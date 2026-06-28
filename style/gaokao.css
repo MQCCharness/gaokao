@@ -1,0 +1,875 @@
+/* ==========================================================================
+   高考志愿 · 命运执笔人  —— 游戏化样式
+   覆盖：分数面板 / 导师召唤卡 / MBTI 结果卡 / 志愿愿望卡 / 片头快闪层
+   所有内容均为对话框内联 HTML 注入，故尺寸按对话框宽度自适应。
+   ========================================================================== */
+
+/* —— 字体回退：优先系统中文字体，营造 galgame 字幕感 —— */
+:root {
+	--gk-font: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', 'Hiragino Sans GB', sans-serif;
+	--gk-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+}
+#monogatari, #monogatari * {
+	font-family: var(--gk-font);
+}
+
+/* 让对话框支持我们注入的 flex/grid 卡片布局 */
+.text-box__inner .gk-wishlist,
+.text-box__inner .gk-scorepanel,
+.text-box__inner .gk-gacha,
+.text-box__inner .gk-mbti {
+	max-width: 100%;
+}
+
+/* ==========================================================================
+   1. 分数面板（查分 BOSS 战揭晓）
+   ========================================================================== */
+.gk-scorepanel {
+	--mc: #7EC8A3;
+	margin: 8px auto;
+	padding: 18px 20px;
+	border-radius: 14px;
+	background: linear-gradient(160deg, color-mix(in srgb, var(--mc) 22%, #0e1626), #0e1626 70%);
+	border: 1px solid color-mix(in srgb, var(--mc) 60%, transparent);
+	box-shadow: 0 0 24px color-mix(in srgb, var(--mc) 35%, transparent), inset 0 0 30px rgba(0,0,0,.4);
+	text-align: center;
+	animation: gk-pop .5s cubic-bezier(.2,1.4,.4,1) both;
+}
+.gk-scorepanel__emoji { font-size: 2.4em; line-height: 1; filter: drop-shadow(0 0 12px var(--mc)); }
+.gk-scorepanel__num {
+	font-family: var(--gk-mono);
+	font-size: 3.2em; font-weight: 800; color: var(--mc);
+	text-shadow: 0 0 18px var(--mc); line-height: 1.1;
+}
+.gk-scorepanel__num small { font-size: .4em; opacity: .7; font-weight: 600; }
+.gk-scorepanel__meta { color: #cbd5e1; font-size: .95em; margin: 4px 0 10px; }
+.gk-scorepanel__meta b { color: #fbbf24; }
+.gk-scorepanel__subs {
+	display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+}
+.gk-subj {
+	background: rgba(255,255,255,.08);
+	padding: 4px 10px; border-radius: 8px; font-size: .85em; color: #cbd5e1;
+	display: inline-flex; gap: 6px; align-items: baseline;
+}
+.gk-subj b { color: #fff; font-family: var(--gk-mono); }
+
+/* ==========================================================================
+   2. 导师召唤卡（抽卡揭晓 + 详情卡）
+   ========================================================================== */
+.gk-gacha {
+	--mc: #B07AAC;
+	--rc: #C0A0FF;
+	margin: 8px auto;
+	padding: 16px;
+	border-radius: 14px;
+	text-align: center;
+	background:
+		radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--rc) 45%, transparent), transparent 60%),
+		linear-gradient(180deg, color-mix(in srgb, var(--mc) 30%, #14101e), #14101e 75%);
+	border: 2px solid var(--rc);
+	box-shadow: 0 0 30px color-mix(in srgb, var(--rc) 55%, transparent);
+	animation: gk-pop .5s cubic-bezier(.2,1.4,.4,1) both, gk-glow 2.2s ease-in-out infinite alternate;
+}
+.gk-gacha--peek { animation: gk-pop .4s ease both; box-shadow: 0 0 18px color-mix(in srgb, var(--rc) 35%, transparent); }
+.gk-gacha--ssr { --rc: #FFD700; }
+.gk-gacha--ssr .gk-gacha__emoji { filter: drop-shadow(0 0 16px #FFD700); animation: gk-shine 1.4s linear infinite; }
+.gk-gacha--sr  { --rc: #C0A0FF; }
+.gk-gacha--r   { --rc: #7EC8FF; }
+.gk-gacha__rarity {
+	font-family: var(--gk-mono); letter-spacing: 2px; font-size: .8em;
+	color: var(--rc); text-shadow: 0 0 8px var(--rc);
+}
+.gk-gacha__portrait {
+	width: 100%; max-width: 180px; height: 240px; margin: 4px auto; overflow: hidden;
+	border-radius: 10px; background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--rc) 30%, transparent), transparent 70%);
+	display: flex; align-items: flex-start; justify-content: center;
+}
+.gk-gacha__portrait img {
+	max-height: 240px; width: auto; object-fit: cover; object-position: top center;
+	filter: drop-shadow(0 0 10px color-mix(in srgb, var(--rc) 60%, transparent));
+	animation: gk-pop .5s cubic-bezier(.2,1.4,.4,1) both;
+}
+.gk-gacha__emoji { font-size: 2.2em; line-height: 1.1; margin: 2px 0; }
+.gk-gacha__name { font-size: 1.4em; font-weight: 800; color: #fff; }
+.gk-gacha__title { color: var(--mc); font-size: .95em; margin-bottom: 4px; }
+.gk-gacha__elem {
+	display: inline-block; font-size: .8em; color: #cbd5e1;
+	background: rgba(255,255,255,.08); padding: 2px 10px; border-radius: 999px; margin-bottom: 8px;
+}
+.gk-gacha__tag { color: #fef3c7; font-style: italic; font-size: .9em; }
+.gk-gacha__bio { color: #94a3b8; font-size: .82em; margin-top: 8px; line-height: 1.5; text-align: left; }
+
+/* ==========================================================================
+   3. MBTI 结果卡
+   ========================================================================== */
+.gk-mbti {
+	--mc: #5B7FB8;
+	margin: 8px auto; padding: 16px 18px; border-radius: 14px; text-align: center;
+	background: linear-gradient(160deg, color-mix(in srgb, var(--mc) 28%, #0e1422), #0e1422 72%);
+	border: 1px solid color-mix(in srgb, var(--mc) 70%, transparent);
+	box-shadow: 0 0 22px color-mix(in srgb, var(--mc) 35%, transparent);
+	animation: gk-pop .5s cubic-bezier(.2,1.4,.4,1) both;
+}
+.gk-mbti__avatar {
+	width: 80px;
+	height: 96px;
+	margin: 0 auto 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.gk-mbti__avatar img {
+	max-width: 80px;
+	max-height: 96px;
+	filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+}
+.gk-mbti__type {
+	font-family: var(--gk-mono); font-size: 2.6em; font-weight: 800; color: var(--mc);
+	text-shadow: 0 0 16px var(--mc); letter-spacing: 4px;
+}
+.gk-mbti__cn { font-size: 1.3em; color: #fff; font-weight: 700; }
+.gk-mbti__nick { color: var(--mc); font-style: italic; margin: 2px 0 6px; }
+.gk-mbti__tag { color: #fef3c7; font-size: .9em; margin-bottom: 8px; }
+.gk-mbti__row { color: #cbd5e1; font-size: .85em; margin: 3px 0; text-align: left; }
+.gk-mbti__row b { color: #fbbf24; }
+
+/* ==========================================================================
+   4. 志愿愿望表（抽卡卡面）
+   ========================================================================== */
+.gk-wishlist {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 10px;
+	margin: 10px 0;
+	max-height: 52vh; overflow-y: auto; padding-right: 4px;
+}
+.gk-wishlist::-webkit-scrollbar { width: 6px; }
+.gk-wishlist::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 3px; }
+
+.gk-card {
+	--rc: #7EC8FF;
+	padding: 10px 12px; border-radius: 12px;
+	background: linear-gradient(165deg, color-mix(in srgb, var(--rc) 18%, #121826), #121826 80%);
+	border: 1px solid color-mix(in srgb, var(--rc) 60%, transparent);
+	box-shadow: 0 0 14px color-mix(in srgb, var(--rc) 22%, transparent);
+	animation: gk-flipin .55s cubic-bezier(.2,1.3,.4,1) both;
+	position: relative; overflow: hidden;
+}
+.gk-card::before {
+	content: ''; position: absolute; inset: 0;
+	background: linear-gradient(120deg, transparent 30%, color-mix(in srgb, var(--rc) 25%, transparent) 50%, transparent 70%);
+	transform: translateX(-100%); animation: gk-sweep 3s ease-in-out infinite;
+}
+.gk-card:hover { transform: translateY(-2px); transition: transform .15s; }
+.gk-r-ssr { --rc: #FFD700; }
+.gk-r-sr  { --rc: #C0A0FF; }
+.gk-r-r   { --rc: #7EC8FF; }
+.gk-card__rarity {
+	font-family: var(--gk-mono); font-size: .72em; letter-spacing: 1px;
+	color: var(--rc); text-shadow: 0 0 6px var(--rc);
+}
+.gk-card__match {
+	position: absolute; top: 8px; right: 10px;
+	font-family: var(--gk-mono); font-size: .8em; font-weight: 700; color: #fbbf24;
+}
+.gk-card__uni { font-size: 1em; font-weight: 700; color: #fff; margin-top: 2px; }
+.gk-card__tier {
+	font-size: .65em; padding: 1px 6px; border-radius: 4px; margin-left: 4px;
+	background: rgba(255,215,0,.18); color: #FFD700; vertical-align: middle;
+}
+.gk-card__stab { font-size: .72em; font-weight: 700; margin-left: 4px; }
+.gk-card__major { color: var(--rc); font-size: .9em; margin: 2px 0; }
+.gk-card__reason { color: #94a3b8; font-size: .76em; line-height: 1.45; }
+.gk-empty { color: #94a3b8; text-align: center; padding: 20px; }
+
+/* ==========================================================================
+   5. 片头快闪层 + 名校剪影（原创 SVG）
+   ========================================================================== */
+.gk-intro-overlay {
+	position: fixed; inset: 0; z-index: 9999;
+	display: flex; align-items: center; justify-content: center;
+	overflow: hidden; animation: gk-fadein .3s ease both;
+}
+.gk-intro-overlay__bg {
+	position: absolute; inset: 0;
+	background:
+		radial-gradient(ellipse at 50% 40%, rgba(91,127,184,.35), transparent 60%),
+		radial-gradient(ellipse at 50% 70%, rgba(176,122,172,.25), transparent 55%),
+		linear-gradient(180deg, #050810, #0a0f1c);
+}
+.gk-intro-flash {
+	position: relative; z-index: 2; width: 86%; max-width: 1100px;
+}
+.gk-intro-grid {
+	display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;
+}
+.gk-intro-grid .gk-landmark {
+	opacity: 0; animation: gk-flash .8s ease both;
+}
+.gk-intro-overlay__title {
+	position: absolute; inset: 0; z-index: 3;
+	display: flex; flex-direction: column; align-items: center; justify-content: center;
+	pointer-events: none;
+	animation: gk-fadein 1.6s ease .6s both;
+}
+.gk-intro-overlay__title-main {
+	font-size: clamp(2.4em, 6vw, 4.5em); font-weight: 800; letter-spacing: 8px;
+	color: #fff; text-shadow: 0 0 24px rgba(91,127,184,.9), 0 0 48px rgba(176,122,172,.6);
+}
+.gk-intro-overlay__title-sub {
+	font-size: clamp(.9em, 2vw, 1.5em); color: #fbbf24; letter-spacing: 6px; margin-top: 6px;
+	text-shadow: 0 0 12px rgba(251,191,36,.7);
+}
+.gk-intro-overlay__skip {
+	position: absolute; right: 18px; bottom: 18px; z-index: 4;
+	background: rgba(255,255,255,.08); color: #cbd5e1; border: 1px solid rgba(255,255,255,.2);
+	padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: .85em;
+	transition: background .15s;
+}
+.gk-intro-overlay__skip:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+/* 单个剪影卡 */
+.gk-landmark {
+	display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+	padding: 6px 2px; min-height: 90px;
+}
+.gk-landmark__svg { width: 100%; max-width: 64px; aspect-ratio: 1; color: var(--c2, #D4AF37); }
+.gk-landmark__svg svg { width: 100%; height: 100%; filter: drop-shadow(0 0 6px var(--c2)); }
+.gk-landmark__name {
+	font-size: .6em; color: #fff; margin-top: 2px; text-align: center; line-height: 1.1;
+}
+.gk-landmark__lm { font-size: .5em; color: var(--c2); }
+.gk-landmark__tier { font-size: .45em; color: #94a3b8; }
+
+/* ==========================================================================
+   5b. MBTI 单题展示
+   ========================================================================== */
+.gk-mbti-q {
+	margin: 6px auto; padding: 12px 14px; border-radius: 10px;
+	background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+}
+.gk-mbti-q__no { font-family: var(--gk-mono); color: #fbbf24; font-size: .8em; letter-spacing: 1px; }
+.gk-mbti-q__text { color: #fff; font-size: 1.05em; font-weight: 600; margin: 4px 0 8px; line-height: 1.4; }
+.gk-mbti-q__opt { color: #cbd5e1; font-size: .92em; margin: 3px 0; line-height: 1.4; }
+.gk-mbti-q__opt b { color: #7EC8FF; }
+
+/* ==========================================================================
+   6. Livemotion —— 立绘呼吸（轻微浮动，给画面生气）
+   ========================================================================== */
+img[data-character].lm-breathing {
+	animation: lm-breathe 4.5s ease-in-out infinite;
+	transform-origin: bottom center;
+	will-change: transform;
+}
+@keyframes lm-breathe {
+	0%, 100% { transform: translateY(0) scale(1); }
+	50%      { transform: translateY(-6px) scale(1.005); }
+}
+
+/* —— 立绘容器定位上下文（引擎可能直接把立绘挂到 game-screen，保持显式定位） —— */
+character-sprite, [data-component="character-sprite"], .character-sprite {
+	position: relative;
+}
+
+/* ==========================================================================
+   7. 主菜单 / 底部快捷菜单 布局修正
+   ========================================================================== */
+/* 主菜单居中（覆盖引擎默认的 align-self:flex-end 贴右下） */
+main-menu, [data-component="main-menu"] {
+	align-self: center !important;
+	align-items: center !important;
+	bottom: auto !important;
+	top: 50%;
+	transform: translateY(-50%);
+}
+main-screen {
+	align-items: center;
+	justify-content: center;
+}
+
+/* ==========================================================================
+   动画关键帧
+   ========================================================================== */
+@keyframes gk-pop {
+	0% { opacity: 0; transform: scale(.7); }
+	100% { opacity: 1; transform: scale(1); }
+}
+@keyframes gk-flipin {
+	0% { opacity: 0; transform: perspective(600px) rotateY(80deg); }
+	100% { opacity: 1; transform: perspective(600px) rotateY(0); }
+}
+@keyframes gk-glow {
+	from { box-shadow: 0 0 18px color-mix(in srgb, var(--rc) 35%, transparent); }
+	to   { box-shadow: 0 0 34px color-mix(in srgb, var(--rc) 65%, transparent); }
+}
+@keyframes gk-shine {
+	0%, 100% { filter: drop-shadow(0 0 10px #FFD700); }
+	50% { filter: drop-shadow(0 0 22px #fff7cc); }
+}
+@keyframes gk-sweep {
+	0%, 100% { transform: translateX(-100%); }
+	50% { transform: translateX(100%); }
+}
+@keyframes gk-flash {
+	0% { opacity: 0; transform: scale(.5) translateY(20px); }
+	40% { opacity: 1; transform: scale(1.08) translateY(0); }
+	60% { transform: scale(1); }
+	100% { opacity: 1; }
+}
+@keyframes gk-fadein {
+	from { opacity: 0; } to { opacity: 1; }
+}
+
+/* ==========================================================================
+   8. 导师画廊（接近全屏的角色图鉴，独立覆盖层）
+   ========================================================================== */
+.gk-gallery {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	background: radial-gradient(ellipse at center, rgba(20,15,40,0.97), rgba(8,5,18,0.99));
+	backdrop-filter: blur(8px);
+	display: flex;
+	flex-direction: column;
+	animation: gk-fadein 0.3s ease;
+	overflow: hidden;
+}
+.gk-gallery__header {
+	flex-shrink: 0;
+	padding: 18px 28px 10px;
+	text-align: center;
+	border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.gk-gallery__title {
+	font-size: 1.5em;
+	font-weight: bold;
+	color: #fff;
+	letter-spacing: 2px;
+	margin: 0;
+}
+.gk-gallery__subtitle {
+	font-size: 0.85em;
+	color: #89a;
+	margin-top: 4px;
+}
+.gk-gallery__close {
+	position: absolute;
+	top: 16px;
+	right: 20px;
+	background: rgba(255,255,255,0.1);
+	border: 1px solid rgba(255,255,255,0.2);
+	color: #fff;
+	font-size: 1.1em;
+	padding: 6px 16px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.gk-gallery__close:hover { background: rgba(255,80,80,0.4); }
+.gk-gallery__grid {
+	flex: 1;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 18px;
+	padding: 20px 28px;
+	overflow-y: auto;
+	align-content: start;
+}
+.gk-gallery__card {
+	position: relative;
+	border: 3px solid var(--rc, #555);
+	border-radius: 16px;
+	cursor: pointer;
+	overflow: hidden;
+	transition: transform 0.25s ease, box-shadow 0.25s ease;
+	min-height: 360px;
+	/* 稀有度边框光晕 */
+	box-shadow: 0 0 20px var(--rc), inset 0 0 30px rgba(0,0,0,0.4);
+	background: #0a0815;
+}
+/* 立绘铺满整张卡（英雄卡风格） */
+.gk-gallery__card .gk-gallery__portrait {
+	position: absolute;
+	inset: 0;
+	min-height: 0;
+	margin: 0;
+	border-radius: 0;
+	background: radial-gradient(ellipse at center 35%, rgba(255,255,255,0.12), transparent 70%);
+	z-index: 1;
+}
+.gk-gallery__card .gk-gallery__portrait img {
+	position: absolute;
+	inset: 0;
+	max-height: none;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center top;
+	filter: drop-shadow(0 0 0 transparent);
+	transition: transform 0.4s ease;
+}
+.gk-gallery__card:hover {
+	transform: translateY(-10px) scale(1.05);
+	box-shadow: 0 16px 50px var(--rc), 0 0 0 3px #fff, inset 0 0 30px rgba(0,0,0,0.4);
+}
+.gk-gallery__card:hover .gk-gallery__portrait img { transform: scale(1.1); }
+/* 稀有度角标（左上角） */
+.gk-gallery__card .gk-gallery__rarity {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	z-index: 3;
+	background: linear-gradient(135deg, var(--rc), rgba(0,0,0,0.6));
+	color: #fff;
+	font-size: 0.78em;
+	font-weight: bold;
+	padding: 4px 12px;
+	border-radius: 12px;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+	box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+	margin: 0;
+	letter-spacing: 1px;
+}
+/* emoji 角标（右上角） */
+.gk-gallery__card .gk-gallery__emoji-badge {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 3;
+	font-size: 1.8em;
+	filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+}
+/* 底部信息条（叠在立绘上，半透明渐变） */
+.gk-gallery__card .gk-gallery__info {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 3;
+	padding: 14px 14px 12px;
+	background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.95) 100%);
+	color: #fff;
+}
+.gk-gallery__card .gk-gallery__name {
+	font-size: 1.25em;
+	font-weight: bold;
+	margin: 0 0 2px;
+	color: #fff;
+	text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+}
+.gk-gallery__card .gk-gallery__title-text {
+	font-size: 0.8em;
+	color: #cde;
+	margin: 0 0 6px;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+}
+.gk-gallery__card .gk-gallery__elem {
+	display: inline-block;
+	font-size: 0.74em;
+	background: var(--rc);
+	color: #fff;
+	padding: 2px 10px;
+	border-radius: 10px;
+	margin-bottom: 6px;
+	font-weight: bold;
+}
+.gk-gallery__card .gk-gallery__passive,
+.gk-gallery__card .gk-gallery__tagline {
+	font-size: 0.74em;
+	margin-top: 4px;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+}
+.gk-gallery__card .gk-gallery__passive { color: #fde68a; }
+.gk-gallery__card .gk-gallery__tagline {
+	color: #cde;
+	font-style: italic;
+	border-left: 2px solid var(--rc);
+	padding-left: 8px;
+}
+@media (max-width: 900px) {
+	.gk-gallery__grid { grid-template-columns: repeat(2, 1fr); }
+	.gk-gallery__card { min-height: 240px; }
+}
+@media (max-width: 600px) {
+	.gk-gallery__grid { grid-template-columns: 1fr; }
+}
+
+/* ==========================================================================
+   8. （已废弃）旧的导师选择网格样式 —— 已被 .gk-gallery 全屏画廊取代
+   ========================================================================== */
+
+/* ==========================================================================
+   9. Loading 进度条美化（真实百分比）
+   ========================================================================== */
+loading-screen [data-content="progress"],
+[data-component="loading-screen"] [data-content="progress"] {
+	width: 60%;
+	max-width: 480px;
+	height: 14px;
+	border: none;
+	border-radius: 8px;
+	overflow: hidden;
+	background: rgba(255,255,255,0.12);
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+	-webkit-appearance: none;
+	appearance: none;
+}
+loading-screen [data-content="progress"]::-webkit-progress-bar,
+[data-component="loading-screen"] [data-content="progress"]::-webkit-progress-bar {
+	background: rgba(255,255,255,0.12);
+	border-radius: 8px;
+}
+loading-screen [data-content="progress"]::-webkit-progress-value,
+[data-component="loading-screen"] [data-content="progress"]::-webkit-progress-value {
+	background: linear-gradient(90deg, #7f5af0, #2cb67d);
+	border-radius: 8px;
+	transition: width 0.3s ease;
+}
+loading-screen [data-content="progress"]::-moz-progress-bar,
+[data-component="loading-screen"] [data-content="progress"]::-moz-progress-bar {
+	background: linear-gradient(90deg, #7f5af0, #2cb67d);
+	border-radius: 8px;
+}
+loading-screen [data-content="message"],
+[data-component="loading-screen"] [data-content="message"] {
+	color: #9ab;
+	font-size: 0.85em;
+	margin-top: 10px;
+	font-family: 'Microsoft YaHei', sans-serif;
+}
+
+/* —— 响应式：窄屏把志愿表改为单列 —— */
+@media (max-width: 720px) {
+	.gk-wishlist { grid-template-columns: 1fr; max-height: 44vh; }
+	.gk-intro-grid { grid-template-columns: repeat(4, 1fr); }
+	.gk-scorepanel__num { font-size: 2.4em; }
+}
+
+/* ==========================================================================
+   10. 校园地图（SLG 风格：真实场景缩略图卡片网格）
+   ========================================================================== */
+.gk-map {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	background:
+		linear-gradient(180deg, rgba(15,20,45,0.97), rgba(5,8,20,0.99)),
+		radial-gradient(circle at 30% 20%, rgba(127,90,240,0.15), transparent 50%),
+		radial-gradient(circle at 70% 80%, rgba(44,182,125,0.10), transparent 50%);
+	overflow-y: auto;
+	animation: gk-fadein 0.3s ease;
+}
+.gk-map__bg { display: none; }
+.gk-map__header {
+	padding: 24px 28px 16px;
+	text-align: center;
+}
+.gk-map__title { font-size: 1.6em; font-weight: bold; color: #fff; margin: 0; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(127,90,240,0.5); }
+.gk-map__subtitle { font-size: 0.88em; color: #9ab; margin-top: 6px; }
+.gk-map__close {
+	position: fixed;
+	top: 16px; right: 20px;
+	z-index: 110;
+	background: rgba(255,255,255,0.1);
+	border: 1px solid rgba(255,255,255,0.2);
+	color: #fff;
+	font-size: 0.95em;
+	padding: 8px 18px;
+	border-radius: 20px;
+	cursor: pointer;
+	backdrop-filter: blur(6px);
+}
+.gk-map__close:hover { background: rgba(255,80,80,0.4); }
+.gk-map__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 20px;
+	padding: 8px 32px 24px;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+.gk-map__node {
+	position: relative;
+	background: rgba(20,25,50,0.85);
+	border: 2px solid rgba(127,90,240,0.4);
+	border-radius: 16px;
+	overflow: hidden;
+	cursor: pointer;
+	transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+	backdrop-filter: blur(6px);
+	display: flex;
+	flex-direction: column;
+}
+.gk-map__node:hover {
+	transform: translateY(-8px) scale(1.03);
+	border-color: #fff;
+	box-shadow: 0 16px 48px rgba(127,90,240,0.5);
+}
+.gk-map__node-thumb {
+	width: 100%;
+	height: 160px;
+	overflow: hidden;
+	position: relative;
+}
+.gk-map__node-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.4s ease;
+}
+.gk-map__node:hover .gk-map__node-thumb img { transform: scale(1.1); }
+.gk-map__node-body {
+	padding: 12px 14px 14px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.gk-map__node-icon { font-size: 1.8em; line-height: 1; }
+.gk-map__node-label { font-size: 1.02em; font-weight: bold; color: #fff; }
+.gk-map__node-npc { font-size: 0.78em; color: #9ab; margin-top: 2px; }
+.gk-map__node-check {
+	position: absolute;
+	top: 10px; right: 10px;
+	background: #2cb67d;
+	color: #fff;
+	font-size: 0.78em;
+	font-weight: bold;
+	padding: 4px 12px;
+	border-radius: 12px;
+	box-shadow: 0 2px 10px rgba(44,182,125,0.6);
+}
+.gk-map__node-go {
+	position: absolute;
+	top: 10px; right: 10px;
+	background: rgba(127,90,240,0.85);
+	color: #fff;
+	font-size: 0.78em;
+	padding: 4px 12px;
+	border-radius: 12px;
+}
+.gk-map__node--done { border-color: rgba(44,182,125,0.5); }
+.gk-map__node--done .gk-map__node-thumb img { filter: grayscale(0.3) brightness(0.85); }
+/* 锁定状态（未满足前置任务） */
+.gk-map__node--locked {
+	opacity: 0.55;
+	cursor: not-allowed;
+	border-color: rgba(229,49,112,0.4);
+	border-style: dashed;
+}
+.gk-map__node--locked .gk-map__node-thumb img { filter: grayscale(0.7) brightness(0.5); }
+.gk-map__node--locked:hover { transform: none; box-shadow: none; }
+.gk-map__node-locked {
+	position: absolute;
+	top: 10px; right: 10px;
+	background: rgba(229,49,112,0.85);
+	color: #fff;
+	font-size: 0.72em;
+	padding: 4px 10px;
+	border-radius: 10px;
+	max-width: 180px;
+	text-align: right;
+	line-height: 1.3;
+}
+.gk-map__submit {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	max-width: 1200px;
+	margin: 0 auto 32px;
+	padding: 18px 32px;
+	background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(229,49,112,0.2));
+	border: 2px solid #FFD700;
+	border-radius: 16px;
+	color: #fff;
+	font-size: 1.1em;
+	font-weight: bold;
+	cursor: pointer;
+	transition: transform 0.2s, box-shadow 0.2s;
+	animation: gk-glow 2.5s ease-in-out infinite;
+}
+.gk-map__submit:hover { transform: scale(1.02); box-shadow: 0 0 40px #FFD700; }
+.gk-map__submit-icon { font-size: 1.4em; }
+.gk-map__locked {
+	max-width: 1200px;
+	margin: 0 auto 32px;
+	padding: 16px 24px;
+	text-align: center;
+	color: #9ab;
+	font-size: 0.95em;
+	background: rgba(0,0,0,0.4);
+	border: 1px dashed rgba(255,255,255,0.2);
+	border-radius: 12px;
+}
+@media (max-width: 600px) {
+	.gk-map__grid { grid-template-columns: 1fr; padding: 8px 16px 24px; }
+	.gk-map__node-thumb { height: 130px; }
+}
+
+/* 记忆碎片闪回（任务完成后弹窗） */
+.gk-shard {
+	position: fixed;
+	inset: 0;
+	z-index: 110;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0,0,0,0.92);
+	backdrop-filter: blur(10px);
+	animation: gk-fadein 0.5s ease;
+}
+.gk-shard__inner {
+	max-width: 640px;
+	padding: 36px 40px;
+	text-align: center;
+	color: #cde;
+	font-size: 1.05em;
+	line-height: 1.8;
+}
+.gk-shard__icon { font-size: 3em; margin-bottom: 16px; animation: gk-flash 1.5s ease; }
+.gk-shard__title { font-size: 1.3em; color: #7f5af0; font-weight: bold; margin-bottom: 16px; letter-spacing: 1px; }
+.gk-shard__text { margin-bottom: 24px; font-style: italic; }
+.gk-shard__hint { font-size: 0.85em; color: #89a; }
+.gk-shard__close {
+	margin-top: 8px;
+	padding: 8px 24px;
+	background: rgba(127,90,240,0.3);
+	border: 1px solid #7f5af0;
+	color: #fff;
+	border-radius: 20px;
+	cursor: pointer;
+	font-size: 0.95em;
+}
+.gk-shard__close:hover { background: rgba(127,90,240,0.6); }
+
+/* ==========================================================================
+   11. 状态面板（关系值 + 属性）& 存档提醒
+   ========================================================================== */
+.gk-map__status {
+	position: fixed;
+	top: 16px; left: 20px;
+	z-index: 110;
+	background: rgba(127,90,240,0.25);
+	border: 1px solid rgba(127,90,240,0.5);
+	color: #fff;
+	font-size: 0.9em;
+	padding: 8px 16px;
+	border-radius: 20px;
+	cursor: pointer;
+	backdrop-filter: blur(6px);
+}
+.gk-map__status:hover { background: rgba(127,90,240,0.5); }
+.gk-status-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 115;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0,0,0,0.8);
+	backdrop-filter: blur(8px);
+	animation: gk-fadein 0.3s ease;
+	padding: 20px;
+}
+.gk-status-box {
+	max-width: 560px;
+	width: 100%;
+	max-height: 86vh;
+	overflow-y: auto;
+	background: linear-gradient(180deg, rgba(25,28,55,0.98), rgba(15,12,30,0.99));
+	border: 1px solid rgba(127,90,240,0.4);
+	border-radius: 16px;
+	padding: 24px 28px;
+}
+.gk-status-box__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 16px;
+}
+.gk-status-box__head h2 { font-size: 1.3em; color: #fff; margin: 0; }
+.gk-status-box__close {
+	background: rgba(255,255,255,0.1);
+	border: none;
+	color: #fff;
+	font-size: 1.1em;
+	cursor: pointer;
+	padding: 4px 12px;
+	border-radius: 12px;
+}
+.gk-status-box__close:hover { background: rgba(255,80,80,0.4); }
+.gk-status-box__tip {
+	font-size: 0.8em;
+	color: #789;
+	margin-top: 16px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(255,255,255,0.1);
+	line-height: 1.6;
+}
+.gk-status {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+	padding: 8px 4px;
+}
+.gk-status__group h3 {
+	font-size: 0.9em;
+	color: #9ab;
+	margin: 0 0 10px;
+	border-bottom: 1px solid rgba(255,255,255,0.1);
+	padding-bottom: 4px;
+}
+.gk-status__row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+	font-size: 0.85em;
+}
+.gk-status__name { width: 90px; color: #cde; flex-shrink: 0; }
+.gk-status__bar {
+	flex: 1;
+	height: 10px;
+	background: rgba(255,255,255,0.1);
+	border-radius: 5px;
+	overflow: hidden;
+}
+.gk-status__fill { height: 100%; border-radius: 5px; transition: width 0.4s ease; }
+.gk-status__val { width: 70px; text-align: right; font-weight: bold; flex-shrink: 0; }
+@media (max-width: 600px) {
+	.gk-status { grid-template-columns: 1fr; }
+	.gk-status__name { width: 70px; }
+}
+.gk-savewarn {
+	position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+	z-index: 120; max-width: 90vw; padding: 12px 20px;
+	background: linear-gradient(135deg, rgba(249,199,79,0.95), rgba(229,49,112,0.9));
+	color: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+	font-size: 0.9em; display: flex; align-items: center; gap: 12px;
+	animation: gk-pop 0.3s ease;
+}
+.gk-savewarn__text { flex: 1; }
+.gk-savewarn__btn {
+	background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4);
+	color: #fff; padding: 4px 14px; border-radius: 16px; cursor: pointer;
+	font-size: 0.85em; white-space: nowrap;
+}
+.gk-savewarn__btn:hover { background: rgba(255,255,255,0.4); }
+
+/* 语音播放中：text-box 边框微闪 + 右上角播放指示器 */
+text-box.gk-voice-playing,
+[data-component="text-box"].gk-voice-playing {
+	box-shadow: 0 0 0 2px rgba(127, 90, 240, 0.6), 0 0 16px rgba(127, 90, 240, 0.3);
+}
+text-box.gk-voice-playing::after,
+[data-component="text-box"].gk-voice-playing::after {
+	content: '🔊 语音播放中…';
+	position: absolute;
+	top: 4px;
+	right: 8px;
+	font-size: 0.7em;
+	color: rgba(127, 90, 240, 0.8);
+	pointer-events: none;
+	z-index: 10;
+}

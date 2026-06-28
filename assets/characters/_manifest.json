@@ -1,0 +1,314 @@
+{
+ "senior": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 337,
+    "w": 502,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "senior_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 141,
+    "y": 342,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "senior_happy_blink.png"
+  },
+  "sad": {
+   "eye": {
+    "x": 141,
+    "y": 343,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "senior_sad_blink.png"
+  }
+ },
+ "rival": {
+  "normal": {
+   "eye": {
+    "x": 185,
+    "y": 603,
+    "w": 658,
+    "h": 162
+   },
+   "mouth": null,
+   "blink": "rival_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 185,
+    "y": 625,
+    "w": 658,
+    "h": 162
+   },
+   "mouth": null,
+   "blink": "rival_happy_blink.png"
+  },
+  "angry": {
+   "eye": {
+    "x": 180,
+    "y": 594,
+    "w": 643,
+    "h": 162
+   },
+   "mouth": null,
+   "blink": "rival_angry_blink.png"
+  }
+ },
+ "buddy": {
+  "normal": {
+   "eye": {
+    "x": 151,
+    "y": 476,
+    "w": 539,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "buddy_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 152,
+    "y": 476,
+    "w": 542,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "buddy_happy_blink.png"
+  },
+  "surprised": {
+   "eye": {
+    "x": 152,
+    "y": 476,
+    "w": 542,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "buddy_surprised_blink.png"
+  }
+ },
+ "guide": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 335,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "guide_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 141,
+    "y": 335,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "guide_happy_blink.png"
+  },
+  "sad": {
+   "eye": {
+    "x": 141,
+    "y": 335,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "guide_sad_blink.png"
+  }
+ },
+ "system": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 464,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "system_normal_blink.png"
+  }
+ },
+ "mentor_yuan": {
+  "normal": {
+   "eye": {
+    "x": 73,
+    "y": 230,
+    "w": 263,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "mentor_yuan_normal_blink.png"
+  }
+ },
+ "mentor_can": {
+  "normal": {
+   "eye": {
+    "x": 282,
+    "y": 924,
+    "w": 1003,
+    "h": 246
+   },
+   "mouth": null,
+   "blink": "mentor_can_normal_blink.png"
+  }
+ },
+ "mentor_wan": {
+  "normal": {
+   "eye": {
+    "x": 86,
+    "y": 247,
+    "w": 306,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "mentor_wan_normal_blink.png"
+  }
+ },
+ "mentor_chi": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 464,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "mentor_chi_normal_blink.png"
+  }
+ },
+ "mentor_ning": {
+  "normal": {
+   "eye": {
+    "x": 86,
+    "y": 271,
+    "w": 306,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "mentor_ning_normal_blink.png"
+  }
+ },
+ "mentor_lao": {
+  "normal": {
+   "eye": {
+    "x": 151,
+    "y": 468,
+    "w": 538,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "mentor_lao_normal_blink.png"
+  }
+ },
+ "mentor_lingfeng": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 342,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "mentor_lingfeng_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 141,
+    "y": 342,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "mentor_lingfeng_happy_blink.png"
+  },
+  "thinking": {
+   "eye": {
+    "x": 141,
+    "y": 342,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "mentor_lingfeng_thinking_blink.png"
+  }
+ },
+ "mentor_zhaoyang": {
+  "normal": {
+   "eye": {
+    "x": 152,
+    "y": 476,
+    "w": 542,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "mentor_zhaoyang_normal_blink.png"
+  },
+  "happy": {
+   "eye": {
+    "x": 152,
+    "y": 476,
+    "w": 542,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "mentor_zhaoyang_happy_blink.png"
+  },
+  "excited": {
+   "eye": {
+    "x": 152,
+    "y": 476,
+    "w": 542,
+    "h": 113
+   },
+   "mouth": null,
+   "blink": "mentor_zhaoyang_excited_blink.png"
+  }
+ },
+ "classmate_lin": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 335,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "classmate_lin_normal_blink.png"
+  }
+ },
+ "classmate_xyu": {
+  "normal": {
+   "eye": {
+    "x": 73,
+    "y": 230,
+    "w": 263,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "classmate_xyu_normal_blink.png"
+  }
+ },
+ "classmate_dazhi": {
+  "normal": {
+   "eye": {
+    "x": 86,
+    "y": 271,
+    "w": 306,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "classmate_dazhi_normal_blink.png"
+  }
+ }
+}

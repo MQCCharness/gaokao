@@ -1,0 +1,26 @@
+# 依赖
+node_modules/
+
+# 可由 lib/*.mjs 重新生成的中间产物 / 缓存（旧方案残留）
+_keri_cache/
+assets/_downloads/
+assets/_keri_backup/
+assets/characters/_stella_*/
+assets/characters/Base/
+assets/characters/Bottoms/
+assets/characters/Eyebrows/
+assets/characters/Eyes/
+assets/characters/Hair/
+assets/characters/Mouth/
+assets/characters/Tops/
+
+# 临时调试 / 截图对比 / 调试快照
+_cmp*.mjs
+_probe*.mjs
+_shots.mjs
+_debug*.mjs
+_debug_shot.png
+_d_*.png
+_*_compare.png
+_rival_guide.png
+shots/
