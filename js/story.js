@@ -65,8 +65,10 @@ monogatari.script({
 		'show character buddy normal with fadeIn',
 	'buddy 阿星 嘿，{{player.name}}！来食堂坐坐？填志愿太烧脑了，咱先聊点轻松的。',
 		function () { GK.voice('buddy/interest_intro'); },
-		'show character buddy_sports happy',
-		'buddy 你平时最来劲的事儿是啥？游戏？写代码？打球？跟我说说，这关系到你该报啥专业。',
+		'show character buddy happy',
+		'buddy 阿星 说真的，别光看分数。你平时最来劲的事儿是啥？打游戏时爱琢磨策略？还是爱画画？爱跟人聊？',
+		'buddy 阿星 这些「来劲」的事儿，就是你的兴趣。它直接决定你该报什么专业——学四年不喜欢的东西，比考低分还难受。',
+		'buddy 阿星 来，选几个你最来劲的【兴趣标签】，选完点确认。这决定你未来的学习方向！',
 		'jump InterestPickStart',
 	],
 
@@ -484,6 +486,7 @@ monogatari.script({
 		'system 傍晚的体育馆，光线从高窗斜照进来。球鞋摩擦地板的声音回荡着。',
 		'play sound env-crowd',   // 远处人群声
 		'show character buddy_sports happy with fadeIn',
+		function () { GK.voice('buddy/basketball'); },
 		'buddy_sports 阿星 嘿！{{player.name}}！传一个！',
 		'system 阿星把球甩给你。你接住，手感冰凉又熟悉。',
 		{ Choice: {
@@ -540,6 +543,7 @@ monogatari.script({
 	],
 	'RelaxStarWisdom': [
 		function () { GK.feedback({ rel: { senior: +10 }, attrs: { insight: +6 } }); },
+		function () { GK.voice('senior/stargaze'); },
 		'senior 温 你看，天上那么多星星。有的亮，有的暗。但每一颗，都在自己的位置上发着光。',
 		'show character senior happy',
 		'senior 温 分数就是你现在的亮度。但亮度不代表位置——有些暗星，其实在更重要的位置上。',
@@ -596,6 +600,150 @@ monogatari.script({
 	'RelaxRiverEnd': [
 		function () { GK.sfx('reveal'); },
 		'system （和阿星的关系提升了。散步让人放松，也让人看清自己的内心。）',
+		'jump CampusMap',
+	],
+
+	// ══════ 家人互动（家·查分后解锁）══════
+	'HomeEnter': [
+		'show scene scene-home with fadeIn',
+		'play music bgm-chat',
+		function () { GK.clearCharacters(); },
+		'system 你回到家。客厅的灯亮着，桌上摆着水果和一堆打印的「热门专业推荐」。',
+		'system 家人在等你。他们有不同的想法，也有不同的爱。',
+		{ Choice: {
+			Dialog: 'system 选择和家人聊：',
+			'Mom':   { Text: '👩 妈妈', Do: 'jump HomeMom' },
+			'Dad':   { Text: '👨 爸爸', Do: 'jump HomeDad' },
+			'Aunt':  { Text: '👱‍♀️ 小姨', Do: 'jump HomeAunt' },
+			'Leave': { Text: '🚪 先回学校', Do: 'jump HomeLeave' },
+		}}
+	],
+	'HomeMom': [
+		'show character fam_mom normal with fadeIn',
+		function () { GK.voice('fam_mom/intro'); },
+		'fam_mom 妈 妈不求，妈只怕你将来怪妈没管你。',
+		'fam_mom 妈 这几张是妈帮你打印的，你看看……计算机、金融、师范，都说热门。',
+		{ Choice: {
+			Dialog: 'fam_mom 妈 ……',
+			'Good':  { Text: '❤️ 耐心解释自己的想法', Do: 'jump HomeMomGood' },
+			'Bad':   { Text: '😤 不耐烦', Do: 'jump HomeMomBad' },
+		}}
+	],
+	'HomeMomGood': [ function () { GK.showNpcInteract('fam_mom', 'good'); }, 'jump HomeAfter' ],
+	'HomeMomBad':  [ function () { GK.showNpcInteract('fam_mom', 'bad'); }, 'jump HomeAfter' ],
+	'HomeDad': [
+		'show character fam_dad normal with fadeIn',
+		function () { GK.voice('fam_dad/intro'); },
+		'fam_dad 爸 我吃过的盐比你走过的路多。听爸的，报个计算机，饿不死。',
+		'fam_dad 爸 看看，你这个分，老老实实报个稳的。别整那些没用的。',
+		{ Choice: {
+			Dialog: 'fam_dad 爸 ……',
+			'Good':  { Text: '📋 用数据理性回应', Do: 'jump HomeDadGood' },
+			'Bad':   { Text: '😠 正面硬刚', Do: 'jump HomeDadBad' },
+		}}
+	],
+	'HomeDadGood': [ function () { GK.showNpcInteract('fam_dad', 'good'); }, 'jump HomeAfter' ],
+	'HomeDadBad':  [ function () { GK.showNpcInteract('fam_dad', 'bad'); }, 'jump HomeAfter' ],
+	'HomeAunt': [
+		'show character fam_aunt normal with fadeIn',
+		function () { GK.voice('fam_aunt/intro'); },
+		'fam_aunt 小姨 别像我当年一样，别人说什么就报什么，毕业了才发现全是错的。',
+		'fam_aunt 小姨 我跟你说句实话——当年你妈让我报会计，说稳定。我报了。然后我痛苦了十年。',
+		{ Choice: {
+			Dialog: 'fam_aunt 小姨 ……',
+			'Good':  { Text: '👂 认真听她的经验', Do: 'jump HomeAuntGood' },
+			'Bad':   { Text: '📱 敷衍', Do: 'jump HomeAuntBad' },
+		}}
+	],
+	'HomeAuntGood': [ function () { GK.showNpcInteract('fam_aunt', 'good'); }, 'jump HomeAfter' ],
+	'HomeAuntBad':  [ function () { GK.showNpcInteract('fam_aunt', 'bad'); }, 'jump HomeAfter' ],
+	'HomeAfter': [
+		'hide character fam_mom with fadeOut',
+		'hide character fam_dad with fadeOut',
+		'hide character fam_aunt with fadeOut',
+		function () {
+			const g = GK.get();
+			const remaining = ['fam_mom','fam_dad','fam_aunt'].filter(k => (g.relations?.[k]||0) === (k==='fam_mom'?40:k==='fam_dad'?35:30));
+			if (remaining.length === 0) {
+				GK.markCleared('home');
+				return 'system 你和每位家人都聊过了。\n（家探索完成）';
+			}
+			return 'system 还可以再和家人聊聊。';
+		},
+		{ Choice: {
+			Dialog: 'system 家',
+			'Back':  { Text: '🏠 继续聊', Do: 'jump HomeEnter' },
+			'Leave': { Text: '🚪 回学校', Do: 'jump HomeLeave' },
+		}}
+	],
+	'HomeLeave': [
+		'hide character fam_mom with fadeOut',
+		'hide character fam_dad with fadeOut',
+		'hide character fam_aunt with fadeOut',
+		'jump CampusMap',
+	],
+
+	// ══════ 老师互动（办公室·查分后解锁）══════
+	'OfficeEnter': [
+		'show scene scene-office with fadeIn',
+		'play music bgm-chat',
+		function () { GK.clearCharacters(); },
+		'system 教师办公室。走廊尽头，有人在等你。',
+		'system 注意：不是所有老师的建议都为你好。学会辨别真心和利益。',
+		{ Choice: {
+			Dialog: 'system 选择和老师聊：',
+			'Lee':   { Text: '🍎 李老师（班主任）', Do: 'jump OfficeLee' },
+			'Wang':  { Text: '💰 王主任（招生办）', Do: 'jump OfficeWang' },
+			'Leave': { Text: '🚪 离开', Do: 'jump OfficeLeave' },
+		}}
+	],
+	'OfficeLee': [
+		'show character tch_lee normal with fadeIn',
+		function () { GK.voice('tch_lee/intro'); },
+		'tch_lee 李老师 我看了你的分数。不差。但老师更想问你——你想好了吗？',
+		'tch_lee 李老师 老师的职责不是告诉你报什么，是帮你想清楚你想要什么。',
+		{ Choice: {
+			Dialog: 'tch_lee 李老师 ……',
+			'Good':  { Text: '💬 坦诚说出自己的纠结', Do: 'jump OfficeLeeGood' },
+			'Bad':   { Text: '🤷 您说我报什么好', Do: 'jump OfficeLeeBad' },
+		}}
+	],
+	'OfficeLeeGood': [ function () { GK.showNpcInteract('tch_lee', 'good'); }, 'jump OfficeAfter' ],
+	'OfficeLeeBad':  [ function () { GK.showNpcInteract('tch_lee', 'bad'); }, 'jump OfficeAfter' ],
+	'OfficeWang': [
+		'show character tch_wang normal with fadeIn',
+		function () { GK.voice('tch_wang/intro'); },
+		'tch_wang 王主任 同学！你这个分数，正好我们有个合作院校，还有内部名额。机会难得啊！',
+		'tch_wang 王主任 这个学校跟我们有合作关系，你有内部名额优势。错过可就没了。',
+		{ Choice: {
+			Dialog: 'tch_wang 王主任 ……',
+			'Good':  { Text: '🔍 表示要回去查查再说', Do: 'jump OfficeWangGood' },
+			'Bad':   { Text: '😍 太好了！那就报这个！', Do: 'jump OfficeWangBad' },
+		}}
+	],
+	'OfficeWangGood': [ function () { GK.showNpcInteract('tch_wang', 'good'); }, 'jump OfficeAfter' ],
+	'OfficeWangBad':  [ function () { GK.showNpcInteract('tch_wang', 'bad'); }, 'jump OfficeAfter' ],
+	'OfficeAfter': [
+		'hide character tch_lee with fadeOut',
+		'hide character tch_wang with fadeOut',
+		function () {
+			const g = GK.get();
+			const remaining = ['tch_lee','tch_wang'].filter(k => (g.relations?.[k]||0) === (k==='tch_lee'?30:20));
+			if (remaining.length === 0) {
+				GK.markCleared('office');
+				return 'system 你和每位老师都聊过了。\n（办公室探索完成）';
+			}
+			return 'system 还可以再和老师聊聊。';
+		},
+		{ Choice: {
+			Dialog: 'system 办公室',
+			'Back':  { Text: '📋 继续聊', Do: 'jump OfficeEnter' },
+			'Leave': { Text: '🚪 离开', Do: 'jump OfficeLeave' },
+		}}
+	],
+	'OfficeLeave': [
+		'hide character tch_lee with fadeOut',
+		'hide character tch_wang with fadeOut',
 		'jump CampusMap',
 	],
 });

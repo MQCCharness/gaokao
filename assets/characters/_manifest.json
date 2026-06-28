@@ -310,5 +310,65 @@
    "mouth": null,
    "blink": "classmate_dazhi_normal_blink.png"
   }
+ },
+ "fam_mom": {
+  "normal": {
+   "eye": {
+    "x": 73,
+    "y": 230,
+    "w": 263,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "fam_mom_normal_blink.png"
+  }
+ },
+ "fam_dad": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 340,
+    "w": 501,
+    "h": 123
+   },
+   "mouth": null,
+   "blink": "fam_dad_normal_blink.png"
+  }
+ },
+ "fam_aunt": {
+  "normal": {
+   "eye": {
+    "x": 185,
+    "y": 625,
+    "w": 658,
+    "h": 162
+   },
+   "mouth": null,
+   "blink": "fam_aunt_normal_blink.png"
+  }
+ },
+ "tch_lee": {
+  "normal": {
+   "eye": {
+    "x": 86,
+    "y": 247,
+    "w": 306,
+    "h": 64
+   },
+   "mouth": null,
+   "blink": "tch_lee_normal_blink.png"
+  }
+ },
+ "tch_wang": {
+  "normal": {
+   "eye": {
+    "x": 141,
+    "y": 342,
+    "w": 501,
+    "h": 122
+   },
+   "mouth": null,
+   "blink": "tch_wang_normal_blink.png"
+  }
  }
 }

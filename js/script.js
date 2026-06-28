@@ -49,6 +49,13 @@ monogatari.characters ({
 	'classmate_xyu':   { Name: '同学·小雨', Color: '#7EC8E3', Directory: 'classmate_xyu',   Images: { 'normal': 'classmate_xyu_normal.png' } },
 	'classmate_dazhi': { Name: '同学·大志', Color: '#E8923C', Directory: 'classmate_dazhi', Images: { 'normal': 'classmate_dazhi_normal.png' } },
 	'buddy_sports':   { Name: '阿星(运动装)', Color: '#C09A6F', Directory: 'buddy_sports', Images: { 'normal': 'buddy_sports_normal.png', 'happy': 'buddy_sports_happy.png' } },
+	// 家人 NPC
+	'fam_mom':  { Name: '妈妈',   Color: '#E891A8', Directory: 'fam_mom',  Images: { 'normal': 'fam_mom_normal.png' } },
+	'fam_dad':  { Name: '爸爸',   Color: '#5B8AB8', Directory: 'fam_dad',  Images: { 'normal': 'fam_dad_normal.png' } },
+	'fam_aunt': { Name: '小姨',   Color: '#C4A0D9', Directory: 'fam_aunt', Images: { 'normal': 'fam_aunt_normal.png' } },
+	// 老师 NPC
+	'tch_lee':  { Name: '李老师', Color: '#5B8A5B', Directory: 'tch_lee',  Images: { 'normal': 'tch_lee_normal.png' } },
+	'tch_wang': { Name: '王主任', Color: '#B8860B', Directory: 'tch_wang', Images: { 'normal': 'tch_wang_normal.png' } },
 });
 
 monogatari.action ('notification').notifications ({
@@ -87,6 +94,8 @@ monogatari.assets ('scenes', {
 	'scene-gym':      'scene-gym.webp',       // 体育馆（打篮球放松）
 	'scene-stargaze': 'scene-stargaze.webp',  // 屋上星空（看星星放松）
 	'scene-river':    'scene-river.webp',     // 河川敷（散步放松）
+	'scene-home':     'scene-home.webp',      // 家（家人互动）
+	'scene-office':   'scene-office.webp',    // 楼梯/办公室（老师互动）
 });
 
 // 背景音乐（houkago_stella MIT，每关一首贴合氛围的 BGM）
@@ -136,6 +145,11 @@ monogatari.assets ('characters', {
 	'mentor_lingfeng': [ 'mentor_lingfeng_normal.png' ],
 	'mentor_zhaoyang': [ 'mentor_zhaoyang_normal.png' ],
 	'buddy_sports':   [ 'buddy_sports_normal.png', 'buddy_sports_happy.png' ],
+	'fam_mom':  [ 'fam_mom_normal.png' ],
+	'fam_dad':  [ 'fam_dad_normal.png' ],
+	'fam_aunt': [ 'fam_aunt_normal.png' ],
+	'tch_lee':  [ 'tch_lee_normal.png' ],
+	'tch_wang': [ 'tch_wang_normal.png' ],
 });
 
 // ============================================================================
@@ -394,9 +408,11 @@ monogatari.script (Object.assign({
 		'jump MentorReveal'
 	],
 	'MentorReveal': [
-		'system 你的导师已就位。',
+		'system 一道光芒闪过。你召唤出的导师出现在面前。',
+		'system 导师的力量将影响你整张志愿表的推荐方向——他们的"被动技能"会加权不同维度。',
+		'system 选好的导师会陪你走完整个流程。你也可以稍后在地图重新召唤。',
 		{ Choice: {
-			Dialog: 'system 准备好了吗？',
+			Dialog: 'system 导师已就位。准备好了吗？',
 			'Next': { Text: '✦ 出战！返回地图', Do: 'jump MentorTaskDone' }
 		}}
 	],
@@ -553,7 +569,10 @@ monogatari.script (Object.assign({
 		'senior 想成为什么样的人，比考多少分更重要。这是你志愿表的灵魂。',
 		function () { GK.voice('senior/vision_intro'); },
 		'show character senior happy',
-		'senior 我这里有 12 种「人生理想」画像，哪一个让你心跳加速？',
+		'senior 我这里有 12 种「人生理想」画像，每一个都指向不同的专业方向。',
+		'senior 别急着选"听起来厉害"的。闭上眼想想——十年后的你，在做什么？那个画面里，你是什么样的人？',
+		'show character senior normal',
+		'senior 那个画面，就是你真正该选的理想。来吧，选一个让你心跳加速的。',
 		'jump VisionPick'
 	],
 	'VisionPick': [

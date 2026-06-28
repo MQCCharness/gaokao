@@ -15,6 +15,11 @@ VOICES = {
     'lingfeng':'zh-CN-YunjianNeural',             # 凛：低沉冷峻男声
     'zhaoyang':'zh-CN-YunxiaNeural',              # 朝阳：活力男声
     'narrator':'zh-CN-XiaoxiaoNeural',            # 旁白
+    'fam_mom': 'zh-CN-XiaoyiNeural',              # 妈妈：温柔女声
+    'fam_dad': 'zh-CN-YunyangNeural',             # 爸爸：稳重男声
+    'fam_aunt':'zh-CN-XiaoxiaoNeural',            # 小姨：清晰女声
+    'tch_lee':'zh-CN-YunxiNeural',                # 李老师：年轻温和男声
+    'tch_wang':'zh-CN-YunjianNeural',             # 王主任：精明低沉男声
 }
 
 # 关键台词（char, key, text）—— 只给重要节点配音
@@ -41,6 +46,17 @@ LINES = [
     ('senior', 'ending_good', '你做到了。这一次，你真的想清楚了。这张表上的每一个选择，都有你的理由。雨停了，晨光透过窗帘，未来是你的。'),
     # 结局·苦涩（温）
     ('senior', 'ending_bitter', '你走完了流程，但说实话，你敷衍了。这张表，和五年前那张，又有多大区别？'),
+    # 家人 NPC
+    ('fam_mom', 'intro', '妈不求你考多好，妈只怕你将来怪妈没管你。'),
+    ('fam_dad', 'intro', '我吃过的盐比你走过的路多。听爸的，报个计算机，饿不死。'),
+    ('fam_aunt', 'intro', '别像我当年一样，别人说什么就报什么，毕业了才发现全是错的。'),
+    # 老师 NPC
+    ('tch_lee', 'intro', '老师的职责不是告诉你报什么，是帮你想清楚你想要什么。'),
+    ('tch_wang', 'intro', '这个学校跟我们有合作关系，你有内部名额优势。错过可就没了。'),
+    # 放松场景
+    ('senior', 'stargaze', '你看，天上那么多星星。有的亮，有的暗。但每一颗，都在自己的位置上发着光。'),
+    ('buddy', 'basketball', '嘿！传一个！来，单挑一局？输的请喝汽水！'),
+    ('buddy', 'river', '小时候我跟我爸来这钓鱼。那时候觉得，长大后什么都能搞定。'),
 ]
 
 async def gen(char, key, text):

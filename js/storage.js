@@ -38,7 +38,7 @@ monogatari.storage ({
 		// 角色关系值（正/负反馈引导；越高越信任，支线/主线门控）
 		// 主角团：温(学姐)/凛(学霸)/阿星(死党)/沈(导师)；每位 0-100，初始 50（中立）
 		// NPC同学：林/小雨/大志；初始 30（同学关系没那么熟，需互动提升）
-		relations: { senior: 50, rival: 50, buddy: 50, guide: 50, classmate_lin: 30, classmate_xyu: 30, classmate_dazhi: 30 },
+		relations: { senior: 50, rival: 50, buddy: 50, guide: 50, classmate_lin: 30, classmate_xyu: 30, classmate_dazhi: 30, fam_mom: 40, fam_dad: 35, fam_aunt: 30, tch_lee: 30, tch_wang: 20 },
 
 		// NPC 同学分数（查分后生成，用于对比）
 		npcScores: {},
