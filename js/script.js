@@ -281,6 +281,25 @@ const quizChoice = { Choice: {
 	'A': { Text: '⬅ A', Do: 'jump _mbtiA_0' },
 	'B': { Text: 'B ➡', Do: 'jump _mbtiB_0' },
 }};
+// MBTI 结果卡片的 live choice（Dialog 由 MbtiResult 标签的函数动态写入人格信息）
+const mbtiResultChoice = { Choice: {
+	Dialog: 'system 正在生成你的人格画像…',
+	'Next': { Text: '🗺 完成 MBTI，返回地图', Do: 'jump MbtiTaskDone' },
+}};
+// 在 MbtiResult 渲染前，用函数写入人格卡 HTML 到 mbtiResultChoice.Dialog
+function buildMbtiResultDialog () {
+	GK.computeMbti();
+	const g = GK.get();
+	const info = GK.mbtiInfo(g.mbtiType) || { type: g.mbtiType, cn: '探索者', nick: '', tagline: '', strengths: [], careers: [], color: '#5B7FB8', emoji: '🔮' };
+	return `system <div class="gk-mbti" style="--mc:${info.color}">
+		<div class="gk-mbti__avatar"><img src="assets/images/mbti/${g.mbtiType}.svg" alt="${g.mbtiType}"></div>
+		<div class="gk-mbti__type">${g.mbtiType}</div>
+		<div class="gk-mbti__cn">${info.cn} ${info.emoji || ''}</div>
+		<div class="gk-mbti__nick">「${info.nick}」</div>
+		<div class="gk-mbti__tag">${info.tagline}</div>
+		<div class="gk-mbti__row"><b>天赋：</b>${(info.strengths || []).join(' · ')}</div>
+		<div class="gk-mbti__row"><b>可能的方向：</b>${(info.careers || []).slice(0, 4).join(' · ')}</div></div>`;
+}
 MBTI_QUESTIONS.forEach((q, i) => {
 	const nextLabel = (i + 1 >= MBTI_QUESTIONS.length) ? 'MbtiResult' : 'MbtiQuiz';
 	mbtiHandlers['_mbtiA_' + i] = [
@@ -541,23 +560,10 @@ monogatari.script (Object.assign({
 		'play sound achievement',
 		'show notification MbtiDone',
 		function () {
-			GK.computeMbti();
-			const g = GK.get();
-			const info = GK.mbtiInfo(g.mbtiType) || { type: g.mbtiType, cn: '探索者', nick: '', tagline: '', strengths: [], careers: [], color: '#5B7FB8' };
-			const html = `<div class="gk-mbti" style="--mc:${info.color}">
-				<div class="gk-mbti__avatar"><img src="assets/images/mbti/${g.mbtiType}.svg" alt="${g.mbtiType}" onerror="this.style.display='none'"></div>
-				<div class="gk-mbti__type">${g.mbtiType}</div>
-				<div class="gk-mbti__cn">${info.cn}</div>
-				<div class="gk-mbti__nick">「${info.nick}」</div>
-				<div class="gk-mbti__tag">${info.tagline}</div>
-				<div class="gk-mbti__row"><b>天赋：</b>${(info.strengths||[]).join(' · ')}</div>
-				<div class="gk-mbti__row"><b>可能的方向：</b>${(info.careers||[]).slice(0,4).join(' · ')}</div></div>`;
-			return 'system ' + html;
+			// ★ 把人格卡 HTML 写入 mbtiResultChoice.Dialog（避免被 Choice 覆盖）
+			mbtiResultChoice.Choice.Dialog = buildMbtiResultDialog();
 		},
-		{ Choice: {
-			Dialog: 'senior 人格测试完成。回校园地图，继续找回其他碎片吧。',
-			'Next': { Text: '🗺 完成 MBTI，返回地图', Do: 'jump MbtiTaskDone' }
-		}}
+		mbtiResultChoice
 	],
 
 	// ══════ Vision + Interest ══════
