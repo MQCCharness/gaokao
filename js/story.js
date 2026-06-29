@@ -141,8 +141,18 @@ monogatari.script({
 	// ScoreBossReal：真正的查分入口（解谜通过后）+ 存档提醒
 	'ScoreBossReal': [
 		function () { if (GK.saveWarn('score')) GK.showSaveWarn('查分后剧情将根据分数分支，建议先存档。'); },
-		'system 解谜通过。现在，面对你的真实分数。',
-		'jump ScoreBoss',
+		'system 解谜通过。现在，选择你查分的方式：',
+		{ Choice: {
+			Dialog: 'system 🎮 游戏路线（虚拟分数，体验剧情） / 📊 现实路线（输入真实分数，AI 估算位次）',
+			'Game':   { Text: '🎮 游戏路线（虚拟分数）', Do: 'jump ScoreBoss' },
+			'Real':   { Text: '📊 现实路线（输入真实分数）', Do: 'jump RealScoreEnter' },
+		}}
+	],
+
+	// 现实路线：输入真实分数 → 调 AI 估算位次
+	'RealScoreEnter': [
+		function () { GK.showRealScoreForm(); },
+		'system （请在弹出的窗口中输入你的真实信息）',
 	],
 
 	// ══════ MBTI 关的解谜（进 MbtiIntro 前）══════

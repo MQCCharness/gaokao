@@ -873,3 +873,78 @@ text-box.gk-voice-playing::after,
 	pointer-events: none;
 	z-index: 10;
 }
+
+/* 现实路线分数输入表单 */
+.gk-realscore {
+	position: fixed; inset: 0; z-index: 120;
+	display: flex; align-items: center; justify-content: center;
+	background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+	animation: gk-fadein 0.3s ease; padding: 20px;
+}
+.gk-realscore__box {
+	max-width: 460px; width: 100%; padding: 28px 32px;
+	background: linear-gradient(180deg, rgba(25,28,55,0.98), rgba(15,12,30,0.99));
+	border: 1px solid rgba(127,90,240,0.4); border-radius: 16px; text-align: center;
+}
+.gk-realscore__box h2 { color: #fff; font-size: 1.3em; margin: 0 0 12px; }
+.gk-realscore__box p { color: #cde; font-size: 0.9em; margin: 4px 0; }
+.gk-realscore__tip { color: #9ab; font-size: 0.82em; margin: 8px 0 16px; line-height: 1.5; }
+.gk-realscore__input {
+	width: 100%; padding: 12px 16px; font-size: 1.2em; text-align: center;
+	background: rgba(255,255,255,0.1); border: 2px solid rgba(127,90,240,0.5);
+	border-radius: 10px; color: #fff; margin-bottom: 12px; box-sizing: border-box;
+}
+.gk-realscore__input:focus { border-color: #7f5af0; outline: none; }
+.gk-realscore__btn {
+	width: 100%; padding: 10px; font-size: 1em; cursor: pointer;
+	background: linear-gradient(135deg, #7f5af0, #2cb67d); color: #fff;
+	border: none; border-radius: 10px; margin-bottom: 12px;
+}
+.gk-realscore__btn:hover { opacity: 0.9; }
+.gk-realscore__result { margin: 12px 0; text-align: left; }
+.gk-realscore__rank { font-size: 1.1em; color: #FFD700; margin-bottom: 8px; }
+.gk-realscore__advice { color: #cde; font-size: 0.88em; line-height: 1.6; }
+.gk-realscore__note { color: #f9c74f; font-size: 0.8em; margin-top: 8px; }
+.gk-realscore__use {
+	width: 100%; padding: 10px; font-size: 1em; cursor: pointer;
+	background: #2cb67d; color: #fff; border: none; border-radius: 10px; margin-bottom: 8px;
+}
+.gk-realscore__cancel {
+	width: 100%; padding: 8px; font-size: 0.9em; cursor: pointer;
+	background: rgba(255,255,255,0.1); color: #9ab; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px;
+}
+
+/* ==========================================================================
+   12. 移动端适配（手机横屏优化）
+   ========================================================================== */
+@media (max-width: 768px) {
+	/* 地图网格 → 双列 */
+	.gk-map__grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 8px 12px; }
+	.gk-map__node-thumb { height: 100px; }
+	.gk-map__node-label { font-size: 0.85em; }
+	.gk-map__title { font-size: 1.2em; }
+	.gk-map__status { font-size: 0.75em; padding: 6px 10px; }
+	/* 画廊网格 → 双列 */
+	.gk-gallery__grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; }
+	.gk-gallery__card { min-height: 240px; }
+	.gk-gallery__portrait img { max-height: 160px; }
+	/* 状态面板 → 单列 */
+	.gk-status { grid-template-columns: 1fr; }
+	/* 碎片闪回字号缩小 */
+	.gk-shard__inner { padding: 24px 20px; font-size: 0.95em; }
+	.gk-shard__title { font-size: 1.1em; }
+	/* 分数面板/志愿卡/MBTI 卡更紧凑 */
+	.gk-scorepanel__num { font-size: 2.2em; }
+	.gk-wishlist { grid-template-columns: 1fr; }
+	.gk-mbti__avatar { width: 64px; height: 76px; }
+	.gk-mbti__avatar img { max-width: 64px; max-height: 76px; }
+	/* 现实路线输入框 */
+	.gk-realscore__box { padding: 20px 16px; }
+	/* 文字框触控友好 */
+	text-box, [data-component="text-box"] { min-height: 120px; }
+}
+@media (max-width: 480px) {
+	.gk-map__grid { grid-template-columns: 1fr; }
+	.gk-gallery__grid { grid-template-columns: 1fr; }
+	.gk-map__node-thumb { height: 90px; }
+}
