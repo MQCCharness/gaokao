@@ -72,35 +72,28 @@ monogatari.script({
 		'jump InterestPickStart',
 	],
 
-	// ══════ 各任务完成后的收尾标签（markCleared + 碎片闪回 + 回地图）══════
-	// 每个 ScoreReact/MbtiResult/VisionPick 收尾 / InterestDone / MentorReveal 出战后
-	// 应 jump 到这里，而不是直接跳下一关
+	// ══════ 各任务完成后的收尾标签（markCleared + 碎片闪回）══════
+	// showShardFlash 内部关闭按钮会 jump CampusMap，不再重复写 jump（避免双重跳转冲突）
 
 	'ScoreTaskDone': [
 		function () { GK.markCleared('score'); },
 		function () { GK.showShardFlash('score'); },
-		// showShardFlash 内部关闭后会 jump CampusMap，这里兜底
-		'jump CampusMap',
 	],
 	'MbtiTaskDone': [
 		function () { GK.markCleared('mbti'); },
 		function () { GK.showShardFlash('mbti'); },
-		'jump CampusMap',
 	],
 	'VisionTaskDone': [
 		function () { GK.markCleared('vision'); },
 		function () { GK.showShardFlash('vision'); },
-		'jump CampusMap',
 	],
 	'InterestTaskDone': [
 		function () { GK.markCleared('interest'); },
 		function () { GK.showShardFlash('interest'); },
-		'jump CampusMap',
 	],
 	'MentorTaskDone': [
 		function () { GK.markCleared('mentor'); },
 		function () { GK.showShardFlash('mentor'); },
-		'jump CampusMap',
 	],
 
 	// ══════ 查分关的解谜（进入 ScoreBoss 前的小谜题）══════
