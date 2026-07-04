@@ -421,8 +421,8 @@ monogatari.script({
 			'Bad':   { Text: '😏 嫉妒顶撞', Do: 'jump NpcLinBad' },
 		}}
 	],
-	'NpcLinGood':  [ function () { GK.showNpcInteract('classmate_lin', 'good'); }, 'jump NpcCorridorAfter' ],
-	'NpcLinBad':   [ function () { GK.showNpcInteract('classmate_lin', 'bad'); }, 'jump NpcCorridorAfter' ],
+		'NpcLinGood':  [ function () { GK.showNpcInteract('classmate_lin', 'good'); } ],
+		'NpcLinBad':   [ function () { GK.showNpcInteract('classmate_lin', 'bad'); } ],
 	// 小雨（同分）互动
 	'NpcTalkXyu': [
 		'show character classmate_xyu normal with fadeIn',
@@ -435,8 +435,8 @@ monogatari.script({
 			'Bad':   { Text: '📉 攀比单科', Do: 'jump NpcXyuBad' },
 		}}
 	],
-	'NpcXyuGood':  [ function () { GK.showNpcInteract('classmate_xyu', 'good'); }, 'jump NpcCorridorAfter' ],
-	'NpcXyuBad':   [ function () { GK.showNpcInteract('classmate_xyu', 'bad'); }, 'jump NpcCorridorAfter' ],
+		'NpcXyuGood':  [ function () { GK.showNpcInteract('classmate_xyu', 'good'); } ],
+		'NpcXyuBad':   [ function () { GK.showNpcInteract('classmate_xyu', 'bad'); } ],
 	// 大志（低分）互动
 	'NpcTalkDazhi': [
 		'show character classmate_dazhi normal with fadeIn',
@@ -449,8 +449,8 @@ monogatari.script({
 			'Bad':   { Text: '🚶 冷漠走过', Do: 'jump NpcDazhiBad' },
 		}}
 	],
-	'NpcDazhiGood':[ function () { GK.showNpcInteract('classmate_dazhi', 'good'); }, 'jump NpcCorridorAfter' ],
-	'NpcDazhiBad': [ function () { GK.showNpcInteract('classmate_dazhi', 'bad'); }, 'jump NpcCorridorAfter' ],
+		'NpcDazhiGood':[ function () { GK.showNpcInteract('classmate_dazhi', 'good'); } ],
+		'NpcDazhiBad': [ function () { GK.showNpcInteract('classmate_dazhi', 'bad'); } ],
 	// 互动后回到走廊选择（可继续和其他同学聊，或离开）
 	'NpcCorridorAfter': [
 		'hide character classmate_lin with fadeOut',
