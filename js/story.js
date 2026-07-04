@@ -709,7 +709,8 @@ monogatari.script({
 		'jump CampusMap',
 	],
 
-	// ══════ 家人互动（家·查分后解锁）══════
+	// ══════ 家人互动（家·查分后解锁）══════ —— 修卡死 bug + 丰富剧情
+	// markTalked：记录已聊过的家人（替代脆弱的关系值匹配）
 	'HomeEnter': [
 		'show scene scene-home with fadeIn',
 		'play music bgm-chat',
@@ -724,55 +725,76 @@ monogatari.script({
 			'Leave': { Text: '🚪 先回学校', Do: 'jump HomeLeave' },
 		}}
 	],
+	// —— 妈妈：焦虑催促 → 深层是怕你将来怪她 → 耐心后她软化 ——
 	'HomeMom': [
+		function () { const t = GK.get()._talked || {}; t.fam_mom = true; GK.set({ _talked: t }); },
 		'show character fam_mom normal with fadeIn',
 		function () { GK.voice('fam_mom/intro'); },
 		'fam_mom 妈 妈不求，妈只怕你将来怪妈没管你。',
 		'fam_mom 妈 这几张是妈帮你打印的，你看看……计算机、金融、师范，都说热门。',
+		'system 妈妈把一摞打印纸推到你面前，纸张边角都卷了——她翻了不知道多少遍。',
+		'fam_mom 妈 隔壁王阿姨家的孩子，报的计算机，现在年薪三十万。妈不是要你比，妈是怕你吃亏。',
 		{ Choice: {
 			Dialog: 'fam_mom 妈 ……',
 			'Good':  { Text: '❤️ 耐心解释自己的想法', Do: 'jump HomeMomGood' },
 			'Bad':   { Text: '😤 不耐烦', Do: 'jump HomeMomBad' },
 		}}
 	],
-	'HomeMomGood': [ function () { GK.showNpcInteract('fam_mom', 'good'); }, 'jump HomeAfter' ],
-	'HomeMomBad':  [ function () { GK.showNpcInteract('fam_mom', 'bad'); }, 'jump HomeAfter' ],
+		'HomeMomGood': [ function () { GK.showNpcInteract('fam_mom', 'good'); } ],
+		'HomeMomBad':  [ function () { GK.showNpcInteract('fam_mom', 'bad'); } ],
+	// —— 爸爸：强硬施压 → 加转折：他当年因选不稳的路吃过苦 ——
 	'HomeDad': [
+		function () { const t = GK.get()._talked || {}; t.fam_dad = true; GK.set({ _talked: t }); },
 		'show character fam_dad normal with fadeIn',
 		function () { GK.voice('fam_dad/intro'); },
 		'fam_dad 爸 我吃过的盐比你走过的路多。听爸的，报个计算机，饿不死。',
 		'fam_dad 爸 看看，你这个分，老老实实报个稳的。别整那些没用的。',
+		'system 爸爸没有看你，他在看手机上的招生群。但你知道他在听。',
+		'fam_dad 爸 你以为爸不想让你报你喜欢的？爸当年也想过。',
+		'fam_dad 爸 爸那时候报了个"有前途"的专业，结果呢？毕业就下岗。整整三年，捡过破烂，摆过地摊。',
+		'system 爸爸的声音顿了一下。这是你第一次听他说这些。',
+		'fam_dad 爸 爸不让你冒险，不是要管你。是爸摔过的跤，不想让你再摔一遍。',
 		{ Choice: {
 			Dialog: 'fam_dad 爸 ……',
 			'Good':  { Text: '📋 用数据理性回应', Do: 'jump HomeDadGood' },
 			'Bad':   { Text: '😠 正面硬刚', Do: 'jump HomeDadBad' },
 		}}
 	],
-	'HomeDadGood': [ function () { GK.showNpcInteract('fam_dad', 'good'); }, 'jump HomeAfter' ],
-	'HomeDadBad':  [ function () { GK.showNpcInteract('fam_dad', 'bad'); }, 'jump HomeAfter' ],
+		'HomeDadGood': [ function () { GK.showNpcInteract('fam_dad', 'good'); } ],
+		'HomeDadBad':  [ function () { GK.showNpcInteract('fam_dad', 'bad'); } ],
+	// —— 小姨：痛苦十年 → 现在终于敢做自己 → 给你打气 ——
 	'HomeAunt': [
+		function () { const t = GK.get()._talked || {}; t.fam_aunt = true; GK.set({ _talked: t }); },
 		'show character fam_aunt normal with fadeIn',
 		function () { GK.voice('fam_aunt/intro'); },
 		'fam_aunt 小姨 别像我当年一样，别人说什么就报什么，毕业了才发现全是错的。',
 		'fam_aunt 小姨 我跟你说句实话——当年你妈让我报会计，说稳定。我报了。然后我痛苦了十年。',
+		'system 小姨端着茶杯，手指在杯沿上慢慢转。她的指甲是新做的，亮亮的——你从没见她这么精心打扮过。',
+		'fam_aunt 小姨 但你知道吗？去年我辞职了。',
+		'fam_aunt 小姨 我去学了一直想学的花艺。现在开了一家小花店，不大，但每天醒来，我是笑着的。',
+		'fam_aunt 小姨 十年我才敢。你比我幸运——你十八岁就能问出"我真正想要什么"这个问题。',
+		'system 小姨看着你，眼睛里有光。那是一种你从没在她脸上见过的、自由的光。',
 		{ Choice: {
 			Dialog: 'fam_aunt 小姨 ……',
 			'Good':  { Text: '👂 认真听她的经验', Do: 'jump HomeAuntGood' },
 			'Bad':   { Text: '📱 敷衍', Do: 'jump HomeAuntBad' },
 		}}
 	],
-	'HomeAuntGood': [ function () { GK.showNpcInteract('fam_aunt', 'good'); }, 'jump HomeAfter' ],
-	'HomeAuntBad':  [ function () { GK.showNpcInteract('fam_aunt', 'bad'); }, 'jump HomeAfter' ],
+		'HomeAuntGood': [ function () { GK.showNpcInteract('fam_aunt', 'good'); } ],
+		'HomeAuntBad':  [ function () { GK.showNpcInteract('fam_aunt', 'bad'); } ],
 	'HomeAfter': [
-		'hide character fam_mom with fadeOut',
-		'hide character fam_dad with fadeOut',
-		'hide character fam_aunt with fadeOut',
 		function () {
+			// 首句函数：计算剩余家人 + markCleared（避免 hide character 首句报错卡住）
+			try { monogatari.run('hide character fam_mom with fadeOut'); } catch (e) {}
+			try { monogatari.run('hide character fam_dad with fadeOut'); } catch (e) {}
+			try { monogatari.run('hide character fam_aunt with fadeOut'); } catch (e) {}
 			const g = GK.get();
-			const remaining = ['fam_mom','fam_dad','fam_aunt'].filter(k => (g.relations?.[k]||0) === (k==='fam_mom'?40:k==='fam_dad'?35:30));
+			const talked = g._talked || {};
+			const all = ['fam_mom', 'fam_dad', 'fam_aunt'];
+			const remaining = all.filter(k => !talked[k]);
 			if (remaining.length === 0) {
 				GK.markCleared('home');
-				return 'system 你和每位家人都聊过了。\n（家探索完成）';
+				return 'system 你和每位家人都聊过了。客厅的灯还亮着，但空气轻了一些。\n（家探索完成，关系值影响结局）';
 			}
 			return 'system 还可以再和家人聊聊。';
 		},
