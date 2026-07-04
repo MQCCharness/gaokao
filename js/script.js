@@ -56,6 +56,16 @@ monogatari.characters ({
 	// 老师 NPC
 	'tch_lee':  { Name: '李老师', Color: '#5B8A5B', Directory: 'tch_lee',  Images: { 'normal': 'tch_lee_normal.png' } },
 	'tch_wang': { Name: '王主任', Color: '#B8860B', Directory: 'tch_wang', Images: { 'normal': 'tch_wang_normal.png' } },
+	// —— 8 位导师（独立角色定义，对话时可 show character mentor_xxx 显示各自立绘）——
+	// Color 取自 mentors.js 各导师的 color 字段
+	'mentor_yuan':     { Name: '导师·渊',     Color: '#4A6FA5', Directory: 'mentor_yuan',     Images: { 'normal': 'mentor_yuan_normal.png' } },
+	'mentor_can':      { Name: '导师·灿哥',   Color: '#E8702A', Directory: 'mentor_can',      Images: { 'normal': 'mentor_can_normal.png' } },
+	'mentor_wan':      { Name: '导师·婉',     Color: '#B07AAC', Directory: 'mentor_wan',      Images: { 'normal': 'mentor_wan_normal.png' } },
+	'mentor_chi':      { Name: '导师·炽',     Color: '#5B8A8A', Directory: 'mentor_chi',      Images: { 'normal': 'mentor_chi_normal.png' } },
+	'mentor_ning':     { Name: '导师·宁老师', Color: '#9C6FB0', Directory: 'mentor_ning',     Images: { 'normal': 'mentor_ning_normal.png' } },
+	'mentor_lao':      { Name: '导师·老朽',   Color: '#C09A6F', Directory: 'mentor_lao',      Images: { 'normal': 'mentor_lao_normal.png' } },
+	'mentor_lingfeng': { Name: '导师·凛',     Color: '#5B7FB8', Directory: 'mentor_lingfeng', Images: { 'normal': 'mentor_lingfeng_normal.png', 'happy': 'mentor_lingfeng_happy.png', 'thinking': 'mentor_lingfeng_thinking.png' } },
+	'mentor_zhaoyang': { Name: '导师·朝阳',   Color: '#E8923C', Directory: 'mentor_zhaoyang', Images: { 'normal': 'mentor_zhaoyang_normal.png', 'happy': 'mentor_zhaoyang_happy.png', 'excited': 'mentor_zhaoyang_excited.png' } },
 });
 
 monogatari.action ('notification').notifications ({
@@ -206,16 +216,24 @@ GK.showMentorGallery = function () {
 	if (old) old.remove();
 	const cards = MENTORS.map(m => {
 		const rc = RARITY_CONFIG[m.rarity];
-		return `<div class="gk-gallery__card" data-mentor="${m.id}" style="--rc:${rc.color}">
-			<div class="gk-gallery__rarity">${'★'.repeat(rc.stars)} ${rc.label.split(' ')[0]}</div>
-			<div class="gk-gallery__emoji-badge">${m.emoji}</div>
+		const archetypes = (m.archetypes || []).slice(0, 4).join(' · ');
+		return `<div class="gk-gallery__card" data-mentor="${m.id}" style="--rc:${m.color || rc.color}">
+			<div class="gk-gallery__rarity" style="--rc-rarity:${rc.color}">${'★'.repeat(rc.stars)} ${rc.label.split(' ')[0]}</div>
 			<div class="gk-gallery__portrait"><img src="assets/characters/mentor_${m.id}/mentor_${m.id}_normal.png" alt="${m.name}" loading="lazy"></div>
 			<div class="gk-gallery__info">
-				<div class="gk-gallery__name">${m.name}</div>
+				<div class="gk-gallery__name">${m.emoji} ${m.name}</div>
 				<div class="gk-gallery__title-text">${m.title.split(' · ')[1] || m.title}</div>
-				<div class="gk-gallery__elem">${m.element}属性</div>
-				<div class="gk-gallery__passive">⚔ ${m.passive.label}：${m.passive.desc}</div>
-				<div class="gk-gallery__tagline">${m.tagline}</div>
+				<div class="gk-gallery__tags">
+					<span class="gk-gallery__elem" style="background:${m.color}">${m.element}</span>
+					<span class="gk-gallery__arch">${archetypes}</span>
+				</div>
+				<div class="gk-gallery__tagline">"${m.tagline}"</div>
+				<div class="gk-gallery__bio">${m.bio}</div>
+				<div class="gk-gallery__skills">
+					<div class="gk-gallery__passive"><b>⚔ ${m.passive.label}</b>：${m.passive.desc}</div>
+					<div class="gk-gallery__skill"><b>✨ 主动技</b>：${m.skill}</div>
+				</div>
+				<div class="gk-gallery__greet">💬 ${m.greet}</div>
 			</div>
 		</div>`;
 	}).join('');
