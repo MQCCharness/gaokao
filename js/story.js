@@ -578,6 +578,7 @@ monogatari.script({
 		'jump RelaxGymEnd'
 	],
 	'RelaxGymEnd': [
+		'stop sound',
 		function () { GK.markCleared('relax_gym'); },
 		function () { GK.sfx('reveal'); },
 		'system （体育馆探索完成。和阿星的关系提升了——你见过他最热血的样子，也见过他最脆弱的时刻。）',
@@ -635,6 +636,7 @@ monogatari.script({
 		'jump RelaxStargazeEnd'
 	],
 	'RelaxStargazeEnd': [
+		'stop sound',
 		function () { GK.markCleared('relax_star'); },
 		function () { GK.sfx('reveal'); },
 		'system （屋上探索完成。和学姐的关系提升了——她把没对那个学生说出的话，今晚都对你说了。）',
@@ -717,6 +719,7 @@ monogatari.script({
 		'jump RelaxRiverEnd'
 	],
 	'RelaxRiverEnd': [
+		'stop sound',
 		function () { GK.markCleared('relax_river'); },
 		function () { GK.sfx('reveal'); },
 		'system （河川敷探索完成。和阿星的关系大幅提升——你见过他最脆弱的样子，也陪他撑过了最难的一关。）',
