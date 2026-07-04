@@ -411,6 +411,7 @@ monogatari.script({
 	],
 	// 林（高分）互动
 	'NpcTalkLin': [
+		function () { const t = GK.get()._talked || {}; t.classmate_lin = true; GK.set({ _talked: t }); },
 		'show character classmate_lin normal with fadeIn',
 		'system 林靠在窗边，手里捏着一张写得密密麻麻的纸。',
 		'classmate_lin 林 ……你来啦。分数看了？',
@@ -425,6 +426,7 @@ monogatari.script({
 		'NpcLinBad':   [ function () { GK.showNpcInteract('classmate_lin', 'bad'); } ],
 	// 小雨（同分）互动
 	'NpcTalkXyu': [
+		function () { const t = GK.get()._talked || {}; t.classmate_xyu = true; GK.set({ _talked: t }); },
 		'show character classmate_xyu normal with fadeIn',
 		'system 小雨蹲在饮水机旁边，手机屏幕亮着，是查分页面。',
 		'classmate_xyu 小雨 嘿……你考了多少？我……我和你差不多。天哪，我现在手还在抖。',
@@ -439,6 +441,7 @@ monogatari.script({
 		'NpcXyuBad':   [ function () { GK.showNpcInteract('classmate_xyu', 'bad'); } ],
 	// 大志（低分）互动
 	'NpcTalkDazhi': [
+		function () { const t = GK.get()._talked || {}; t.classmate_dazhi = true; GK.set({ _talked: t }); },
 		'show character classmate_dazhi normal with fadeIn',
 		'system 大志蹲在走廊尽头，背对着所有人。',
 		'classmate_dazhi 大志 ……别管我。我就是……不知道该干嘛了。',
@@ -453,13 +456,14 @@ monogatari.script({
 		'NpcDazhiBad': [ function () { GK.showNpcInteract('classmate_dazhi', 'bad'); } ],
 	// 互动后回到走廊选择（可继续和其他同学聊，或离开）
 	'NpcCorridorAfter': [
-		'hide character classmate_lin with fadeOut',
-		'hide character classmate_xyu with fadeOut',
-		'hide character classmate_dazhi with fadeOut',
 		function () {
+			try { monogatari.run('hide character classmate_lin with fadeOut'); } catch (e) {}
+			try { monogatari.run('hide character classmate_xyu with fadeOut'); } catch (e) {}
+			try { monogatari.run('hide character classmate_dazhi with fadeOut'); } catch (e) {}
 			const g = GK.get();
-			const talked = ['classmate_lin','classmate_xyu','classmate_dazhi'].filter(k => (g.relations?.[k]||0) !== 30);
-			const remaining = ['classmate_lin','classmate_xyu','classmate_dazhi'].filter(k => (g.relations?.[k]||0) === 30);
+			const talked = g._talked || {};
+			const all = ['classmate_lin', 'classmate_xyu', 'classmate_dazhi'];
+			const remaining = all.filter(k => !talked[k]);
 			if (remaining.length === 0) {
 				GK.markCleared('corridor');
 				return 'system 你和每位同学都聊过了。走廊空了下来，阳光照进来。\n（走廊探索完成，关系值影响结局）';
@@ -811,7 +815,7 @@ monogatari.script({
 		'jump CampusMap',
 	],
 
-	// ══════ 老师互动（办公室·查分后解锁）══════
+	// ══════ 老师互动（办公室·查分后解锁）══════ —— 修 bug + 丰富剧情（真心 vs 利益）
 	'OfficeEnter': [
 		'show scene scene-office with fadeIn',
 		'play music bgm-chat',
@@ -825,41 +829,57 @@ monogatari.script({
 			'Leave': { Text: '🚪 离开', Do: 'jump OfficeLeave' },
 		}}
 	],
+	// —— 李老师：真心为你 + 透露自己也后悔当年没敢冒险 ——
 	'OfficeLee': [
+		function () { const t = GK.get()._talked || {}; t.tch_lee = true; GK.set({ _talked: t }); },
 		'show character tch_lee normal with fadeIn',
 		function () { GK.voice('tch_lee/intro'); },
 		'tch_lee 李老师 我看了你的分数。不差。但老师更想问你——你想好了吗？',
 		'tch_lee 李老师 老师的职责不是告诉你报什么，是帮你想清楚你想要什么。',
+		'system 李老师摘下眼镜，擦了擦。镜片上有道划痕，很旧了——他戴了很多年。',
+		'tch_lee 李老师 老师跟你说句心里话。我当年高考，分数够上美院。',
+		'tch_lee 李老师 但所有人都说"画画没出路"。我听了。报了师范。现在站在这里，做了二十年班主任。',
+		'tch_lee 李老师 我不后悔当老师。但有时候改作业改到半夜，我会想——如果当年我敢画下去，现在会在哪？',
+		'system 李老师看着你，眼神里有种你从没见过的东西——不是老师的威严，是一个过来人的疲惫和温柔。',
+		'tch_lee 李老师 所以老师不想替你决定。老师只希望你十年后，不用问自己"如果当时"。',
 		{ Choice: {
 			Dialog: 'tch_lee 李老师 ……',
 			'Good':  { Text: '💬 坦诚说出自己的纠结', Do: 'jump OfficeLeeGood' },
 			'Bad':   { Text: '🤷 您说我报什么好', Do: 'jump OfficeLeeBad' },
 		}}
 	],
-	'OfficeLeeGood': [ function () { GK.showNpcInteract('tch_lee', 'good'); }, 'jump OfficeAfter' ],
-	'OfficeLeeBad':  [ function () { GK.showNpcInteract('tch_lee', 'bad'); }, 'jump OfficeAfter' ],
+		'OfficeLeeGood': [ function () { GK.showNpcInteract('tch_lee', 'good'); } ],
+		'OfficeLeeBad':  [ function () { GK.showNpcInteract('tch_lee', 'bad'); } ],
+	// —— 王主任：利益诱导 + 加一层"招生指标"的真实压力 ——
 	'OfficeWang': [
+		function () { const t = GK.get()._talked || {}; t.tch_wang = true; GK.set({ _talked: t }); },
 		'show character tch_wang normal with fadeIn',
 		function () { GK.voice('tch_wang/intro'); },
 		'tch_wang 王主任 同学！你这个分数，正好我们有个合作院校，还有内部名额。机会难得啊！',
 		'tch_wang 王主任 这个学校跟我们有合作关系，你有内部名额优势。错过可就没了。',
+		'system 王主任的笑很热情，但你注意到他桌上堆着一摞招生简章，每一份都盖着不同的章。',
+		'system 他的电脑屏幕上，是一个表格——"XX学院 2024 招生指标完成度：67%"。',
+		'tch_wang 王主任 你放心，这个学校绝对靠谱。我跟他们招办的老总是铁哥们，你报了，我保你录。',
+		'system 他压低了声音，凑近你。但你闻到了他杯子里的茶已经凉了——他在这里等了很久。',
+		'system 等的不是你，是任何一个"分数够得上、又没主见"的学生。',
 		{ Choice: {
 			Dialog: 'tch_wang 王主任 ……',
 			'Good':  { Text: '🔍 表示要回去查查再说', Do: 'jump OfficeWangGood' },
 			'Bad':   { Text: '😍 太好了！那就报这个！', Do: 'jump OfficeWangBad' },
 		}}
 	],
-	'OfficeWangGood': [ function () { GK.showNpcInteract('tch_wang', 'good'); }, 'jump OfficeAfter' ],
-	'OfficeWangBad':  [ function () { GK.showNpcInteract('tch_wang', 'bad'); }, 'jump OfficeAfter' ],
+		'OfficeWangGood': [ function () { GK.showNpcInteract('tch_wang', 'good'); } ],
+		'OfficeWangBad':  [ function () { GK.showNpcInteract('tch_wang', 'bad'); } ],
 	'OfficeAfter': [
-		'hide character tch_lee with fadeOut',
-		'hide character tch_wang with fadeOut',
 		function () {
+			try { monogatari.run('hide character tch_lee with fadeOut'); } catch (e) {}
+			try { monogatari.run('hide character tch_wang with fadeOut'); } catch (e) {}
 			const g = GK.get();
-			const remaining = ['tch_lee','tch_wang'].filter(k => (g.relations?.[k]||0) === (k==='tch_lee'?30:20));
+			const talked = g._talked || {};
+			const remaining = ['tch_lee', 'tch_wang'].filter(k => !talked[k]);
 			if (remaining.length === 0) {
 				GK.markCleared('office');
-				return 'system 你和每位老师都聊过了。\n（办公室探索完成）';
+				return 'system 你和每位老师都聊过了。\n（办公室探索完成——你学会了分辨：谁是真心，谁在冲指标。）';
 			}
 			return 'system 还可以再和老师聊聊。';
 		},
