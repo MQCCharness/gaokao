@@ -12,6 +12,10 @@ _keri_cache/
 assets/_downloads/
 assets/_keri_backup/
 assets/characters/_stella_*/
+assets/characters/_sensei_pack/
+assets/characters/_*_new/
+assets/characters/_backup_stella/
+assets/characters/*.zip
 assets/characters/Base/
 assets/characters/Bottoms/
 assets/characters/Eyebrows/

@@ -54,12 +54,12 @@ monogatari.characters ({
 	'fam_dad':  { Name: '爸爸',   Color: '#5B8AB8', Directory: 'fam_dad',  Images: { 'normal': 'fam_dad_normal.png' } },
 	'fam_aunt': { Name: '小姨',   Color: '#C4A0D9', Directory: 'fam_aunt', Images: { 'normal': 'fam_aunt_normal.png' } },
 	// 老师 NPC
-	'tch_lee':  { Name: '李老师', Color: '#5B8A5B', Directory: 'tch_lee',  Images: { 'normal': 'tch_lee_normal.png' } },
+	'tch_lee':  { Name: '李老师', Color: '#5B8A5B', Directory: 'tch_lee',  Images: { 'normal': 'tch_lee_normal.png', 'happy': 'tch_lee_happy.png', 'sad': 'tch_lee_sad.png', 'angry': 'tch_lee_angry.png', 'talk': 'tch_lee_talk.png' } },
 	'tch_wang': { Name: '王主任', Color: '#B8860B', Directory: 'tch_wang', Images: { 'normal': 'tch_wang_normal.png' } },
 	// —— 8 位导师（独立角色定义，对话时可 show character mentor_xxx 显示各自立绘）——
 	// Color 取自 mentors.js 各导师的 color 字段
 	'mentor_yuan':     { Name: '导师·渊',     Color: '#4A6FA5', Directory: 'mentor_yuan',     Images: { 'normal': 'mentor_yuan_normal.png' } },
-	'mentor_can':      { Name: '导师·灿哥',   Color: '#E8702A', Directory: 'mentor_can',      Images: { 'normal': 'mentor_can_normal.png' } },
+	'mentor_can':      { Name: '导师·灿哥',   Color: '#E8702A', Directory: 'mentor_can',      Images: { 'normal': 'mentor_can_normal.png', 'happy': 'mentor_can_happy.png', 'angry': 'mentor_can_angry.png', 'surprised': 'mentor_can_surprised.png' } },
 	'mentor_wan':      { Name: '导师·婉',     Color: '#B07AAC', Directory: 'mentor_wan',      Images: { 'normal': 'mentor_wan_normal.png' } },
 	'mentor_chi':      { Name: '导师·炽',     Color: '#5B8A8A', Directory: 'mentor_chi',      Images: { 'normal': 'mentor_chi_normal.png' } },
 	'mentor_ning':     { Name: '导师·宁老师', Color: '#9C6FB0', Directory: 'mentor_ning',     Images: { 'normal': 'mentor_ning_normal.png' } },
