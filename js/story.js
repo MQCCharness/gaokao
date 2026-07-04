@@ -481,14 +481,14 @@ monogatari.script({
 
 	// ══════ 放松场景（日常支线，节奏调节 + 关系培养 + 环境音）══════
 
-	// 🏀 打篮球（体育馆，和阿星）
+	// 🏀 打篮球（体育馆，和阿星）—— 扬抑交替 + 道德选择
 	'RelaxGym': [
 		'show scene scene-gym with fadeIn',
 		'play music bgm-chat',
 		function () { GK.clearCharacters(); },
-		'play sound env-gym',     // 体育馆哨声
+		'play sound env-gym',
 		'system 傍晚的体育馆，光线从高窗斜照进来。球鞋摩擦地板的声音回荡着。',
-		'play sound env-crowd',   // 远处人群声
+		'play sound env-crowd',
 		'show character buddy_sports happy with fadeIn',
 		function () { GK.voice('buddy/basketball'); },
 		'buddy_sports 阿星 嘿！{{player.name}}！传一个！',
@@ -505,10 +505,52 @@ monogatari.script({
 		'system 你运球，急停，跳投——球在篮筐上弹了两下，进了。',
 		'buddy 阿星 卧槽！可以啊你！这手感，填志愿也该这么果断。',
 		'show character buddy_sports happy',
-		'buddy 阿星 说真的，刚才那一下，你眼睛里有光。好久没见你这么有干劲了。',
-		'system 打完一局，你俩瘫在场边，汗流浃背。窗外的晚霞把整个体育馆染成橙色。',
+		'system 你俩你来我往，比分交替上升。汗水淌进眼睛，但奇怪的是，那些填志愿的焦虑，随着每一次运球慢慢淡了。',
+		'system 一个小时后，你俩瘫在场边。晚霞把体育馆染成橙色。',
+		// ↓ 抑：阿星突然沉默，透露家里压力
+		'show character buddy_sports normal',
+		'buddy 阿星 ……喂。',
+		'buddy 阿星 你说，人是不是非得活成爸妈想要的样子？',
+		'system 阿星盯着地板，球还在地上慢慢滚。他的声音突然轻了下来。',
+		'buddy 阿星 我爸昨晚又喝多了。他说，我必须报金融。他说，他托了关系，能让我进一个不错的学校。',
+		'buddy 阿星 可我想报体育教育。我想当教练。你知道的，我打球的时候……眼睛里有光。',
+		'system 他抬起头看你，眼眶有点红。这是你认识阿星这么多年，第一次见他这样。',
+		// ↓ 道德选择
+		{ Choice: {
+			Dialog: 'buddy 阿星 ……帮我个忙呗。今晚回去填预志愿的时候，你帮我盯着——如果我手一抖填了金融，你就骂醒我。行不？',
+			'Help':    { Text: '🤝 行，我盯着你', Do: 'jump RelaxGymHelp' },
+			'Refuse':  { Text: '🙅 这事你得自己跟你爸谈', Do: 'jump RelaxGymRefuse' },
+			'Middle':  { Text: '💡 先报金融保底，体育做第二志愿？', Do: 'jump RelaxGymMiddle' },
+		}}
+	],
+	'RelaxGymHelp': [
+		function () { GK.feedback({ rel: { buddy: +12 }, attrs: { courage: +5, diligence: +3 } }); },
+		'buddy 阿星 ……谢了兄弟。',
+		'buddy 阿星 有你这句话，我就知道我不是一个人扛。',
+		'system 阿星用力拍了一下你的肩膀。疼，但那种"被需要"的感觉，让你心里一暖。',
 		'show character buddy_sports happy',
-		'buddy 阿星 看，不管考多少分，能投进一个球，今天就没白过。志愿也一样——投出去，才知道进不进。',
+		'buddy 阿星 走！请你喝汽水。今天这局，我认输。',
+		'jump RelaxGymEnd'
+	],
+	'RelaxGymRefuse': [
+		function () { GK.feedback({ rel: { buddy: +4 }, attrs: { insight: +6 } }); },
+		'show character buddy_sports normal',
+		'buddy 阿星 ……也是。',
+		'buddy 阿星 躲得过今晚，躲不过四年。躲得过我爸，躲不过我自己。',
+		'system 阿星沉默了一会儿，忽然笑了。那笑里有点苦，但也有点释然。',
+		'buddy 阿星 行，我今晚就跟我爸摊牌。大不了挨顿打。总比后悔四年强。',
+		'system 你没有帮他隐瞒，但你的话让他下定了决心。有时候，朋友能做的不是替你决定，而是逼你面对。',
+		'jump RelaxGymEnd'
+	],
+	'RelaxGymMiddle': [
+		function () { GK.feedback({ rel: { buddy: +8 }, attrs: { diligence: +5, insight: +4 } }); },
+		'buddy 阿星 ……保底？',
+		'system 阿星愣了一下，眼睛突然亮了。',
+		'buddy 阿星 卧槽，我怎么没想到！金融做第一志愿糊弄我爸，体育做第二志愿——就算第一志愿滑档，我还能上体育！',
+		'buddy 阿星 你他妈是天才！这招"明修栈道暗度陈仓"，服了服了！',
+		'show character buddy_sports happy',
+		'system 阿星又活过来了。他用力撞了一下你的肩膀，力气大得差点把你撞倒。',
+		'buddy 阿星 走，请你喝汽水。今天这局，值了。',
 		'jump RelaxGymEnd'
 	],
 	'RelaxGymTalk': [
@@ -517,24 +559,25 @@ monogatari.script({
 		'system 你俩坐在场边，喝着汽水。球场空了，只有风穿过窗户的声音。',
 		'play sound env-leaves',
 		'buddy 阿星 其实我也慌。不是怕考不好，是怕……选错了，以后后悔。',
-		'buddy 阿星 但刚才打球的时候我突然想通了——后悔又怎样？至少是我自己选的。比让爸妈替我选，然后怪他们一辈子强。',
+		'buddy 阿星 但刚才看你投那个球，我突然想通了——后悔又怎样？至少是我自己选的。比让爸妈替我选，然后怪他们一辈子强。',
 		'system 阿星的话糙，但你听进去了。有些道理，非得出了汗才想得通。',
 		'jump RelaxGymEnd'
 	],
 	'RelaxGymEnd': [
+		function () { GK.markCleared('relax_gym'); },
 		function () { GK.sfx('reveal'); },
-		'system （和阿星的关系提升了。运动让人清醒，也让人坦诚。）',
+		'system （体育馆探索完成。和阿星的关系提升了——你见过他最热血的样子，也见过他最脆弱的时刻。）',
 		'jump CampusMap',
 	],
 
-	// 🌌 看星空（屋上，和学姐·温）
+	// 🌌 看星空（屋上，和学姐·温）—— 先扬后抑 + 学姐的遗憾
 	'RelaxStargaze': [
 		'show scene scene-stargaze with fadeIn',
 		'play music bgm-vision',
 		function () { GK.clearCharacters(); },
-		'play sound env-rooftop',  // 屋上风声
+		'play sound env-rooftop',
 		'system 夜风带着白天的余温。屋上的围栏凉凉的，头顶是漫天星斗。',
-		'play sound env-insect',   // 夜间虫鸣
+		'play sound env-insect',
 		'show character senior sad with fadeIn',
 		'senior 温 你也睡不着啊。',
 		'system 学姐靠在围栏边，仰头看天。星光落在她脸上，很安静。',
@@ -553,6 +596,21 @@ monogatari.script({
 		'senior 温 分数就是你现在的亮度。但亮度不代表位置——有些暗星，其实在更重要的位置上。',
 		'senior 温 填志愿，不是比谁更亮。是找到属于你的那个位置，然后，发你的光。',
 		'system 夜风吹过，虫鸣起伏。你忽然觉得，那些分数的焦虑，轻了一点。',
+		// ↓ 抑：学姐突然沉默，提起往事
+		'show character senior sad',
+		'senior 温 ……我跟你说个事。',
+		'senior 温 去年，有个学生。分数比你高得多，全省前五百。所有人都觉得他要上清北。',
+		'senior 温 他爸妈都是医生，从小到大，他的志愿只有两个字：医学。',
+		'system 学姐的声音轻下去。她没有看你，只是盯着天上某一颗星。',
+		'senior 温 他其实想学天文。但我那时候没像今晚这样带他看星星。我只是说"分数这么高，别浪费了"。',
+		'senior 温 他听了所有的人，除了他自己。进了医学院，读了半年，退学了。',
+		'system 夜风忽然冷了一些。学姐的睫毛上，似乎有什么东西在闪。',
+		'senior 温 后来他重新高考，考得没第一次好。但他报了天文。现在在山里的一个观测站，天天看星星。',
+		// ↓ 扬：遗憾化作叮嘱，温柔收尾
+		'show character senior happy',
+		'senior 温 所以今晚我带你来这里。我不想让你——也成为那个"分数很高，但夜里睡不着"的人。',
+		'senior 温 {{player.name}}，听所有人的建议，但最后那一下，听你自己的。',
+		'system 学姐笑了。星光又落回她脸上，这一次，比刚才暖。',
 		'jump RelaxStargazeEnd'
 	],
 	'RelaxStarAsk': [
@@ -563,47 +621,91 @@ monogatari.script({
 		'jump RelaxStargazeEnd'
 	],
 	'RelaxStargazeEnd': [
+		function () { GK.markCleared('relax_star'); },
 		function () { GK.sfx('reveal'); },
-		'system （和学姐的关系提升了。星空让人安静，也让人看清方向。）',
+		'system （屋上探索完成。和学姐的关系提升了——她把没对那个学生说出的话，今晚都对你说了。）',
 		'jump CampusMap',
 	],
 
-	// 🌊 河川敷散步（和阿星）
+	// 🌊 河川敷散步（和阿星）—— 先抑后扬 + 阿星崩溃
 	'RelaxRiver': [
 		'show scene scene-river with fadeIn',
 		'play music bgm-chat',
 		function () { GK.clearCharacters(); },
-		'play sound env-river',    // 河水声
+		'play sound env-river',
 		'system 河水在夕阳下闪着光。你和阿星沿着堤岸走，谁都没说话。',
-		'play sound env-semi',     // 蝉鸣
+		'play sound env-semi',
 		'show character buddy normal with fadeIn',
 		'buddy 阿星 ……你知道吗，小时候我跟我爸来这钓鱼。那时候觉得，长大后什么都能搞定。',
-		'buddy 阿星 现在长大了，发现搞不定的更多。比如……填志愿。',
+		// ↓ 抑：阿星突然停下，情绪崩溃
+		'system 阿星走着走着，忽然停下了。他没有回头，肩膀在抖。',
+		'show character buddy_sports normal',
+		'buddy 阿星 ……我撑不住了。',
+		'system 你愣住了。认识阿星这么多年，你从没见他这样——他总是那个嘻嘻哈哈、什么事都能扛的人。',
+		'buddy 阿星 我爸昨天把我志愿表撕了。当着我妈的面。',
+		'buddy 阿星 他说我考这点分，还敢报体育？他说我要是敢不听他的，就别认他这个爸。',
+		'buddy 阿星 我妈就坐在那儿，一句话都没说。她低着头，一直在择菜，好像什么都没发生。',
+		'system 阿星蹲下来，把脸埋进手臂里。蝉鸣忽然变得很响。',
+		'buddy 阿星 我不是怕我爸打我。我是怕……我真的相信了他说的，我这辈子就这样了。',
+		'buddy 阿星 我怕我填志愿的那天，手会抖。我怕我最后变成他想要的样子，然后，恨我自己一辈子。',
+		// ↓ 道德选择：怎么回应阿星的崩溃
 		{ Choice: {
-			Dialog: 'buddy 阿星 你呢？你害怕吗？',
-			'Honest': { Text: '😔 老实说，怕', Do: 'jump RelaxRiverHonest' },
-			'Brave':  { Text: '💪 还行，有方向了', Do: 'jump RelaxRiverBrave' },
+			Dialog: 'system 阿星蹲在堤岸边，肩膀一抖一抖的。蝉鸣很响，河水很慢。你怎么做？',
+			'Hug':     { Text: '🫂 蹲下来，拍拍他', Do: 'jump RelaxRiverHug' },
+			'Speak':   { Text: '🗣 你不是你爸说的那样', Do: 'jump RelaxRiverSpeak' },
+			'Silent':  { Text: '😶 什么都不说，陪着他', Do: 'jump RelaxRiverSilent' },
 		}}
 	],
-	'RelaxRiverHonest': [
-		function () { GK.feedback({ rel: { buddy: +10 }, attrs: { courage: +3 } }); },
+	'RelaxRiverHug': [
+		function () { GK.feedback({ rel: { buddy: +15 }, attrs: { courage: +6, patience: +5 } }); },
+		'system 你没说话，只是蹲下来，把手放在他肩上。',
+		'system 阿星的身体僵了一下，然后，像是什么东西断了，他终于哭出了声。',
+		'buddy 阿星 ……操。操他妈的志愿。操他妈的分数。',
+		'buddy 阿星 ……我不是想哭。我就是……憋太久了。',
+		'system 你没有打断他。河水在脚边慢慢流，蝉还在叫。有些眼泪，流出来比憋着强。',
+		// ↓ 扬：阿星情绪宣泄后振作
 		'show character buddy_sports happy',
-		'buddy 阿星 哈！我就知道。其实我也怕。但说出来之后，好像没那么怕了。',
-		'buddy 阿星 两个人一起怕，比一个人怕强。咱俩互相盯着，谁填错了另一个骂他。',
-		'system 夕阳沉下去一半。河水还在流。你笑了——有些恐惧，说出来就轻了一半。',
+		'buddy 阿星 ……靠。哭完了。丢人。',
+		'buddy 阿星 但好像……没那么沉了。',
+		'buddy 阿星 谢了兄弟。没你在这儿，我可能真就一个人扛到填志愿那天，然后手一抖，把我爸想要的填上去了。',
+		'buddy 阿星 不行。我得自己填。大不了挨顿打。总比恨我自己强。',
+		'system 夕阳沉下去一半。河水还在流。但阿星站起来了——这一次，背挺得比刚才直。',
 		'jump RelaxRiverEnd'
 	],
-	'RelaxRiverBrave': [
-		function () { GK.feedback({ rel: { buddy: +6 }, attrs: { courage: +5 } }); },
+	'RelaxRiverSpeak': [
+		function () { GK.feedback({ rel: { buddy: +10 }, attrs: { courage: +8 } }); },
+		'system 你蹲到他面前，看着他的眼睛。',
+		'system "你不是你爸说的那样。"',
+		'system "你投篮的时候眼睛里有光，那是你自己发的光。你爸看不到，不代表它不存在。"',
+		'system "志愿表是你填，不是他填。你的四年，不是他的四年。"',
+		'buddy 阿星 ……',
+		'system 阿星抬起头，眼睛红红的，但里面有什么东西在重新亮起来。',
+		'buddy 阿星 ……你说的对。',
+		'buddy 阿星 凭什么他说我怎样我就怎样。他填过志愿吗？他过的那辈子，是他想要的吗？',
+		'buddy 阿星 不行。我不能走他的老路。我得自己试一次。哪怕错了，也是我自己错的。',
 		'show character buddy_sports happy',
-		'buddy 阿星 ……你真的想清楚了？行，那我得加把劲了。不能就我一个人慌。',
-		'buddy 阿星 说真的，你这种状态挺好的。有方向的人，走路都不一样。',
-		'system 阿星的话让你更确定了自己的选择。河水带走了一些犹豫。',
+		'buddy 阿星 谢了兄弟。你刚才说的那几句，我记住了。',
+		'system 夕阳沉下去一半。河水带走了很多，但也留下了什么。',
+		'jump RelaxRiverEnd'
+	],
+	'RelaxRiverSilent': [
+		function () { GK.feedback({ rel: { buddy: +12 }, attrs: { patience: +6, patience: +4 } }); },
+		'system 你没有说话。你只是在他旁边蹲下来，跟他一起看河水。',
+		'system 有时候，陪伴比任何话都管用。',
+		'buddy 阿星 ……你不用安慰我。',
+		'buddy 阿星 你在这儿，就够了。',
+		'system 蝉鸣，河水，风。两个少年蹲在堤岸边，什么都没说，但什么都懂了。',
+		'system 过了很久，阿星站起来，抹了一把脸。',
+		'show character buddy_sports happy',
+		'buddy 阿星 走吧。回去了。',
+		'buddy 阿星 我今晚就跟我爸摊牌。不管结果怎样……至少今晚，我不是一个人。',
+		'system 夕阳沉下去一半。河水还在流。但你的肩膀上，多了一份重量——那是一个朋友把信任交给你的重量。',
 		'jump RelaxRiverEnd'
 	],
 	'RelaxRiverEnd': [
+		function () { GK.markCleared('relax_river'); },
 		function () { GK.sfx('reveal'); },
-		'system （和阿星的关系提升了。散步让人放松，也让人看清自己的内心。）',
+		'system （河川敷探索完成。和阿星的关系大幅提升——你见过他最脆弱的样子，也陪他撑过了最难的一关。）',
 		'jump CampusMap',
 	],
 
