@@ -47,23 +47,23 @@ monogatari.characters ({
 	// 3 位 NPC 同学（走廊互动，stella 换装）
 	'classmate_lin':   { Name: '同学·林',   Color: '#4A90D9', Directory: 'classmate_lin',   Images: { 'normal': 'classmate_lin_normal.png' } },
 	'classmate_xyu':   { Name: '同学·小雨', Color: '#7EC8E3', Directory: 'classmate_xyu',   Images: { 'normal': 'classmate_xyu_normal.png' } },
-	'classmate_dazhi': { Name: '同学·大志', Color: '#E8923C', Directory: 'classmate_dazhi', Images: { 'normal': 'classmate_dazhi_normal.png' } },
+	'classmate_dazhi': { Name: '同学·大志', Color: '#E8923C', Directory: 'classmate_dazhi', Images: { 'normal': 'classmate_dazhi_normal.png', 'angry': 'classmate_dazhi_angry.png', 'smirk': 'classmate_dazhi_smirk.png' } },
 	'buddy_sports':   { Name: '阿星(运动装)', Color: '#C09A6F', Directory: 'buddy_sports', Images: { 'normal': 'buddy_sports_normal.png', 'happy': 'buddy_sports_happy.png' } },
 	// 家人 NPC
 	'fam_mom':  { Name: '妈妈',   Color: '#E891A8', Directory: 'fam_mom',  Images: { 'normal': 'fam_mom_normal.png' } },
-	'fam_dad':  { Name: '爸爸',   Color: '#5B8AB8', Directory: 'fam_dad',  Images: { 'normal': 'fam_dad_normal.png' } },
+	'fam_dad':  { Name: '爸爸',   Color: '#5B8AB8', Directory: 'fam_dad',  Images: { 'normal': 'fam_dad_normal.png', 'angry': 'fam_dad_angry.png', 'smirk': 'fam_dad_smirk.png', 'straight': 'fam_dad_straight.png' } },
 	'fam_aunt': { Name: '小姨',   Color: '#C4A0D9', Directory: 'fam_aunt', Images: { 'normal': 'fam_aunt_normal.png' } },
 	// 老师 NPC
 	'tch_lee':  { Name: '李老师', Color: '#5B8A5B', Directory: 'tch_lee',  Images: { 'normal': 'tch_lee_normal.png', 'happy': 'tch_lee_happy.png', 'sad': 'tch_lee_sad.png', 'angry': 'tch_lee_angry.png', 'talk': 'tch_lee_talk.png' } },
-	'tch_wang': { Name: '王主任', Color: '#B8860B', Directory: 'tch_wang', Images: { 'normal': 'tch_wang_normal.png' } },
+	'tch_wang': { Name: '王主任', Color: '#B8860B', Directory: 'tch_wang', Images: { 'normal': 'tch_wang_normal.png', 'angry': 'tch_wang_angry.png', 'smirk': 'tch_wang_smirk.png', 'straight': 'tch_wang_straight.png' } },
 	// —— 8 位导师（独立角色定义，对话时可 show character mentor_xxx 显示各自立绘）——
 	// Color 取自 mentors.js 各导师的 color 字段
 	'mentor_yuan':     { Name: '导师·渊',     Color: '#4A6FA5', Directory: 'mentor_yuan',     Images: { 'normal': 'mentor_yuan_normal.png' } },
 	'mentor_can':      { Name: '导师·灿哥',   Color: '#E8702A', Directory: 'mentor_can',      Images: { 'normal': 'mentor_can_normal.png', 'happy': 'mentor_can_happy.png', 'angry': 'mentor_can_angry.png', 'surprised': 'mentor_can_surprised.png' } },
 	'mentor_wan':      { Name: '导师·婉',     Color: '#B07AAC', Directory: 'mentor_wan',      Images: { 'normal': 'mentor_wan_normal.png' } },
-	'mentor_chi':      { Name: '导师·炽',     Color: '#5B8A8A', Directory: 'mentor_chi',      Images: { 'normal': 'mentor_chi_normal.png' } },
+	'mentor_chi':      { Name: '导师·炽',     Color: '#5B8A8A', Directory: 'mentor_chi',      Images: { 'normal': 'mentor_chi_normal.png', 'happy': 'mentor_chi_happy.png', 'angry': 'mentor_chi_angry.png', 'sad': 'mentor_chi_sad.png', 'surprised': 'mentor_chi_surprised.png' } },
 	'mentor_ning':     { Name: '导师·宁老师', Color: '#9C6FB0', Directory: 'mentor_ning',     Images: { 'normal': 'mentor_ning_normal.png' } },
-	'mentor_lao':      { Name: '导师·老朽',   Color: '#C09A6F', Directory: 'mentor_lao',      Images: { 'normal': 'mentor_lao_normal.png' } },
+	'mentor_lao':      { Name: '导师·老朽',   Color: '#C09A6F', Directory: 'mentor_lao',      Images: { 'normal': 'mentor_lao_normal.png', 'happy': 'mentor_lao_happy.png', 'clueless': 'mentor_lao_clueless.png', 'poker': 'mentor_lao_poker.png' } },
 	'mentor_lingfeng': { Name: '导师·凛',     Color: '#5B7FB8', Directory: 'mentor_lingfeng', Images: { 'normal': 'mentor_lingfeng_normal.png', 'happy': 'mentor_lingfeng_happy.png', 'thinking': 'mentor_lingfeng_thinking.png' } },
 	'mentor_zhaoyang': { Name: '导师·朝阳',   Color: '#E8923C', Directory: 'mentor_zhaoyang', Images: { 'normal': 'mentor_zhaoyang_normal.png', 'happy': 'mentor_zhaoyang_happy.png', 'excited': 'mentor_zhaoyang_excited.png' } },
 });

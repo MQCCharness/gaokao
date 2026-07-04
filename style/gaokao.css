@@ -567,13 +567,12 @@ main-screen {
 img[data-character="mentor_yuan"] { filter: hue-rotate(180deg) saturate(1.3); }
 img[data-character="fam_mom"] { filter: hue-rotate(40deg) saturate(1.2) brightness(1.05); }
 img[data-character="classmate_xyu"] { filter: hue-rotate(280deg) saturate(0.8) brightness(0.95); }
-/* 炽(mentor_chi) vs system —— 同源 sakura_sports */
-img[data-character="mentor_chi"] { filter: hue-rotate(150deg) saturate(1.3) brightness(0.95); }
+/* 炽(mentor_chi) —— 已换 Potat0Master Kioshi 校服毛衣（男立绘），无需调色 */
 img[data-character="system"] { filter: hue-rotate(0deg) saturate(1.1); }
-/* 婉(mentor_wan) —— 原 mahiru_private，调色区分（李老师已换成 Potat0Master 男老师立绘，无需调色）*/
+/* 婉(mentor_wan) —— 原 mahiru_private，调色区分 */
 img[data-character="mentor_wan"] { filter: hue-rotate(300deg) saturate(1.2); }
-/* 老朽(mentor_lao) mahiru_sports —— 棕调偏黄 */
-img[data-character="mentor_lao"] { filter: sepia(0.4) saturate(1.3) hue-rotate(20deg); }
+/* 老朽(mentor_lao) —— 与炽同源 Kioshi（同脸不同装），轻微调色偏老气黄调区分 */
+img[data-character="mentor_lao"] { filter: sepia(0.35) saturate(1.2) hue-rotate(15deg) brightness(0.95); }
 /* 宁(mentor_ning) mahiru_no_camera —— 冷紫调 */
 img[data-character="mentor_ning"] { filter: hue-rotate(220deg) saturate(1.2) brightness(0.95); }
 /* 凛(mentor_lingfeng) kotoha thinking —— 冷蓝调（与学姐 senior 区分） */
