@@ -221,6 +221,20 @@
 	color: #fca5a5;
 }
 .gk-airec__majors { font-size: .66em; color: #7dd3fc; margin-left: 4px; }
+
+/* 可点击的验证链接 */
+.gk-verify-link, .gk-airec__name--link {
+	color: #93c5fd; text-decoration: none; border-bottom: 1px dotted #93c5fd;
+	transition: color .15s, border-color .15s;
+}
+.gk-verify-link:hover, .gk-airec__name--link:hover {
+	color: #fbbf24; border-bottom-color: #fbbf24; text-decoration: none;
+}
+.gk-airec__name--link { font-weight: 700; }
+/* 位次多年趋势 */
+.gk-rank-trend {
+	font-size: .7em; color: #94a3b8; margin-top: 4px; line-height: 1.4;
+}
 .gk-intro-overlay {
 	position: fixed; inset: 0; z-index: 9999;
 	display: flex; align-items: center; justify-content: center;
@@ -982,4 +996,86 @@ text-box.gk-voice-playing::after,
 	.gk-map__grid { grid-template-columns: 1fr; }
 	.gk-gallery__grid { grid-template-columns: 1fr; }
 	.gk-map__node-thumb { height: 90px; }
+}
+
+/* ==========================================================================
+   兴趣多选弹层（gk-interestpick）
+   ========================================================================== */
+.gk-interestpick {
+	position: fixed; inset: 0; z-index: 10000;
+	background: rgba(15, 17, 33, 0.96);
+	backdrop-filter: blur(8px);
+	display: flex; flex-direction: column;
+	padding: 24px 20px; overflow-y: auto;
+	animation: gk-fade-in .2s ease;
+}
+.gk-interestpick__header { text-align: center; margin-bottom: 20px; }
+.gk-interestpick__title {
+	font-size: 1.4em; color: #fbbf24; margin: 0 0 6px;
+	text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+}
+.gk-interestpick__subtitle { font-size: 0.85em; color: #9ab; }
+.gk-interestpick__subtitle b { color: #7dd3fc; font-size: 1.1em; }
+.gk-interestpick__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: 14px; max-width: 800px; margin: 0 auto; width: 100%;
+}
+.gk-interestpick__card {
+	position: relative; padding: 18px 12px; text-align: center;
+	background: rgba(255, 255, 255, 0.05);
+	border: 2px solid rgba(255, 255, 255, 0.12);
+	border-radius: 14px; cursor: pointer;
+	transition: all 0.18s ease;
+	user-select: none;
+}
+.gk-interestpick__card:hover {
+	background: rgba(255, 255, 255, 0.1);
+	border-color: rgba(255, 255, 255, 0.3);
+	transform: translateY(-2px);
+}
+.gk-interestpick__card--sel {
+	background: linear-gradient(135deg, rgba(124, 92, 255, 0.3), rgba(45, 212, 191, 0.2));
+	border-color: #7c5cff;
+	box-shadow: 0 0 16px rgba(124, 92, 255, 0.4);
+}
+.gk-interestpick__emoji { font-size: 2.2em; margin-bottom: 8px; line-height: 1; }
+.gk-interestpick__name { font-size: 0.95em; color: #e2e8f0; font-weight: 600; }
+.gk-interestpick__card--sel .gk-interestpick__name { color: #fff; }
+.gk-interestpick__check {
+	position: absolute; top: 8px; right: 10px;
+	width: 22px; height: 22px; border-radius: 50%;
+	background: #7c5cff; color: #fff;
+	font-size: 0.8em; font-weight: bold;
+	display: flex; align-items: center; justify-content: center;
+}
+.gk-interestpick__footer {
+	display: flex; gap: 12px; justify-content: center;
+	margin-top: 24px; padding-top: 16px;
+}
+.gk-interestpick__clear {
+	padding: 10px 20px; font-size: 0.9em; cursor: pointer;
+	background: rgba(255, 255, 255, 0.08); color: #9ab;
+	border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px;
+	transition: all 0.15s;
+}
+.gk-interestpick__clear:hover { background: rgba(255, 255, 255, 0.15); color: #e2e8f0; }
+.gk-interestpick__confirm {
+	padding: 12px 28px; font-size: 1em; font-weight: 600; cursor: pointer;
+	background: linear-gradient(135deg, #7c5cff, #2cb67d);
+	color: #fff; border: none; border-radius: 10px;
+	transition: all 0.15s;
+	box-shadow: 0 4px 16px rgba(124, 92, 255, 0.4);
+}
+.gk-interestpick__confirm:hover:not(:disabled) {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 20px rgba(124, 92, 255, 0.55);
+}
+.gk-interestpick__confirm--disabled {
+	background: rgba(255, 255, 255, 0.08); color: #64748b;
+	cursor: not-allowed; box-shadow: none;
+}
+@media (max-width: 480px) {
+	.gk-interestpick__grid { grid-template-columns: repeat(2, 1fr); }
+	.gk-interestpick__emoji { font-size: 1.8em; }
 }

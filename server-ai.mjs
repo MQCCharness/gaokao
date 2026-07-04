@@ -98,6 +98,54 @@ const PROVINCE_PINYIN = {
 	'北京': 'beijing', '天津': 'tianjin', '上海': 'shanghai', '西藏': 'xizang',
 };
 
+// 省份 → 官方教育考试院一分一段表查询入口（用于"验证链接"）
+// 这些是各省教育考试院官网，发布权威一分一段表
+const PROVINCE_EXAM_URL = {
+	'浙江': 'https://www.zjzs.net/',
+	'河南': 'https://www.heao.gov.cn/',
+	'山东': 'https://www.sdzk.cn/',
+	'河北': 'http://www.hebeea.edu.cn/',
+	'广东': 'https://eea.gd.gov.cn/',
+	'四川': 'https://www.sceea.cn/',
+	'安徽': 'https://www.ahzsks.cn/',
+	'江苏': 'https://www.jseea.cn/',
+	'湖北': 'http://www.hbea.edu.cn/',
+	'湖南': 'https://www.hneeb.cn/',
+	'陕西': 'https://www.sneac.com/',
+	'福建': 'https://www.eeafj.cn/',
+	'辽宁': 'https://www.lnzsks.com/',
+	'江西': 'http://www.jxeea.cn/',
+	'广西': 'https://www.gxeea.cn/',
+	'贵州': 'http://www.eaagz.org.cn/',
+	'云南': 'https://www.ynzs.cn/',
+	'山西': 'http://www.sxkszx.cn/',
+	'重庆': 'https://www.cqksy.cn/',
+	'甘肃': 'https://www.ganseea.cn/',
+	'新疆': 'http://www.xjzk.gov.cn/',
+	'内蒙古': 'https://www.nm.zsks.cn/',
+	'黑龙江': 'https://www.lzk.hl.cn/',
+	'吉林': 'http://www.jleea.com.cn/',
+	'宁夏': 'https://www.nxjyks.cn/',
+	'青海': 'http://www.qhjyks.com/',
+	'海南': 'http://ea.hainan.gov.cn/',
+	'北京': 'https://www.bjeea.cn/',
+	'天津': 'http://www.zhaokao.net/',
+	'上海': 'https://www.shmeea.edu.cn/',
+	'西藏': 'http://zsks.edu.xizang.gov.cn/',
+};
+
+// 阳光高考（教育部指定平台）各省地方站，用于院校/分数线查询验证
+const SUNSHINE_GAOKAO_BASE = 'https://gaokao.chsi.com.cn';
+function sunshineProvinceUrl (provinceName) {
+	// 阳光高考地方站 URL（部分省份有独立站点，否则用主站搜索）
+	const py = PROVINCE_PINYIN[provinceName];
+	return py ? `${SUNSHINE_GAOKAO_BASE}/${py}/` : SUNSHINE_GAOKAO_BASE;
+}
+// 阳光高考院校搜索 URL（点开可查该校历年分数线）
+function sunshineSchoolUrl (schoolName) {
+	return `${SUNSHINE_GAOKAO_BASE}/sch/search.do?searchType=1&name=${encodeURIComponent(schoolName)}`;
+}
+
 // 内存缓存（避免同一省份重复读盘解析）
 const memCache = new Map(); // key: `${year}:${py}:${table}` → { rows, ts }
 
@@ -170,15 +218,12 @@ function splitCSVLine (line) {
 	return result;
 }
 
-// 真实位次查询（基于一分一段表）
+// 真实位次查询（单年，基于一分一段表）
 async function realRank (score, provinceName, year = 2024) {
 	const py = PROVINCE_PINYIN[provinceName];
 	if (!py) return null;
 	try {
 		const rows = await fetchCSV(year, py, 'score-range');
-		// 找等于该分数的行（综合/物理类/历史类，取第一个匹配）
-		// 字段：score, cumulative_count, segment_count, category
-		// 浙江等新高考省份 category=综合；传统省份分文理
 		const hit = rows.find(r => parseFloat(r.score) === parseFloat(score));
 		if (hit && hit.cumulative_count) {
 			return {
@@ -186,24 +231,49 @@ async function realRank (score, provinceName, year = 2024) {
 				segmentCount: parseInt(hit.segment_count) || 0,
 				category: hit.category,
 				score: parseFloat(hit.score),
-				source: `HuggingFace Gaokao-Compass ${year}`,
+				year,
+				source: `一分一段表 ${provinceName} ${year}`,
+				verifyUrl: PROVINCE_EXAM_URL[provinceName] || null,
 			};
 		}
-		// 精确分数没命中：找相邻两个分数插值
+		// 精确分数没命中：插值
 		const sorted = rows
 			.filter(r => r.score && r.cumulative_count)
 			.map(r => ({ score: parseFloat(r.score), rank: parseInt(r.cumulative_count) }))
-			.sort((a, b) => b.score - a.score); // 降序（高分在前）
+			.sort((a, b) => b.score - a.score);
 		for (let i = 0; i < sorted.length - 1; i++) {
 			if (sorted[i].score >= score && sorted[i + 1].score <= score) {
-				// 线性插值
 				const ratio = (score - sorted[i + 1].score) / (sorted[i].score - sorted[i + 1].score);
 				const rank = Math.round(sorted[i + 1].rank + (sorted[i].rank - sorted[i + 1].rank) * (1 - ratio));
-				return { rank, category: rows[0]?.category, score, interpolated: true, source: `HuggingFace Gaokao-Compass ${year} (插值)` };
+				return {
+					rank, category: rows[0]?.category, score, year,
+					interpolated: true,
+					source: `一分一段表 ${provinceName} ${year}（插值）`,
+					verifyUrl: PROVINCE_EXAM_URL[provinceName] || null,
+				};
 			}
 		}
 		return null;
 	} catch (e) { return null; }
+}
+
+// 多年份位次查询（返回近 3 年对比，让玩家看到趋势）
+async function realRankMultiYear (score, provinceName, years = [2024, 2023, 2022]) {
+	const results = await Promise.all(
+		years.map(async (year) => {
+			const r = await realRank(score, provinceName, year);
+			return r ? { year, ...r } : { year, rank: null };
+		})
+	);
+	// 过滤掉没数据的年份
+	const valid = results.filter(r => r.rank !== null);
+	return {
+		score, province: provinceName,
+		years: valid,
+		latestYear: valid[0]?.year || years[0],
+		verifyUrl: PROVINCE_EXAM_URL[provinceName] || null,
+		verifyLabel: '官方教育考试院',
+	};
 }
 
 // 真实院校推荐（基于投档线）
@@ -275,6 +345,9 @@ function formatRealUni (u) {
 		level: u.is985 ? '985' : (u.is211 ? '211' : (u.nature === '公办' ? '一本' : '普通')),
 		region: u.province,
 		subjectReq: u.subjectReq || '',
+		// 验证链接：点开到阳光高考查该校历年分数线
+		verifyUrl: sunshineSchoolUrl(u.name),
+		verifyLabel: '查历年分数线',
 	};
 }
 
@@ -649,23 +722,36 @@ const server = http.createServer(async (req, res) => {
 	}
 
 	// ─── GET /api/realdata/rank (真实位次，基于一分一段表) ────────────────
+	// 参数：score, province, year(默认2024), multi=1 时返回近3年对比
 	if (req.method === 'GET' && req.url.startsWith('/api/realdata/rank')) {
 		const url = new URL(req.url, 'http://x');
 		const score = parseFloat(url.searchParams.get('score'));
 		const province = url.searchParams.get('province') || '';
 		const year = parseInt(url.searchParams.get('year')) || 2024;
+		const multi = url.searchParams.get('multi') === '1';
 		try {
-			const real = await realRank(score, province, year);
-			// 同时返回本地公式估算（便于对比）
 			const estimate = estimateRank(score, 750, province);
 			const tier = tierOfScore(score, 750);
-			res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-			res.end(JSON.stringify({
-				score, province, year,
-				real,        // 真实数据（可能为 null）
-				estimate,    // 公式估算（兜底）
-				tier,
-			}));
+			if (multi) {
+				// 多年份对比
+				const multiData = await realRankMultiYear(score, province, [2024, 2023, 2022]);
+				res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+				res.end(JSON.stringify({
+					score, province,
+					multi: multiData,
+					real: multiData.years.find(y => y.year === year) || multiData.years[0] || null,
+					estimate, tier,
+				}));
+			} else {
+				const real = await realRank(score, province, year);
+				res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+				res.end(JSON.stringify({
+					score, province, year,
+					real,
+					estimate,
+					tier,
+				}));
+			}
 		} catch (e) {
 			res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
 			res.end(JSON.stringify({ score, province, error: e.message, estimate: estimateRank(score, 750, province) }));
