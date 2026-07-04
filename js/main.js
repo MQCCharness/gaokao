@@ -269,6 +269,16 @@ $_ready(() => {
 
 		// 引擎 init 完成后立即播放一次片头快闪覆盖层
 		playIntroOverlay();
+
+		// 语音开关浮动按钮（右下角，状态读 localStorage）
+		const voiceBtn = document.createElement('button');
+		voiceBtn.className = 'gk-voice-toggle' + (GK.voiceEnabled() ? '' : ' gk-voice-toggle--off');
+		voiceBtn.innerHTML = GK.voiceEnabled() ? '🔊' : '🔇';
+		voiceBtn.title = GK.voiceEnabled() ? '语音：开（点击关闭）' : '语音：关（点击开启）';
+		voiceBtn.addEventListener('click', () => {
+			GK.setVoiceEnabled(!GK.voiceEnabled());
+		});
+		document.body.appendChild(voiceBtn);
 	}).catch((e) => {
 		console.error('[GK] init 失败:', e);
 		forceHideLoading();
