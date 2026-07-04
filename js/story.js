@@ -815,7 +815,7 @@ monogatari.script({
 		'jump CampusMap',
 	],
 
-	// ══════ 老师互动（办公室·查分后解锁）══════ —— 修 bug + 丰富剧情（真心 vs 利益）
+	// ══════ 老师互动（办公室·查分后解锁）══════ —— 最丰富版：多分支 + 跌宕起伏 + 道德选择
 	'OfficeEnter': [
 		'show scene scene-office with fadeIn',
 		'play music bgm-chat',
@@ -829,7 +829,7 @@ monogatari.script({
 			'Leave': { Text: '🚪 离开', Do: 'jump OfficeLeave' },
 		}}
 	],
-	// —— 李老师：真心为你 + 透露自己也后悔当年没敢冒险 ——
+	// ══════ 李老师线：先扬后抑 + 素描本秘密 + 道德选择（鼓励他追梦） ══════
 	'OfficeLee': [
 		function () { const t = GK.get()._talked || {}; t.tch_lee = true; GK.set({ _talked: t }); },
 		'show character tch_lee normal with fadeIn',
@@ -837,36 +837,173 @@ monogatari.script({
 		'tch_lee 李老师 我看了你的分数。不差。但老师更想问你——你想好了吗？',
 		'tch_lee 李老师 老师的职责不是告诉你报什么，是帮你想清楚你想要什么。',
 		'system 李老师摘下眼镜，擦了擦。镜片上有道划痕，很旧了——他戴了很多年。',
+		// ↓ 抑：透露美院往事
 		'tch_lee 李老师 老师跟你说句心里话。我当年高考，分数够上美院。',
 		'tch_lee 李老师 但所有人都说"画画没出路"。我听了。报了师范。现在站在这里，做了二十年班主任。',
 		'tch_lee 李老师 我不后悔当老师。但有时候改作业改到半夜，我会想——如果当年我敢画下去，现在会在哪？',
-		'system 李老师看着你，眼神里有种你从没见过的东西——不是老师的威严，是一个过来人的疲惫和温柔。',
-		'tch_lee 李老师 所以老师不想替你决定。老师只希望你十年后，不用问自己"如果当时"。',
+		// ↓ 扬转抑：素描本秘密
+		'system 李老师突然犹豫了一下。他拉开抽屉，又推回去，又拉开。',
+		'system 最后，他从抽屉最底下，摸出一个本子。封皮磨得发白，边角卷起。',
+		'tch_lee 李老师 ……你别告诉别人。',
+		'system 他把本子翻开。里面是一幅幅素描——校园的树、操场上的猫、改作业时的台灯。每一幅都标着日期，从二十年前，到上个月。',
+		'tch_lee 李老师 我一直没停过画。每天半小时，雷打不动。这是我唯一没听别人话的事。',
+		// ↓ 扬：他的眼睛亮了
+		'system 说这话时，李老师的眼睛突然亮了——那不是班主任的眼神，是一个画了二十年的人，谈起画时的光。',
+		'tch_lee 李老师 但我从没拿出去过。我怕。怕学生笑我"不务正业"，怕校长说我"心思不在教学"。',
+		// ↓ 道德选择：要不要鼓励他参赛
 		{ Choice: {
-			Dialog: 'tch_lee 李老师 ……',
-			'Good':  { Text: '💬 坦诚说出自己的纠结', Do: 'jump OfficeLeeGood' },
-			'Bad':   { Text: '🤷 您说我报什么好', Do: 'jump OfficeLeeBad' },
+			Dialog: 'tch_lee 李老师 上个月，有个老同学说想帮我报名一个画展。老师说……你说，我该去吗？',
+			'Encourage': { Text: '🎨 去！画了二十年为什么不去', Do: 'jump OfficeLeeEncourage' },
+			'Cautious':  { Text: '🤔 先想想会不会影响工作', Do: 'jump OfficeLeeCautious' },
+			'Listen':    { Text: '👂 您自己心里其实有答案', Do: 'jump OfficeLeeListen' },
 		}}
+	],
+	'OfficeLeeEncourage': [
+		function () { GK.feedback({ rel: { tch_lee: +15 }, attrs: { courage: +6, insight: +4 } }); },
+		'system 你没有犹豫："去。画了二十年，凭什么不能让人看看？"',
+		'tch_lee 李老师 ……',
+		'system 李老师愣住了。然后他笑了，是那种很久没笑过、突然咧开嘴的笑。',
+		'tch_lee 李老师 你知道吗，我等这句话，等了二十年。',
+		'tch_lee 李老师 我带过几百个学生。没有一个，像你今天这样，对我说"去"。',
+		'system 他把素描本合上，紧紧攥在手里，像攥着一个迟到二十年的决定。',
+		'tch_lee 李老师 好。我去。然后回来告诉你结果——不管成不成。',
+		'system 你看见一个五十岁的老师，眼睛里有十八岁的光。有些话，说出口就改变了一个人。也许不只是你。',
+		'jump OfficeAfter'
+	],
+	'OfficeLeeCautious': [
+		function () { GK.feedback({ rel: { tch_lee: +6 }, attrs: { diligence: +5, patience: +3 } }); },
+		'system 你想了想："老师，画展是什么时候？如果占用上课时间，可能会有麻烦。"',
+		'tch_lee 李老师 ……也是。周末的展，但布展要请假。',
+		'system 李老师沉默了。他重新把素描本放回抽屉。',
+		'tch_lee 李老师 你说得对。我不能因为自己的事，影响学生。',
+		'system 但你注意到，他放本子时，手在抽屉边缘停了很久。',
+		'tch_lee 李老师 ……不过，我会再想想。你提醒了我，这事得有个计划，不能冲动。',
+		'system 你的话很实际。但你也看到，那个抽屉，又被关上了。',
+		'jump OfficeAfter'
+	],
+	'OfficeLeeListen': [
+		function () { GK.feedback({ rel: { tch_lee: +12 }, attrs: { insight: +8, patience: +4 } }); },
+		'system 你看着他："老师，您问我该不该去。但您画了二十年没停过——您心里，其实早有答案。"',
+		'system 李老师的手停在素描本上，半天没动。',
+		'tch_lee 李老师 ……',
+		'tch_lee 李老师 你这孩子。',
+		'system 他抬起头，眼眶有点红。',
+		'tch_lee 李老师 是。我心里有答案。我只是不敢承认，我怕承认了，就得真的去做。',
+		'tch_lee 李老师 你今天比我还勇敢。你敢问自己"我真正想要什么"——我五十岁了，才刚学会问。',
+		'system 他把素描本放进包里，不是抽屉。',
+		'tch_lee 李老师 好。我带回家。今晚就填报名表。',
+		'tch_lee 李老师 谢谢你。你帮老师做了一件，老师犹豫了二十年的事。',
+		'jump OfficeAfter'
 	],
 		'OfficeLeeGood': [ function () { GK.showNpcInteract('tch_lee', 'good'); } ],
 		'OfficeLeeBad':  [ function () { GK.showNpcInteract('tch_lee', 'bad'); } ],
-	// —— 王主任：利益诱导 + 加一层"招生指标"的真实压力 ——
+	// ══════ 王主任线：先抑(利益诱导) → 反转(孩子被骗往事) → 道德选择 ══════
 	'OfficeWang': [
 		function () { const t = GK.get()._talked || {}; t.tch_wang = true; GK.set({ _talked: t }); },
 		'show character tch_wang normal with fadeIn',
 		function () { GK.voice('tch_wang/intro'); },
+		// ↓ 抑：利益诱导
 		'tch_wang 王主任 同学！你这个分数，正好我们有个合作院校，还有内部名额。机会难得啊！',
 		'tch_wang 王主任 这个学校跟我们有合作关系，你有内部名额优势。错过可就没了。',
 		'system 王主任的笑很热情，但你注意到他桌上堆着一摞招生简章，每一份都盖着不同的章。',
 		'system 他的电脑屏幕上，是一个表格——"XX学院 2024 招生指标完成度：67%"。',
 		'tch_wang 王主任 你放心，这个学校绝对靠谱。我跟他们招办的老总是铁哥们，你报了，我保你录。',
 		'system 他压低了声音，凑近你。但你闻到了他杯子里的茶已经凉了——他在这里等了很久。',
-		'system 等的不是你，是任何一个"分数够得上、又没主见"的学生。',
+		// ↓ 玩家第一次选择：怎么回应推销
 		{ Choice: {
-			Dialog: 'tch_wang 王主任 ……',
-			'Good':  { Text: '🔍 表示要回去查查再说', Do: 'jump OfficeWangGood' },
-			'Bad':   { Text: '😍 太好了！那就报这个！', Do: 'jump OfficeWangBad' },
+			Dialog: 'system 等的不是你，是任何"分数够、又没主见"的学生。你怎么回应？',
+			'Question': { Text: '🔍 问清楚：这个学校是几本？就业率多少？', Do: 'jump OfficeWangQuestion' },
+			'Refuse':   { Text: '🙅 不用了我自己查', Do: 'jump OfficeWangRefuse' },
+			'Accept':   { Text: '😍 太好了！那就报这个！', Do: 'jump OfficeWangAccept' },
 		}}
+	],
+	'OfficeWangQuestion': [
+		function () { GK.feedback({ rel: { tch_wang: +3 }, attrs: { insight: +8 } }); },
+		'system 你没有急着答应，也没有直接拒绝。你问了一个问题。',
+		'system "王主任，这个学校是几本？去年的就业率是多少？毕业生都去了哪？"',
+		'system 王主任的笑容僵了一瞬。很快又恢复了，但那一瞬，你看得清清楚楚。',
+		'tch_wang 王主任 这个嘛……是民办本科，但就业率很不错的，很不错的……具体数字我得查查。',
+		'system 他开始翻桌上的资料，动作有点乱。一份文件滑落——你瞥见了标题：',
+		'system 《关于XX学院近年毕业生就业状况的内部调查》。',
+		'system 你没看清全部内容，但看到了几个加粗的字："实际就业率……低于……宣传数据"。',
+		// ↓ 反转铺垫
+		'system 王主任手忙脚乱地把文件塞回去。他的脸有点白。',
+		'jump OfficeWangTruth'
+	],
+	'OfficeWangRefuse': [
+		function () { GK.feedback({ rel: { tch_wang: -2 }, attrs: { courage: +6 } }); },
+		'system "不用了，王主任。我想自己回去查查再决定。"',
+		'system 王主任愣了一下，脸上的笑淡了。',
+		'tch_wang 王主任 ……行。你查吧。不过这个名额，我最多给你留三天。',
+		'system 你转身要走。忽然，王主任的声音从背后传来，比刚才轻了很多。',
+		'jump OfficeWangTruth'
+	],
+	'OfficeWangAccept': [
+		function () { GK.feedback({ rel: { tch_wang: +8 }, attrs: { courage: -5, insight: -6 } }); },
+		'system "太好了！那就报这个！"',
+		'system 王主任眼睛一亮，立刻递过来一张表："来来来，先签个意向，老师帮你走流程！"',
+		'system 你接过表，正要签字——笔尖碰到纸的瞬间，王主任突然按住了你的手。',
+		'jump OfficeWangTruth'
+	],
+	// ↓ 真相反转：王主任的孩子也被骗过
+	'OfficeWangTruth': [
+		'system 王主任的力气很大。他按住你的手，表情突然变了——不是热情，是一种你读不懂的复杂。',
+		'tch_wang 王主任 ……别签。',
+		'system 你愣住了。',
+		'tch_wang 王主任 你别签。老师刚才说的那些，什么内部名额、铁哥们——',
+		'system 他颓然坐回椅子里。那张总是热情的脸，突然垮了下来。',
+		'tch_wang 王主任 我儿子去年高考。分数跟你差不多。',
+		'tch_wang 王主任 也有人跟我推荐一个"合作院校"，说有内部名额，说包录。我信了。让他报了。',
+		'system 他从抽屉里拿出一张照片——一个男孩，穿着大学的校服，在笑。',
+		'tch_wang 王主任 进去才发现，那个学校……就是个野鸡。学费贵得离谱，专业课全是水课，毕业证外面根本不认。',
+		'tch_wang 王主任 我儿子现在大三，每天打游戏。他说，反正这个文凭也没用，不如混到毕业。',
+		'system 王主任的声音抖了。他把照片翻过去——背面写着一行字："爸，我不怪你。"',
+		'tch_wang 王主任 他不怪我。但我怪我自己。',
+		// ↓ 道德选择：知道真相后怎么对他
+		{ Choice: {
+			Dialog: 'system 王主任把照片攥在手里。他是骗过你，但他也被骗过。你怎么做？',
+			'Forgive':  { Text: '🤝 谢谢您告诉我这些', Do: 'jump OfficeWangForgive' },
+			'Confront': { Text: '😠 那您为什么还要骗别人？', Do: 'jump OfficeWangConfront' },
+			'Help':     { Text: '💡 帮您把那个学校的真相反查出来', Do: 'jump OfficeWangHelp' },
+		}}
+	],
+	'OfficeWangForgive': [
+		function () { GK.feedback({ rel: { tch_wang: +12 }, attrs: { patience: +6, insight: +5 } }); },
+		'system 你没有指责他。你只是说："谢谢您告诉我这些。"',
+		'tch_wang 王主任 ……你不骂我？',
+		'system 王主任抬起头，眼眶红了。一个四十多岁的男人，在学生面前红了眼眶。',
+		'tch_wang 王主任 我知道我在做什么。我完成指标，拿那点提成。我骗自己说"这是双赢"。其实我是在用别人孩子，弥补我自己的错。',
+		'tch_wang 王主任 但今天看到你……我想起我儿子刚进那个学校时的样子。也是这么信任我。',
+		'system 他把那张意向表撕了。',
+		'tch_wang 王主任 你走吧。这个名额，我谁也不给了。我去跟校长说实话，大不了挨处分。',
+		'system 你转身离开。走到门口，王主任又叫住你。',
+		'tch_wang 王主任 ……谢谢你。你让我想起，我本来是个老师，不是个销售。',
+		'jump OfficeAfter'
+	],
+	'OfficeWangConfront': [
+		function () { GK.feedback({ rel: { tch_wang: +4 }, attrs: { courage: +8, insight: +4 } }); },
+		'system 你直直看着他："您儿子被骗过，您为什么还要骗别人？"',
+		'system 王主任沉默了很久。',
+		'tch_wang 王主任 ……因为我得完成指标。完不成，扣绩效，调岗。我还有房贷。',
+		'tch_wang 王主任 我知道这不对。但每个月工资条下来的时候，我就假装忘了。',
+		'system 你的话像一把刀，但你也看到，他自己早就被这把刀捅过，只是假装不疼。',
+		'tch_wang 王主任 你骂得对。但骂完了，明天我还得坐在这里，等下一个学生。',
+		'system 你没有再说话。有些恶意，不是天生的，是被生活一点一点逼出来的。你能做的，只是不让自己成为下一个帮凶。',
+		'jump OfficeAfter'
+	],
+	'OfficeWangHelp': [
+		function () { GK.feedback({ rel: { tch_wang: +15 }, attrs: { insight: +8, courage: +5, patience: +4 } }); },
+		'system 你想了一会儿，说："王主任，您儿子那个学校——如果您愿意，我帮您把它的真实就业数据查出来。"',
+		'system "有了证据，您可以举报，可以帮其他被骗的学生，也可以……让您儿子看清现实。"',
+		'system 王主任瞪大了眼睛。',
+		'tch_wang 王主任 你……你愿意帮我？',
+		'system "您今天拦住了我没让我签字。这就够了。"',
+		'system 王主任站起来，手有些抖。他撕掉了那张意向表，又把桌上的招生简章整理成一摞。',
+		'tch_wang 王主任 好。这个学校的名单我给你。这些年所有像我一样的人，我都知道是谁。',
+		'tch_wang 王主任 我去跟校长坦白。你帮我，我帮所有被这些学校坑过的学生。',
+		'system 你走出办公室时，王主任在身后说了一句话。声音不大，但你听得很清楚。',
+		'tch_wang 王主任 ……谢谢你，孩子。你让我想起，我儿子小时候，也是这样的。',
+		'jump OfficeAfter'
 	],
 		'OfficeWangGood': [ function () { GK.showNpcInteract('tch_wang', 'good'); } ],
 		'OfficeWangBad':  [ function () { GK.showNpcInteract('tch_wang', 'bad'); } ],
@@ -879,7 +1016,7 @@ monogatari.script({
 			const remaining = ['tch_lee', 'tch_wang'].filter(k => !talked[k]);
 			if (remaining.length === 0) {
 				GK.markCleared('office');
-				return 'system 你和每位老师都聊过了。\n（办公室探索完成——你学会了分辨：谁是真心，谁在冲指标。）';
+				return 'system 你和每位老师都聊过了。\n（办公室探索完成——李老师找回了画笔，王主任撕掉了那张表。有些改变，就发生在一个下午。）';
 			}
 			return 'system 还可以再和老师聊聊。';
 		},
