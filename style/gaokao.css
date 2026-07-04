@@ -183,9 +183,44 @@
 .gk-card__reason { color: #94a3b8; font-size: .76em; line-height: 1.45; }
 .gk-empty { color: #94a3b8; text-align: center; padding: 20px; }
 
-/* ==========================================================================
-   5. 片头快闪层 + 名校剪影（原创 SVG）
-   ========================================================================== */
+/* AI 现实推荐区块（gk-airec）*/
+.gk-airec {
+	margin-top: 14px; padding: 12px;
+	background: linear-gradient(135deg, rgba(99,102,241,.12), rgba(168,85,247,.08));
+	border: 1px solid rgba(99,102,241,.35); border-radius: 10px;
+}
+.gk-airec--real {
+	background: linear-gradient(135deg, rgba(16,185,129,.10), rgba(59,130,246,.08));
+	border-color: rgba(16,185,129,.4);
+}
+.gk-airec--real .gk-airec__title { color: #6ee7b7; text-shadow: 0 0 8px rgba(110,231,183,.3); }
+.gk-airec__title {
+	font-size: .82em; font-weight: 700; color: #c4b5fd; margin-bottom: 8px;
+	text-shadow: 0 0 8px rgba(196,181,253,.3);
+}
+.gk-airec__advice {
+	font-size: .76em; color: #a7f3d0; margin-bottom: 8px; line-height: 1.4;
+	padding: 4px 8px; background: rgba(16,185,129,.08); border-radius: 4px;
+}
+.gk-airec__tier-row { margin-bottom: 6px; }
+.gk-airec__label {
+	display: inline-block; font-size: .74em; font-weight: 700;
+	color: #fbbf24; margin-right: 8px; min-width: 36px;
+}
+.gk-airec__item {
+	display: inline-block; font-size: .76em; color: #e2e8f0;
+	margin: 2px 6px 2px 0; padding: 2px 8px;
+	background: rgba(255,255,255,.06); border-radius: 4px;
+}
+.gk-airec__name { font-weight: 700; color: #fff; }
+.gk-airec__item-tier { font-size: .68em; color: #fcd34d; margin-left: 4px; font-weight: 400; }
+.gk-airec__score { font-size: .68em; color: #7dd3fc; margin-left: 4px; }
+.gk-airec__rank { font-size: .66em; color: #94a3b8; margin-left: 4px; }
+.gk-airec__diff {
+	font-size: .66em; margin-left: 4px; padding: 0 3px; border-radius: 2px;
+	color: #fca5a5;
+}
+.gk-airec__majors { font-size: .66em; color: #7dd3fc; margin-left: 4px; }
 .gk-intro-overlay {
 	position: fixed; inset: 0; z-index: 9999;
 	display: flex; align-items: center; justify-content: center;

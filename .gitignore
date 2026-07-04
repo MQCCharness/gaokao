@@ -4,6 +4,9 @@ node_modules/
 # AI API Key（不进版本库）
 .env
 
+# 真实数据缓存（运行时从 HuggingFace 拉取，可重新生成）
+data_cache/
+
 # 可由 lib/*.mjs 重新生成的中间产物 / 缓存（旧方案残留）
 _keri_cache/
 assets/_downloads/
