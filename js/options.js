@@ -54,7 +54,7 @@ monogatari.settings({
 	// 打字机动画
 	// 打字机动画（true=有打字效果，Ctrl快进时可跳过；false=立即显示）
 	'TypeAnimation': true,
-	'InstantText': false,   // false=不立即显示，保留打字效果（Ctrl可快进）
+	'InstantText': false,   // false=不立即显示，保留打字效果（Ctrl可快进）,   // false=不立即显示，保留打字效果（Ctrl可快进）
 	'NVLTypeAnimation': true,
 	'NarratorTypeAnimation': true,
 	'CenteredTypeAnimation': true,
