@@ -289,6 +289,64 @@ $_ready(() => {
 			GK.setVoiceEnabled(!GK.voiceEnabled());
 		});
 		document.body.appendChild(voiceBtn);
+
+		// ══════ 序章跳过功能（多次游玩者快速进入正式游戏）══════
+		// 序章 = Start / Enroll / AmnesiaIntro（名字+省份+失忆闪回）
+		// 跳过 → 直接进 CampusMapEnter（地图，正式游戏），自动填默认值
+		const SKIP_LABELS = ['Start', 'Enroll', 'EnrollProvince', 'EnrollGroupChoice', 'AmnesiaIntro'];
+		const skipBtn = document.createElement('button');
+		skipBtn.className = 'gk-skip-intro';
+		skipBtn.innerHTML = '⏭ 跳过序章';
+		skipBtn.title = '跳过开场剧情，直接进入校园探索（按 S 键也可）';
+		document.body.appendChild(skipBtn);
+
+		function skipIntro () {
+			// 已在地图则不跳
+			if (document.querySelector('.gk-map')) return;
+			// 填入默认玩家数据（如果还没填）
+			const g = GK.get();
+			if (!g.province) GK.set({ province: 'zhejiang' });
+			if (!g.group) GK.set({ group: '物理组' });
+			if (!g.score) GK.set({ score: 620, total: 750, tier: 'A', rank: 34040 });
+			try { monogatari.storage({ player: { name: monogatari.storage('player')?.name || '玩家' } }); } catch (e) {}
+			// 清掉序章相关的 Choice/Input 弹层
+			document.querySelectorAll('input-modal, [data-component="input"]').forEach(el => el.remove());
+			// 跳到地图
+			try {
+				monogatari.run('jump CampusMapEnter');
+				GK.sfx('select');
+			} catch (e) { console.warn('跳过失败:', e); }
+		}
+		skipBtn.addEventListener('click', skipIntro);
+
+		// S 键跳过（输入框聚焦时不触发，避免打字误触）
+		document.addEventListener('keydown', (e) => {
+			if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey) {
+				const tag = e.target?.tagName;
+				if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+				// 只在 game-screen 可见时触发（主菜单不触发）
+				const gameEl = document.querySelector('game-screen');
+				if (gameEl && getComputedStyle(gameEl).display !== 'none') {
+					skipIntro();
+				}
+			}
+		});
+
+		// 显示逻辑：有 text-box（游戏中）且无地图弹层时显示；主菜单/地图/碎片闪回时隐藏
+		const updateSkipVisibility = () => {
+			const hasMap = !!document.querySelector('.gk-map');
+			const hasShard = !!document.querySelector('.gk-shard');
+			const hasGallery = !!document.querySelector('.gk-gallery');
+			const hasRealScore = !!document.querySelector('.gk-realscore');
+			// game-screen 可见（display:flex）= 在游戏中；main-screen 可见 = 主菜单
+			const gameEl = document.querySelector('game-screen');
+			const inGame = gameEl && getComputedStyle(gameEl).display !== 'none';
+			const shouldShow = inGame && !hasMap && !hasShard && !hasGallery && !hasRealScore;
+			skipBtn.style.display = shouldShow ? 'flex' : 'none';
+		};
+		const skipObserver = new MutationObserver(() => updateSkipVisibility());
+		skipObserver.observe(document.body, { childList: true, subtree: true });
+		updateSkipVisibility();
 	}).catch((e) => {
 		console.error('[GK] init 失败:', e);
 		forceHideLoading();

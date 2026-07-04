@@ -133,8 +133,14 @@ monogatari.script({
 		{ Choice: { Dialog: 'system 选 B 校', 'Go': { Text: '✓ B 校', Do: 'jump PuzzleScoreOk' } } }
 	],
 	// ScoreBossReal：真正的查分入口（解谜通过后）+ 存档提醒
+	// ⚠ 存档提醒用 setTimeout 延迟弹窗，避免 DOM 插入干扰引擎 Choice 渲染（导致选项不出现）
 	'ScoreBossReal': [
-		function () { if (GK.saveWarn('score')) GK.showSaveWarn('查分后剧情将根据分数分支，建议先存档。'); },
+		function () {
+			if (GK.saveWarn('score')) {
+				// 延迟 300ms 让 Choice 先渲染
+				setTimeout(() => GK.showSaveWarn('查分后剧情将根据分数分支，建议先存档。'), 300);
+			}
+		},
 		'system 解谜通过。现在，选择你查分的方式：',
 		{ Choice: {
 			Dialog: 'system 🎮 游戏路线（虚拟分数，体验剧情） / 📊 现实路线（输入真实分数，AI 估算位次）',
@@ -257,7 +263,11 @@ monogatari.script({
 
 	// ══════ 真相结局（志愿揭晓后，按关系值分支）══════
 	'WishRevealTruth': [
-		function () { if (GK.saveWarn('truth')) GK.showSaveWarn('即将揭晓真相并进入结局（按关系值分支），强烈建议先存档！'); },
+		function () {
+			if (GK.saveWarn('truth')) {
+				setTimeout(() => GK.showSaveWarn('即将揭晓真相并进入结局（按关系值分支），强烈建议先存档！'), 500);
+			}
+		},
 		'show scene scene-wish with fadeIn',
 		'play music bgm-wish',
 		function () { GK.buildWishlist(); },
