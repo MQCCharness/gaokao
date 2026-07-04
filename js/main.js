@@ -243,8 +243,8 @@ $_ready(() => {
 			_wheelLock = true;
 			setTimeout(() => { _wheelLock = false; }, 250); // 防抖
 			if (e.deltaY < 0) {
-				// 滚轮上 = 回滚（引擎 back action）
-				try { monogatari.run('back'); } catch (err) {}
+				// 滚轮上 = 回滚（点击引擎 quick-menu 的后退按钮）
+				try { document.querySelector('quick-menu [data-action="back"]')?.click(); } catch (err) {}
 				e.preventDefault();
 			} else if (e.deltaY > 0) {
 				// 滚轮下 = 前进（推进对话）
@@ -259,7 +259,8 @@ $_ready(() => {
 			const tb = document.querySelector('text-box');
 			if (!tb) return;
 			if (e.code === 'ArrowLeft' && !e.ctrlKey) {
-				try { monogatari.run('back'); } catch (err) {}
+				// ← = 回滚（点击引擎 quick-menu 的后退按钮）
+				try { document.querySelector('quick-menu [data-action="back"]')?.click(); } catch (err) {}
 				e.preventDefault();
 			} else if (e.code === 'Space' && !e.ctrlKey) {
 				const hasChoice = (() => { const cc = document.querySelector('choice-container'); return cc && !cc.hasAttribute('data-hidden') && cc.querySelectorAll('button').length > 0; })();
