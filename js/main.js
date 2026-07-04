@@ -267,6 +267,16 @@ $_ready(() => {
 			}
 		});
 
+		// Ctrl+S = 快捷存档（打开存档界面）
+		document.addEventListener('keydown', (e) => {
+			if (e.ctrlKey && (e.key === 's' || e.key === 'S')) {
+				e.preventDefault();
+				try { monogatari.run('open save-screen'); } catch (err) {
+					try { monogatari.run('save'); } catch (e2) {}
+				}
+			}
+		});
+
 		// 引擎 init 完成后立即播放一次片头快闪覆盖层
 		playIntroOverlay();
 

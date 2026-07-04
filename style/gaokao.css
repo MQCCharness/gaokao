@@ -935,19 +935,32 @@ loading-screen [data-content="message"],
 }
 .gk-savewarn {
 	position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
-	z-index: 120; max-width: 90vw; padding: 12px 20px;
-	background: linear-gradient(135deg, rgba(249,199,79,0.95), rgba(229,49,112,0.9));
-	color: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-	font-size: 0.9em; display: flex; align-items: center; gap: 12px;
+	z-index: 120; max-width: 92vw; min-width: 320px; padding: 16px 20px;
+	background: linear-gradient(135deg, rgba(249,199,79,0.97), rgba(229,49,112,0.92));
+	color: #fff; border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+	font-size: 0.9em; display: flex; align-items: flex-start; gap: 14px;
 	animation: gk-pop 0.3s ease;
 }
-.gk-savewarn__text { flex: 1; }
+.gk-savewarn__icon { font-size: 1.8em; line-height: 1; flex-shrink: 0; }
+.gk-savewarn__body { flex: 1; min-width: 0; }
+.gk-savewarn__text { font-weight: 600; line-height: 1.4; }
+.gk-savewarn__howto {
+	font-size: 0.82em; margin-top: 6px; opacity: 0.92; line-height: 1.5;
+	background: rgba(0,0,0,0.15); padding: 6px 10px; border-radius: 6px;
+}
+.gk-savewarn__key { margin-right: 4px; }
+.gk-savewarn__howto b { color: #fff; background: rgba(255,255,255,0.2); padding: 1px 6px; border-radius: 4px; }
+.gk-savewarn__btns { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .gk-savewarn__btn {
 	background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4);
-	color: #fff; padding: 4px 14px; border-radius: 16px; cursor: pointer;
-	font-size: 0.85em; white-space: nowrap;
+	color: #fff; padding: 6px 16px; border-radius: 16px; cursor: pointer;
+	font-size: 0.82em; white-space: nowrap; transition: all 0.15s;
 }
-.gk-savewarn__btn:hover { background: rgba(255,255,255,0.4); }
+.gk-savewarn__btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.04); }
+.gk-savewarn__btn--save {
+	background: rgba(255,255,255,0.95); color: #e53170; font-weight: 700;
+}
+.gk-savewarn__btn--save:hover { background: #fff; }
 
 /* 语音播放中：text-box 边框微闪 + 右上角播放指示器 */
 text-box.gk-voice-playing,
