@@ -34,3 +34,9 @@ _d_*.png
 _*_compare.png
 _rival_guide.png
 shots/
+
+# 立绘替换备份与中间文件
+_old_stella/
+_source_*.png
+_buddy_raw.png
+_extract.mjs
