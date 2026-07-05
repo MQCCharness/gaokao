@@ -291,6 +291,54 @@ $_ready(() => {
 		});
 		document.body.appendChild(voiceBtn);
 
+		// ══════ NPC 选择 Choice 增强：已互动项标记 ✓ + 拦截重复点击 ══════
+		// 监听 choice-container 的按钮，根据 _talked 给已互动项加标记
+		// 关键词映射：按钮文案 → _talked 的 key
+		const CHOICE_TALK_MAP = [
+			{ keys: ['林', '高分'], talkedKey: 'classmate_lin' },
+			{ keys: ['小雨', '同分'], talkedKey: 'classmate_xyu' },
+			{ keys: ['大志', '低分'], talkedKey: 'classmate_dazhi' },
+			{ keys: ['妈妈'], talkedKey: 'fam_mom' },
+			{ keys: ['爸爸'], talkedKey: 'fam_dad' },
+			{ keys: ['小姨'], talkedKey: 'fam_aunt' },
+			{ keys: ['李老师', '班主任'], talkedKey: 'tch_lee' },
+			{ keys: ['王主任', '招生'], talkedKey: 'tch_wang' },
+		];
+		function enhanceChoices () {
+			const btns = document.querySelectorAll('choice-container button');
+			btns.forEach(btn => {
+				if (btn.getAttribute('data-gk-enhanced')) return; // 只增强一次
+				const text = btn.textContent || '';
+				const match = CHOICE_TALK_MAP.find(m => m.keys.some(k => text.includes(k)));
+				if (match) {
+					btn.setAttribute('data-gk-talked-key', match.talkedKey);
+					btn.setAttribute('data-gk-enhanced', '1');
+					const talked = (GK.get()._talked || {})[match.talkedKey];
+					if (talked) {
+						btn.classList.add('gk-choice--talked');
+						btn.innerHTML = '✓ ' + text + '（已互动）';
+					}
+					// 拦截重复点击
+					btn.addEventListener('click', (e) => {
+						const isTalked = (GK.get()._talked || {})[match.talkedKey];
+						if (isTalked) {
+							e.preventDefault();
+							e.stopPropagation();
+							// 抖动提示
+							btn.style.animation = 'none';
+							void btn.offsetWidth;
+							btn.style.animation = 'gk-shake 0.4s';
+							GK.sfx('click');
+							return false;
+						}
+					}, true); // 捕获阶段拦截
+				}
+			});
+		}
+		const choiceObserver = new MutationObserver(() => enhanceChoices());
+		choiceObserver.observe(document.body, { childList: true, subtree: true });
+		enhanceChoices();
+
 		// ══════ 序章跳过功能（多次游玩者快速进入正式游戏）══════
 		// 序章 = Start / Enroll / AmnesiaIntro（名字+省份+失忆闪回）
 		// 跳过 → 直接进 CampusMapEnter（地图，正式游戏），自动填默认值

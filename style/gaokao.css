@@ -1244,6 +1244,16 @@ text-box.gk-voice-playing::after,
 }
 .gk-npcpicker__leave:hover { background: rgba(255, 255, 255, 0.15); color: #e2e8f0; }
 
+/* Choice 按钮：已互动状态（绿色边框 + 半透明）*/
+.gk-choice--talked {
+	opacity: 0.55 !important;
+	border-color: rgba(16, 185, 129, 0.5) !important;
+	color: #6ee7b7 !important;
+}
+.gk-choice--talked:hover {
+	opacity: 0.75 !important;
+}
+
 /* 抖动动画（已互动的卡片被点击时） */
 @keyframes gk-shake {
 	0%, 100% { transform: translateX(0); }

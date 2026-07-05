@@ -411,20 +411,13 @@ monogatari.script({
 			}).filter(Boolean).join('\n');
 			return 'system 你的分数：' + myScore + ' 分\n' + lines + '\n\n你看到三位同学。想和谁聊聊？';
 		},
-		function () {
-			GK.showNpcPicker({
-				title: '🚶 选择一位同学互动',
-				subtitle: '已互动过的同学会标记 ✓。',
-				npcs: [
-					{ icon: '📐', label: '林（高分学霸）', talkedKey: 'classmate_lin', jumpLabel: 'NpcTalkLin' },
-					{ icon: '🌧', label: '小雨（同分焦虑）', talkedKey: 'classmate_xyu', jumpLabel: 'NpcTalkXyu' },
-					{ icon: '🍳', label: '大志（低分丧气）', talkedKey: 'classmate_dazhi', jumpLabel: 'NpcTalkDazhi' },
-				],
-				leaveLabel: '🚪 先走了',
-				leaveJump: 'NpcCorridorLeave',
-			});
-		},
-		'system （请在弹出的卡片中选择互动对象）',
+		{ Choice: {
+			Dialog: 'system 选择一位同学互动（已互动的会标记 ✓）：',
+			'Lin':    { Text: '📐 林（高分学霸）', Do: 'jump NpcTalkLin' },
+			'Xyu':    { Text: '🌧 小雨（同分焦虑）', Do: 'jump NpcTalkXyu' },
+			'Dazhi':  { Text: '🍳 大志（低分丧气）', Do: 'jump NpcTalkDazhi' },
+			'Leave':  { Text: '🚪 先走了', Do: 'jump NpcCorridorLeave' },
+		}}
 	],
 	// 林（高分）互动
 	'NpcTalkLin': [
@@ -741,20 +734,13 @@ monogatari.script({
 		function () { GK.clearCharacters(); },
 		'system 你回到家。客厅的灯亮着，桌上摆着水果和一堆打印的「热门专业推荐」。',
 		'system 家人在等你。他们有不同的想法，也有不同的爱。',
-		function () {
-			GK.showNpcPicker({
-				title: '🏠 选择和家人聊',
-				subtitle: '他们有不同的想法，也有不同的爱。已互动过的家人会标记 ✓。',
-				npcs: [
-					{ icon: '👩', label: '妈妈', talkedKey: 'fam_mom', jumpLabel: 'HomeMom' },
-					{ icon: '👨', label: '爸爸', talkedKey: 'fam_dad', jumpLabel: 'HomeDad' },
-					{ icon: '👱‍♀️', label: '小姨', talkedKey: 'fam_aunt', jumpLabel: 'HomeAunt' },
-				],
-				leaveLabel: '🚪 先回学校',
-				leaveJump: 'HomeLeave',
-			});
-		},
-		'system （请在弹出的卡片中选择互动对象）',
+		{ Choice: {
+			Dialog: 'system 选择和家人聊（已互动的会标记 ✓）：',
+			'Mom':   { Text: '👩 妈妈', Do: 'jump HomeMom' },
+			'Dad':   { Text: '👨 爸爸', Do: 'jump HomeDad' },
+			'Aunt':  { Text: '👱‍♀️ 小姨', Do: 'jump HomeAunt' },
+			'Leave': { Text: '🚪 先回学校', Do: 'jump HomeLeave' },
+		}}
 	],
 	// —— 妈妈：焦虑催促 → 深层是怕你将来怪她 → 耐心后她软化 ——
 	'HomeMom': [
@@ -849,19 +835,12 @@ monogatari.script({
 		function () { GK.clearCharacters(); },
 		'system 教师办公室。走廊尽头，有人在等你。',
 		'system 注意：不是所有老师的建议都为你好。学会辨别真心和利益。',
-		function () {
-			GK.showNpcPicker({
-				title: '📋 选择和老师聊',
-				subtitle: '不是所有老师的建议都为你好。已互动过的老师会标记 ✓。',
-				npcs: [
-					{ icon: '🍎', label: '李老师（班主任）', talkedKey: 'tch_lee', jumpLabel: 'OfficeLee' },
-					{ icon: '💰', label: '王主任（招生办）', talkedKey: 'tch_wang', jumpLabel: 'OfficeWang' },
-				],
-				leaveLabel: '🚪 离开',
-				leaveJump: 'OfficeLeave',
-			});
-		},
-		'system （请在弹出的卡片中选择互动对象）',
+		{ Choice: {
+			Dialog: 'system 选择和老师聊（已互动的会标记 ✓）：',
+			'Lee':   { Text: '🍎 李老师（班主任）', Do: 'jump OfficeLee' },
+			'Wang':  { Text: '💰 王主任（招生办）', Do: 'jump OfficeWang' },
+			'Leave': { Text: '🚪 离开', Do: 'jump OfficeLeave' },
+		}}
 	],
 	// ══════ 李老师线：先扬后抑 + 素描本秘密 + 道德选择（鼓励他追梦） ══════
 	// 精简版：保留核心剧情点（美院往事+素描本+Choice），减少对话句数让 Choice 更快到达
