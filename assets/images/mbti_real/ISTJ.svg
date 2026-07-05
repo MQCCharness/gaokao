@@ -1,0 +1,47 @@
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景浅色圆 -->
+  <circle cx="120" cy="160" r="100" fill="#f0f0f0" opacity="0.3"/>
+  
+  <!-- 角色组 -->
+  <g transform="translate(120, 160)">
+    <!-- 身体（衣服） -->
+    <rect x="-30" y="-10" width="60" height="80" rx="5" fill="#5B8A5B"/>
+    
+    <!-- 手臂 -->
+    <rect x="-45" y="0" width="15" height="50" rx="3" fill="#f5d0a9"/>
+    <rect x="30" y="0" width="15" height="50" rx="3" fill="#f5d0a9"/>
+    
+    <!-- 手持清单 -->
+    <g transform="translate(40, 30)">
+      <rect x="0" y="0" width="20" height="25" rx="2" fill="white" stroke="#ccc" stroke-width="1"/>
+      <line x1="3" y1="5" x2="17" y2="5" stroke="#999" stroke-width="1"/>
+      <line x1="3" y1="10" x2="17" y2="10" stroke="#999" stroke-width="1"/>
+      <line x1="3" y1="15" x2="17" y2="15" stroke="#999" stroke-width="1"/>
+    </g>
+    
+    <!-- 头部 -->
+    <circle cx="0" cy="-40" r="35" fill="#f5d0a9"/>
+    
+    <!-- 头发（主色调） -->
+    <path d="M-35,-40 Q-35,-70 0,-70 Q35,-70 35,-40 L35,-50 Q30,-65 0,-65 Q-30,-65 -35,-50 Z" fill="#5B8A5B"/>
+    
+    <!-- 表情（严谨严肃） -->
+    <circle cx="-12" cy="-45" r="3" fill="#333"/>
+    <circle cx="12" cy="-45" r="3" fill="#333"/>
+    <path d="M-8,-30 L8,-30" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+    
+    <!-- 腿 -->
+    <rect x="-20" y="70" width="15" height="30" rx="3" fill="#5B8A5B"/>
+    <rect x="5" y="70" width="15" height="30" rx="3" fill="#5B8A5B"/>
+    
+    <!-- 鞋子 -->
+    <ellipse cx="-12" cy="100" rx="10" ry="5" fill="#333"/>
+    <ellipse cx="12" cy="100" rx="10" ry="5" fill="#333"/>
+  </g>
+  
+  <!-- 头顶 emoji -->
+  <text x="120" y="40" font-size="30" text-anchor="middle">📋</text>
+  
+  <!-- 底部 MBTI 标签 -->
+  <text x="120" y="300" font-size="24" font-weight="bold" text-anchor="middle" fill="#5B8A5B" font-family="sans-serif">ISTJ</text>
+</svg>

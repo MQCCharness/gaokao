@@ -124,6 +124,35 @@
 	max-height: 96px;
 	filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
 }
+/* 真实形象（16personalities 美术）放大显示 */
+.gk-mbti__avatar--real {
+	width: 160px;
+	height: 200px;
+	margin: 0 auto 10px;
+	background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--mc) 35%, transparent), transparent 70%);
+	border-radius: 80px;
+	position: relative;
+	animation: gk-mbti-reveal 1.2s cubic-bezier(.2,.7,.3,1.2);
+}
+.gk-mbti__avatar--real::before {
+	content: '';
+	position: absolute;
+	inset: -4px;
+	border-radius: 50%;
+	border: 2px solid var(--mc);
+	opacity: 0.6;
+}
+.gk-mbti__avatar--real img {
+	max-width: 150px;
+	max-height: 190px;
+	object-fit: contain;
+	filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
+}
+@keyframes gk-mbti-reveal {
+	0% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+	60% { opacity: 1; transform: scale(1.08) rotate(2deg); }
+	100% { opacity: 1; transform: scale(1) rotate(0); }
+}
 .gk-mbti__type {
 	font-family: var(--gk-mono); font-size: 2.6em; font-weight: 800; color: var(--mc);
 	text-shadow: 0 0 16px var(--mc); letter-spacing: 4px;

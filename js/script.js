@@ -319,8 +319,17 @@ function buildMbtiResultDialog () {
 	GK.computeMbti();
 	const g = GK.get();
 	const info = GK.mbtiInfo(g.mbtiType) || { type: g.mbtiType, cn: '探索者', nick: '', tagline: '', strengths: [], careers: [], color: '#5B7FB8', emoji: '🔮' };
+	// 优先用 16personalities 真实形象（花瓣画板下载），失败回退到简笔 SVG
+	// 真图可能是 png/jpg/svg，用 onerror 链式回退
+	const realImgs = ['png', 'jpg', 'svg'].map(ext =>
+		`assets/images/mbti_real/${g.mbtiType}.${ext}`
+	);
+	const fallbackSvg = `assets/images/mbti/${g.mbtiType}.svg`;
+	const onerrorChain = `this.onerror=null;` +
+		realImgs.slice(1).map(p => `if(this.src!=='${p}'){this.src='${p}';}`).join('') +
+		`if(this.src!=='${fallbackSvg}'){this.src='${fallbackSvg}';}`;
 	return `system <div class="gk-mbti" style="--mc:${info.color}">
-		<div class="gk-mbti__avatar"><img src="assets/images/mbti/${g.mbtiType}.svg" alt="${g.mbtiType}"></div>
+		<div class="gk-mbti__avatar gk-mbti__avatar--real"><img src="${realImgs[0]}" alt="${g.mbtiType}" onerror="${onerrorChain}"></div>
 		<div class="gk-mbti__type">${g.mbtiType}</div>
 		<div class="gk-mbti__cn">${info.cn} ${info.emoji || ''}</div>
 		<div class="gk-mbti__nick">「${info.nick}」</div>

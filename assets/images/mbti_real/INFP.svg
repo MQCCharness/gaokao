@@ -1,0 +1,31 @@
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景浅色圆 -->
+  <circle cx="120" cy="160" r="150" fill="#F0E6FF" opacity="0.8"/>
+  <!-- 角色身体 -->
+  <ellipse cx="120" cy="180" rx="40" ry="50" fill="#A88BC0"/> <!-- 服装 -->
+  <circle cx="120" cy="110" r="35" fill="#FFE4C4"/> <!-- 头部皮肤 -->
+  <path d="M85 110 Q120 60 155 110" fill="#A88BC0"/> <!-- 头发前部 -->
+  <path d="M80 110 Q85 70 120 50 Q155 70 160 110 Q150 100 120 90 Q90 100 80 110 Z" fill="#A88BC0"/> <!-- 头发整体 -->
+  <!-- 面部表情 -->
+  <ellipse cx="105" cy="115" rx="5" ry="6" fill="#4A4A4A"/> <!-- 左眼 -->
+  <ellipse cx="135" cy="115" rx="5" ry="6" fill="#4A4A4A"/> <!-- 右眼 -->
+  <circle cx="107" cy="113" r="2" fill="white"/> <!-- 左眼高光 -->
+  <circle cx="137" cy="113" r="2" fill="white"/> <!-- 右眼高光 -->
+  <path d="M115 125 Q120 128 125 125" stroke="#4A4A4A" stroke-width="1.5" fill="none"/> <!-- 嘴巴微笑 -->
+  <!-- 手臂和手 -->
+  <path d="M80 170 Q60 180 70 200" stroke="#A88BC0" stroke-width="8" fill="none" stroke-linecap="round"/> <!-- 左臂 -->
+  <path d="M160 170 Q180 180 170 200" stroke="#A88BC0" stroke-width="8" fill="none" stroke-linecap="round"/> <!-- 右臂 -->
+  <circle cx="70" cy="200" r="6" fill="#FFE4C4"/> <!-- 左手 -->
+  <circle cx="170" cy="200" r="6" fill="#FFE4C4"/> <!-- 右手 -->
+  <!-- 腿 -->
+  <line x1="100" y1="230" x2="100" y2="270" stroke="#A88BC0" stroke-width="8" stroke-linecap="round"/>
+  <line x1="140" y1="230" x2="140" y2="270" stroke="#A88BC0" stroke-width="8" stroke-linecap="round"/>
+  <!-- 脚 -->
+  <ellipse cx="100" cy="275" rx="10" ry="5" fill="#A88BC0"/>
+  <ellipse cx="140" cy="275" rx="10" ry="5" fill="#A88BC0"/>
+  <!-- 头顶 🌙 emoji -->
+  <text x="120" y="50" font-size="24" text-anchor="middle" fill="#FFD700">🌙</text>
+  <!-- 底部 MBTI 标签 -->
+  <rect x="80" y="290" width="80" height="30" rx="10" fill="#A88BC0"/>
+  <text x="120" y="310" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">INFP</text>
+</svg>

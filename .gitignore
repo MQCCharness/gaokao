@@ -56,3 +56,6 @@ _visions_gen/
 
 # 校园地图生成工作目录
 _map_gen/
+
+# MBTI素材生成工作目录
+_mbti_gen/

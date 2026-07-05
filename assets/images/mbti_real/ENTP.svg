@@ -1,0 +1,31 @@
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- 浅色背景圆 -->
+  <circle cx="120" cy="160" r="150" fill="#f0f8ff" opacity="0.6"/>
+  
+  <!-- 角色身体：半身像，居中 -->
+  <ellipse cx="120" cy="220" rx="60" ry="80" fill="#4A7DB5"/> <!-- 上衣 -->
+  <ellipse cx="120" cy="140" rx="45" ry="50" fill="#ffe0bd"/> <!-- 头部 -->
+  
+  <!-- 头发：用 #4A7DB5 填充，简笔风格 -->
+  <path d="M75 120 Q120 60 165 120 L160 130 Q120 80 80 130 Z" fill="#4A7DB5"/>
+  
+  <!-- 面部表情：挑眉、自信微笑 -->
+  <!-- 左眼挑眉 -->
+  <line x1="95" y1="125" x2="105" y2="120" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="100" cy="130" r="3" fill="black"/>
+  <!-- 右眼正常 -->
+  <line x1="135" y1="130" x2="145" y2="130" stroke="black" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="140" cy="135" r="3" fill="black"/>
+  <!-- 嘴巴：自信微笑 -->
+  <path d="M110 145 Q120 155 130 145" stroke="black" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- 抬手姿势：右臂抬起，辩论手势 -->
+  <path d="M160 200 Q180 180 170 160 L165 165" stroke="#ffe0bd" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <ellipse cx="170" cy="155" rx="5" ry="4" fill="#ffe0bd"/> <!-- 手 -->
+  
+  <!-- 装饰：头顶 ⚡ emoji -->
+  <text x="120" y="80" text-anchor="middle" font-size="24" font-family="Arial, sans-serif">⚡</text>
+  
+  <!-- 底部 MBTI 标签 -->
+  <text x="120" y="300" text-anchor="middle" font-size="20" font-weight="bold" fill="#4A7DB5" font-family="Arial, sans-serif">ENTP</text>
+</svg>

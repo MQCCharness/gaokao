@@ -1,0 +1,37 @@
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景浅色圆 -->
+  <circle cx="120" cy="160" r="150" fill="#F0F8FF" opacity="0.5"/>
+  
+  <!-- 星星装饰 -->
+  <text x="120" y="60" font-size="30" text-anchor="middle" fill="#FFD700">🌟</text>
+  
+  <!-- 头部 -->
+  <circle cx="120" cy="100" r="40" fill="#FFE0B2" stroke="#333" stroke-width="2"/>
+  <!-- 头发 (主色调 #E8A857) -->
+  <path d="M80,100 Q90,60 120,50 Q150,60 160,100 L150,100 Q140,70 120,65 Q100,70 90,100 Z" fill="#E8A857" stroke="#333" stroke-width="1"/>
+  
+  <!-- 表情 (热情微笑) -->
+  <circle cx="108" cy="95" r="4" fill="#333"/> <!-- 左眼 -->
+  <circle cx="132" cy="95" r="4" fill="#333"/> <!-- 右眼 -->
+  <path d="M105,115 Q120,130 135,115" fill="none" stroke="#333" stroke-width="2"/> <!-- 微笑 -->
+  <circle cx="108" cy="95" r="1.5" fill="white"/> <!-- 眼睛高光 -->
+  <circle cx="132" cy="95" r="1.5" fill="white"/> <!-- 眼睛高光 -->
+  
+  <!-- 身体 (服装用主色调) -->
+  <rect x="100" y="140" width="40" height="60" rx="5" fill="#E8A857" stroke="#333" stroke-width="2"/>
+  
+  <!-- 手臂 (张开姿势，反映社交热情) -->
+  <path d="M100,160 L60,180" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/> <!-- 左臂 -->
+  <path d="M140,160 L180,180" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/> <!-- 右臂 -->
+  <circle cx="60" cy="180" r="5" fill="#FFE0B2" stroke="#333" stroke-width="1"/> <!-- 左手 -->
+  <circle cx="180" cy="180" r="5" fill="#FFE0B2" stroke="#333" stroke-width="1"/> <!-- 右手 -->
+  
+  <!-- 腿 -->
+  <line x1="110" y1="200" x2="100" y2="260" stroke="#333" stroke-width="3" stroke-linecap="round"/> <!-- 左腿 -->
+  <line x1="130" y1="200" x2="140" y2="260" stroke="#333" stroke-width="3" stroke-linecap="round"/> <!-- 右腿 -->
+  <ellipse cx="100" cy="265" rx="10" ry="5" fill="#FFE0B2" stroke="#333" stroke-width="1"/> <!-- 左脚 -->
+  <ellipse cx="140" cy="265" rx="10" ry="5" fill="#FFE0B2" stroke="#333" stroke-width="1"/> <!-- 右脚 -->
+  
+  <!-- 底部标签 "ENFP" -->
+  <text x="120" y="300" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#E8A857">ENFP</text>
+</svg>
