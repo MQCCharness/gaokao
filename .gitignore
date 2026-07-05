@@ -40,3 +40,10 @@ _old_stella/
 _source_*.png
 _buddy_raw.png
 _extract.mjs
+
+# 序章扩充工作目录
+_prologue_gen/
+
+# 立绘包下载/解压/AI生图工作目录（分支工作区，不入库）
+_dl_lulu/
+_ai_gen/

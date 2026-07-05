@@ -21,6 +21,10 @@ monogatari.characters ({
 		Name: '志愿命运系统', Color: '#FFD700', Directory: 'system',
 		Images: { 'normal': 'system_normal.png' },
 	},
+	// 主角内心独白（序章/回忆用，不显示立绘，柔和米白色）
+	'me': {
+		Name: '', Color: '#E8E0D0',
+	},
 	// 立绘来源：CC0 / Public Domain（OpenGameArt 二次元 VN 全身立绘）
 	// 主角团：「Visual Novel Character Sprite」 https://opengameart.org/content/visual-novel-character-sprite
 	// 导师团：「VN Characters (by cabbit KusSv)」 https://opengameart.org/content/vn-characters
@@ -106,6 +110,12 @@ monogatari.assets ('scenes', {
 	'scene-river':    'scene-river.webp',     // 河川敷（散步放松）
 	'scene-home':     'scene-home.webp',      // 家（家人互动）
 	'scene-office':   'scene-office.webp',    // 楼梯/办公室（老师互动）
+	// 序章 5 幕场景（v2 由 mimo-v2.5 生成）
+	'scene-rain-office': 'scene-rain-office.webp',  // 幕1 雨夜办公室
+	'scene-subway':      'scene-subway.webp',       // 幕2 末班地铁
+	'scene-rent-room':   'scene-rent-room.webp',    // 幕3 8平米合租房
+	'scene-lightning':   'scene-lightning.webp',    // 幕4 闪电穿越（抽象）
+	'scene-bedroom':     'scene-bedroom.webp',      // 幕5 高中卧室
 });
 
 // 背景音乐（houkago_stella MIT，每关一首贴合氛围的 BGM）
