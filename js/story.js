@@ -49,7 +49,7 @@ monogatari.script({
 
 	// ══════ 校园地图入口（jump 目标，首句函数避免卡死）══════
 	'CampusMapEnter': [
-		function () { GK.showCampusMap(); },
+		function () { GK.set({ _introDone: true }); GK.showCampusMap(); },
 		'system 在校园地图上选择要前往的地点。完成全部 5 个任务后，可提交志愿表，揭开真相。',
 	],
 	'CampusMap': [

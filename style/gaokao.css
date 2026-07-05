@@ -1173,6 +1173,42 @@ text-box.gk-voice-playing::after,
 	opacity: 1;
 }
 
+/* 返回主菜单浮动按钮（右下角，语音按钮左侧） */
+.gk-home-toggle {
+	position: fixed;
+	right: 64px;
+	bottom: 72px;
+	z-index: 9000;
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	background: rgba(30, 32, 50, 0.85);
+	border: 2px solid rgba(255, 255, 255, 0.25);
+	color: #fff;
+	font-size: 1.2em;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.15s ease;
+	backdrop-filter: blur(6px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+.gk-home-toggle:hover {
+	background: rgba(60, 64, 100, 0.95);
+	border-color: rgba(255, 255, 255, 0.45);
+	transform: scale(1.08);
+}
+.gk-home-toggle--confirm {
+	background: rgba(229, 49, 112, 0.8);
+	border-color: rgba(255, 255, 255, 0.5);
+	animation: gk-pulse 0.8s infinite;
+}
+@keyframes gk-pulse {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.12); }
+}
+
 /* 序章跳过按钮（左下角，仅序章阶段显示） */
 .gk-skip-intro {
 	position: fixed;

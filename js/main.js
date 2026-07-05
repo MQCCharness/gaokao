@@ -291,6 +291,36 @@ $_ready(() => {
 		});
 		document.body.appendChild(voiceBtn);
 
+		// 返回主菜单浮动按钮（右下角，游戏中常驻，点两次确认避免误触）
+		const homeBtn = document.createElement('button');
+		homeBtn.className = 'gk-home-toggle';
+		homeBtn.innerHTML = '🏠';
+		homeBtn.title = '返回主菜单（再点一次确认）';
+		let homeConfirmTimer = null;
+		homeBtn.addEventListener('click', () => {
+			if (homeBtn.classList.contains('gk-home-toggle--confirm')) {
+				// 第二次点击：确认返回主菜单
+				clearTimeout(homeConfirmTimer);
+				homeBtn.classList.remove('gk-home-toggle--confirm');
+				homeBtn.innerHTML = '🏠';
+				try { monogatari.run('end'); } catch (e) {
+					// 兜底：直接显示 main-screen
+					try { monogatari.run('main'); } catch (e2) {}
+				}
+			} else {
+				// 第一次点击：进入确认状态
+				homeBtn.classList.add('gk-home-toggle--confirm');
+				homeBtn.innerHTML = '⚠';
+				homeBtn.title = '确认返回主菜单？（当前进度不会自动保存，请先存档）';
+				homeConfirmTimer = setTimeout(() => {
+					homeBtn.classList.remove('gk-home-toggle--confirm');
+					homeBtn.innerHTML = '🏠';
+					homeBtn.title = '返回主菜单（再点一次确认）';
+				}, 3000);
+			}
+		});
+		document.body.appendChild(homeBtn);
+
 		// ══════ NPC 选择 Choice 增强：已互动项标记 ✓ + 拦截重复点击 ══════
 		// 监听 choice-container 的按钮，根据 _talked 给已互动项加标记
 		// 关键词映射：按钮文案 → _talked 的 key
@@ -352,6 +382,8 @@ $_ready(() => {
 		function skipIntro () {
 			// 已在地图则不跳
 			if (document.querySelector('.gk-map')) return;
+			// 标记序章已完成（后续不再显示跳过按钮）
+			GK.set({ _introDone: true });
 			// 填入默认玩家数据（如果还没填）
 			const g = GK.get();
 			if (!g.province) GK.set({ province: 'zhejiang' });
@@ -381,13 +413,15 @@ $_ready(() => {
 			}
 		});
 
-		// 显示逻辑：有 text-box（游戏中）且无地图弹层时显示；主菜单/地图/碎片闪回时隐藏
+		// 显示逻辑：只在序章阶段（_introDone 未设）+ game-screen 可见 + 无弹层时显示
+		// 序章完成（进地图）后 _introDone=true，跳过按钮永久隐藏（不再出现在任务对话中）
 		const updateSkipVisibility = () => {
+			const introDone = !!GK.get()._introDone;
+			if (introDone) { skipBtn.style.display = 'none'; return; }
 			const hasMap = !!document.querySelector('.gk-map');
 			const hasShard = !!document.querySelector('.gk-shard');
 			const hasGallery = !!document.querySelector('.gk-gallery');
 			const hasRealScore = !!document.querySelector('.gk-realscore');
-			// game-screen 可见（display:flex）= 在游戏中；main-screen 可见 = 主菜单
 			const gameEl = document.querySelector('game-screen');
 			const inGame = gameEl && getComputedStyle(gameEl).display !== 'none';
 			const shouldShow = inGame && !hasMap && !hasShard && !hasGallery && !hasRealScore;
