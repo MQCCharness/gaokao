@@ -50,7 +50,7 @@ monogatari.characters ({
 	'classmate_dazhi': { Name: '同学·大志', Color: '#E8923C', Directory: 'classmate_dazhi', Images: { 'normal': 'classmate_dazhi_normal.png', 'angry': 'classmate_dazhi_angry.png', 'smirk': 'classmate_dazhi_smirk.png' } },
 	'buddy_sports':   { Name: '阿星(运动装)', Color: '#C09A6F', Directory: 'buddy_sports', Images: { 'normal': 'buddy_sports_normal.png', 'happy': 'buddy_sports_happy.png' } },
 	// 家人 NPC
-	'fam_mom':  { Name: '妈妈',   Color: '#E891A8', Directory: 'fam_mom',  Images: { 'normal': 'fam_mom_normal.png' } },
+	'fam_mom':  { Name: '妈妈',   Color: '#E891A8', Directory: 'fam_mom',  Images: { 'normal': 'fam_mom_normal.png', 'happy': 'fam_mom_happy.png' } },
 	'fam_dad':  { Name: '爸爸',   Color: '#5B8AB8', Directory: 'fam_dad',  Images: { 'normal': 'fam_dad_normal.png', 'angry': 'fam_dad_angry.png', 'smirk': 'fam_dad_smirk.png', 'straight': 'fam_dad_straight.png' } },
 	'fam_aunt': { Name: '小姨',   Color: '#C4A0D9', Directory: 'fam_aunt', Images: { 'normal': 'fam_aunt_normal.png' } },
 	// 老师 NPC
@@ -155,7 +155,7 @@ monogatari.assets ('characters', {
 	'mentor_lingfeng': [ 'mentor_lingfeng_normal.png' ],
 	'mentor_zhaoyang': [ 'mentor_zhaoyang_normal.png' ],
 	'buddy_sports':   [ 'buddy_sports_normal.png', 'buddy_sports_happy.png' ],
-	'fam_mom':  [ 'fam_mom_normal.png' ],
+	'fam_mom':  [ 'fam_mom_normal.png', 'fam_mom_happy.png' ],
 	'fam_dad':  [ 'fam_dad_normal.png' ],
 	'fam_aunt': [ 'fam_aunt_normal.png' ],
 	'tch_lee':  [ 'tch_lee_normal.png' ],
