@@ -215,7 +215,7 @@ monogatari.script({
 		function () { GK.solvePuzzle('score'); GK.feedback({ rel: { rival: +8 }, attrs: { insight: +4 } }); },
 		'rival 凛 对，B 校是冲档。你的位次比它低线略高，有戏但不稳——这正是"冲"的含义。',
 		'rival 凛 学会读位次，比记住分数更重要。走吧，去查你真正的分数。',
-		'jump ScoreBossReal',
+		'jump VisionsIntro',
 	],
 	'PuzzleScoreWrong': [
 		function () { GK.feedback({ rel: { rival: -5 }, attrs: { patience: -3 } }); },
@@ -231,6 +231,71 @@ monogatari.script({
 		'rival 凛 提示：你的位次 28000，B 校要 20000-26000，你比它最低线还低一些——所以有希望冲，这就是冲档。',
 		{ Choice: { Dialog: 'system 选 B 校', 'Go': { Text: '✓ B 校', Do: 'jump PuzzleScoreOk' } } }
 	],
+	// ══════ 众声喧哗 Visions（人生理想关之后、查分之前的迷茫高潮）══════
+	// 主题：玩家以为想清楚了，结果一打开手机被各路科技大佬发言冲昏头
+	// 设计：mimo-v2.5，5 章节奏（1→2→3→1→0 visions 的递进-收束）
+	// 法律：8 位化名+Wikimedia CC 照片+台词改写，剧情内含免责声明
+	'VisionsIntro': [
+		'show scene scene-bedroom with fadeIn',
+		'play music bgm-score',  // 忧郁底
+		'me ……终于填完了人生理想那一栏。',
+		'me 我看着志愿表第一志愿的空白，长舒一口气。窗外不知什么时候已经入夜，校园零星的灯光把夜色衬得格外安静。',
+		'me 这时候——手机震了一下。',
+		'me 一条科技新闻的推送。我没忍住，点开了。',
+		'jump VisionsCh1',
+	],
+	'VisionsCh1': [
+		function () { GK.showVisions(1); },
+		'me ……算力是新石油。',
+		'me 我盯着那个穿黑皮衣的男人，他说这话时眼神像在看一个油田。我心里某个角落"咯噔"一下——我填的那个专业，跟"算力"沾边吗？',
+		'me 还没想完，手机又震了。一条，两条，五条。',
+		'jump VisionsCh2',
+	],
+	'VisionsCh2': [
+		function () { GK.showVisions(2); },
+		'me 四年。AI 接管脑力活。AGI 的门槛。',
+		'me 这俩人的话像两块石头，砸进我原本平静的心里。我大一还没开学，他们就说四年后的世界我不认识了？',
+		'me 我下意识往下滑。屏幕开始失控——',
+		'jump VisionsCh3',
+	],
+	'VisionsCh3': [
+		function () { GK.showVisions(3); },
+		'me 空间智能。ALL IN。AI 淘汰不用 AI 的人。',
+		'me 三张脸叠在一起，像是要把我的脑子撕成三瓣。一个让我搞视觉，一个让我赌上一切，一个让我必须学 AI。',
+		'me 我的手开始发抖。我想到爸妈给我打电话时小心翼翼的声音——他们说"你自己定"。',
+		'me 可我定什么？每个声音都说自己才是未来。',
+		'jump VisionsCh4',
+	],
+	'VisionsCh4': [
+		function () { GK.showVisions(4); },
+		'me 彪悍的人生不需要解释。稳稳地平庸。',
+		'me 那个长鬓角的男人笑着说。我忽然觉得更迷茫了——他想让我折腾，可我连方向都看不清，怎么折腾？',
+		'me 手机屏幕已经模糊成一片光晕。我把手机"啪"地扣在桌上。',
+		'jump VisionsCh5',
+	],
+	'VisionsCh5': [
+		'stop music',
+		'me ……静默。',
+		'me 屋里只剩下窗外的虫鸣，和台灯嗡嗡的电流声。',
+		'me 我看着桌上摊开的志愿表，旁边躺着被我扣住的手机。它的屏幕黑着，像一个闭嘴的人。',
+		'play music bgm-score',
+		'me 他们都在告诉我"未来属于 X"。',
+		'me 可这张表，是我的。',
+		'me 我重新拿起了笔。这一次，我没看手机。',
+		'system 本作登场的所有"未来之声"均为虚构化名角色，其观点为剧情需要而改写，不代表任何现实人物。',
+		{ Choice: {
+			Dialog: 'me 你决定——',
+			'Self':    { Text: '✓ 关掉所有杂音，听听自己心里那个声音', Do: 'jump VisionsResolve' },
+			'Save':    { Text: '把这些大佬的观点截图保存，明天再研究', Do: 'jump VisionsResolve' },
+		}}
+	],
+	'VisionsResolve': [
+		function () { GK.set({ _visionsDone: true }); },
+		'me 不管怎样，这一夜，我必须自己写下答案。',
+		'me 窗外，天快亮了。',
+		'jump ScoreBossReal',
+	],
+
 	// ScoreBossReal：真正的查分入口（解谜通过后）+ 存档提醒
 	// ⚠ 存档提醒用 setTimeout 延迟弹窗，避免 DOM 插入干扰引擎 Choice 渲染（导致选项不出现）
 	'ScoreBossReal': [

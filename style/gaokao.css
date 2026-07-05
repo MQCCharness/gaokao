@@ -955,6 +955,113 @@ loading-screen [data-content="message"],
 }
 
 /* ==========================================================================
+   10C. 众声喧哗 Visions —— 8 位科技大佬化名卡片悬浮弹窗
+   情绪：从孤单到信息过载，再回归主角
+   ========================================================================== */
+.gk-visions {
+	position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+	z-index: 9999;
+	display: flex; align-items: center; justify-content: center;
+	background: radial-gradient(ellipse at center, rgba(20,20,40,0.85) 0%, rgba(0,0,0,0.98) 80%);
+	transition: opacity 0.7s ease;
+}
+.gk-visions--closing { opacity: 0; pointer-events: none; }
+/* 背景：信息流光带（隐约的资讯滚动感） */
+.gk-visions__stream {
+	position: absolute; inset: 0;
+	background:
+		repeating-linear-gradient(180deg,
+			rgba(80,120,200,0.04) 0px, rgba(80,120,200,0.04) 1px,
+			transparent 1px, transparent 4px),
+		radial-gradient(circle at 30% 30%, rgba(100,180,255,0.06), transparent 50%),
+		radial-gradient(circle at 70% 70%, rgba(255,150,100,0.05), transparent 50%);
+	animation: gk-stream-shift 8s linear infinite;
+}
+@keyframes gk-stream-shift {
+	0% { background-position: 0 0, 0 0, 0 0; }
+	100% { background-position: 0 200px, 0 0, 0 0; }
+}
+.gk-visions__inner {
+	position: relative; z-index: 2;
+	width: 90%; max-width: 1100px;
+	display: flex; flex-direction: column; align-items: center;
+	gap: 24px;
+	color: #f0e8d8;
+}
+/* 旁白（顶部，第二人称"你"） */
+.gk-visions__narration {
+	font-size: 1.1em; color: #c8d0e8;
+	font-style: italic; letter-spacing: 1px;
+	text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+	max-width: 720px; text-align: center;
+	min-height: 32px;
+}
+/* 卡片容器：根据章节切换布局 */
+.gk-visions__cards {
+	display: flex; align-items: center; justify-content: center;
+	gap: 30px; flex-wrap: wrap;
+	perspective: 1200px;
+	min-height: 380px;
+}
+/* 第 3 章多卡叠加（信息过载） */
+.gk-visions--ch3 .gk-visions__cards {
+	gap: 0;
+}
+.gk-visions--ch3 .gk-visions__card {
+	position: relative;
+}
+.gk-visions--ch3 .gk-visions__card:nth-child(1) { transform: rotate(-12deg) translate(-180px, 0); }
+.gk-visions--ch3 .gk-visions__card:nth-child(2) { transform: rotate(0deg) translate(0, -20px); z-index: 2; }
+.gk-visions--ch3 .gk-visions__card:nth-child(3) { transform: rotate(12deg) translate(180px, 0); }
+/* 单张卡片 */
+.gk-visions__card {
+	width: 240px;
+	cursor: pointer;
+	opacity: 0;
+	transform-origin: center center;
+	animation: gk-vision-in 0.9s cubic-bezier(.2,.7,.3,1.2) forwards;
+	filter: drop-shadow(0 10px 25px rgba(0,0,0,0.8));
+	transition: transform 0.3s ease, filter 0.3s ease;
+}
+.gk-visions__card:hover {
+	transform: scale(1.06) rotate(0deg) !important;
+	filter: drop-shadow(0 14px 30px rgba(255,200,100,0.4)) brightness(1.08);
+	z-index: 10;
+}
+@keyframes gk-vision-in {
+	0%   { opacity: 0; transform: translateY(50px) scale(0.85) rotate(-10deg); }
+	100% { opacity: 1; transform: var(--rot, rotate(0)) scale(1); }
+}
+.gk-visions__card img {
+	width: 100%; height: auto; display: block;
+	border-radius: 4px 4px 0 0;
+}
+.gk-visions__line {
+	padding: 12px 14px;
+	background: linear-gradient(180deg, rgba(20,20,40,0.95), rgba(0,0,0,0.95));
+	color: #ffd98a;
+	font-size: 0.92em;
+	font-style: italic;
+	line-height: 1.5;
+	border-radius: 0 0 4px 4px;
+	border-top: 1px solid rgba(255,200,100,0.3);
+}
+.gk-visions__hint {
+	padding: 6px;
+	text-align: center;
+	font-size: 0.75em;
+	color: #888;
+	background: #050505;
+	border-radius: 0 0 8px 8px;
+	letter-spacing: 2px;
+}
+@media (max-width: 768px) {
+	.gk-visions__card { width: 180px; }
+	.gk-visions--ch3 .gk-visions__card:nth-child(1) { transform: rotate(-12deg) translate(-100px, 0); }
+	.gk-visions--ch3 .gk-visions__card:nth-child(3) { transform: rotate(12deg) translate(100px, 0); }
+}
+
+/* ==========================================================================
    11. 状态面板（关系值 + 属性）& 存档提醒
    ========================================================================== */
 .gk-map__status {
