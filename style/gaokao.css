@@ -652,9 +652,28 @@ loading-screen [data-content="message"],
 	overflow-y: auto;
 	animation: gk-fadein 0.3s ease;
 }
-.gk-map__bg { display: none; }
+.gk-map--graphic { overflow: hidden; }  /* 图形化地图不滚动 */
+.gk-map__bg {
+	position: absolute;
+	inset: 0;
+	display: block;
+	z-index: 0;
+}
+.gk-map__svg {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	opacity: 0.92;
+	filter: drop-shadow(0 8px 32px rgba(0,0,0,0.5));
+}
 .gk-map__header {
-	padding: 24px 28px 16px;
+	position: relative;
+	z-index: 2;
+	padding: 18px 28px 8px;
 	text-align: center;
 }
 .gk-map__title { font-size: 1.6em; font-weight: bold; color: #fff; margin: 0; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(127,90,240,0.5); }
@@ -673,105 +692,118 @@ loading-screen [data-content="message"],
 	backdrop-filter: blur(6px);
 }
 .gk-map__close:hover { background: rgba(255,80,80,0.4); }
-.gk-map__grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-	gap: 20px;
-	padding: 8px 32px 24px;
-	max-width: 1200px;
-	margin: 0 auto;
+/* === 图形化地图：节点 marker 钉在 SVG 建筑物上 === */
+.gk-map__canvas {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	pointer-events: none;  /* 让 SVG 背景不响应点击 */
 }
-.gk-map__node {
-	position: relative;
-	background: rgba(20,25,50,0.85);
-	border: 2px solid rgba(127,90,240,0.4);
-	border-radius: 16px;
-	overflow: hidden;
-	cursor: pointer;
-	transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
-	backdrop-filter: blur(6px);
+.gk-map__marker {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	z-index: 3;
+	pointer-events: auto;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 4px;
+	font-family: inherit;
+	transition: transform 0.2s ease;
 }
-.gk-map__node:hover {
-	transform: translateY(-8px) scale(1.03);
-	border-color: #fff;
-	box-shadow: 0 16px 48px rgba(127,90,240,0.5);
-}
-.gk-map__node-thumb {
-	width: 100%;
-	height: 160px;
-	overflow: hidden;
-	position: relative;
-}
-.gk-map__node-thumb img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	transition: transform 0.4s ease;
-}
-.gk-map__node:hover .gk-map__node-thumb img { transform: scale(1.1); }
-.gk-map__node-body {
-	padding: 12px 14px 14px;
+.gk-map__marker-emoji {
+	font-size: 2em;
+	line-height: 1;
+	background: rgba(0,0,0,0.6);
+	border: 3px solid #ffd98a;
+	border-radius: 50%;
+	width: 56px;
+	height: 56px;
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	justify-content: center;
+	box-shadow: 0 4px 14px rgba(0,0,0,0.7), inset 0 0 8px rgba(255,200,100,0.2);
+	transition: all 0.2s ease;
 }
-.gk-map__node-icon { font-size: 1.8em; line-height: 1; }
-.gk-map__node-label { font-size: 1.02em; font-weight: bold; color: #fff; }
-.gk-map__node-npc { font-size: 0.78em; color: #9ab; margin-top: 2px; }
-.gk-map__node-check {
-	position: absolute;
-	top: 10px; right: 10px;
-	background: #2cb67d;
-	color: #fff;
-	font-size: 0.78em;
+.gk-map__marker-label {
+	font-size: 0.85em;
 	font-weight: bold;
-	padding: 4px 12px;
-	border-radius: 12px;
-	box-shadow: 0 2px 10px rgba(44,182,125,0.6);
-}
-.gk-map__node-go {
-	position: absolute;
-	top: 10px; right: 10px;
-	background: rgba(127,90,240,0.85);
 	color: #fff;
-	font-size: 0.78em;
-	padding: 4px 12px;
-	border-radius: 12px;
+	text-shadow: 0 1px 4px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.9);
+	background: rgba(0,0,0,0.55);
+	padding: 2px 8px;
+	border-radius: 8px;
+	white-space: nowrap;
 }
-.gk-map__node--done { border-color: rgba(44,182,125,0.5); }
-.gk-map__node--done .gk-map__node-thumb img { filter: grayscale(0.3) brightness(0.85); }
-/* 锁定状态（未满足前置任务） */
-.gk-map__node--locked {
-	opacity: 0.55;
+.gk-map__marker-tip {
+	font-size: 0.7em;
+	color: #ffd98a;
+	text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+	opacity: 0;
+	transform: translateY(-4px);
+	transition: opacity 0.2s, transform 0.2s;
+	white-space: nowrap;
+}
+.gk-map__marker:hover .gk-map__marker-tip { opacity: 1; transform: translateY(0); }
+.gk-map__marker:hover { transform: translate(-50%, -50%) scale(1.12); z-index: 10; }
+.gk-map__marker:hover .gk-map__marker-emoji {
+	box-shadow: 0 6px 20px rgba(255,200,100,0.7), inset 0 0 12px rgba(255,200,100,0.4);
+	border-color: #fff;
+}
+/* 开放状态（可点击进入） */
+.gk-map__marker--open .gk-map__marker-emoji {
+	animation: gk-marker-pulse 2.2s ease-in-out infinite;
+}
+@keyframes gk-marker-pulse {
+	0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.7), 0 0 0 0 rgba(255,200,100,0.6); }
+	50%      { box-shadow: 0 4px 14px rgba(0,0,0,0.7), 0 0 0 12px rgba(255,200,100,0); }
+}
+/* 已完成 */
+.gk-map__marker--done .gk-map__marker-emoji {
+	border-color: #2cb67d;
+	background: rgba(44,182,125,0.3);
+	filter: saturate(0.7);
+}
+.gk-map__marker--done .gk-map__marker-label { color: #2cb67d; }
+/* 锁定 */
+.gk-map__marker--locked {
 	cursor: not-allowed;
-	border-color: rgba(229,49,112,0.4);
+}
+.gk-map__marker--locked .gk-map__marker-emoji {
+	border-color: #e53170;
+	background: rgba(229,49,112,0.2);
+	filter: grayscale(0.5);
+	opacity: 0.75;
+}
+.gk-map__marker--locked .gk-map__marker-label { color: #e53170; opacity: 0.85; }
+.gk-map__marker--shake { animation: gk-shake 0.4s ease; }
+@keyframes gk-shake {
+	0%, 100% { transform: translate(-50%, -50%) translateX(0); }
+	25% { transform: translate(-50%, -50%) translateX(-6px); }
+	75% { transform: translate(-50%, -50%) translateX(6px); }
+}
+/* 支线节点稍小 */
+.gk-map__marker--opt .gk-map__marker-emoji {
+	width: 46px; height: 46px; font-size: 1.6em;
+	border-width: 2px;
 	border-style: dashed;
 }
-.gk-map__node--locked .gk-map__node-thumb img { filter: grayscale(0.7) brightness(0.5); }
-.gk-map__node--locked:hover { transform: none; box-shadow: none; }
-.gk-map__node-locked {
-	position: absolute;
-	top: 10px; right: 10px;
-	background: rgba(229,49,112,0.85);
-	color: #fff;
-	font-size: 0.72em;
-	padding: 4px 10px;
-	border-radius: 10px;
-	max-width: 180px;
-	text-align: right;
-	line-height: 1.3;
-}
 .gk-map__submit {
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 5;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
-	max-width: 1200px;
-	margin: 0 auto 32px;
-	padding: 18px 32px;
-	background: linear-gradient(135deg, rgba(255,215,0,0.2), rgba(229,49,112,0.2));
+	padding: 16px 36px;
+	background: linear-gradient(135deg, rgba(255,215,0,0.25), rgba(229,49,112,0.25));
 	border: 2px solid #FFD700;
 	border-radius: 16px;
 	color: #fff;
@@ -780,23 +812,30 @@ loading-screen [data-content="message"],
 	cursor: pointer;
 	transition: transform 0.2s, box-shadow 0.2s;
 	animation: gk-glow 2.5s ease-in-out infinite;
+	backdrop-filter: blur(8px);
 }
-.gk-map__submit:hover { transform: scale(1.02); box-shadow: 0 0 40px #FFD700; }
+.gk-map__submit:hover { transform: translateX(-50%) scale(1.04); box-shadow: 0 0 40px #FFD700; }
 .gk-map__submit-icon { font-size: 1.4em; }
 .gk-map__locked {
-	max-width: 1200px;
-	margin: 0 auto 32px;
-	padding: 16px 24px;
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 5;
+	padding: 14px 24px;
 	text-align: center;
 	color: #9ab;
-	font-size: 0.95em;
-	background: rgba(0,0,0,0.4);
-	border: 1px dashed rgba(255,255,255,0.2);
+	font-size: 0.92em;
+	background: rgba(0,0,0,0.65);
+	border: 1px dashed rgba(255,255,255,0.25);
 	border-radius: 12px;
+	backdrop-filter: blur(8px);
 }
-@media (max-width: 600px) {
-	.gk-map__grid { grid-template-columns: 1fr; padding: 8px 16px 24px; }
-	.gk-map__node-thumb { height: 130px; }
+@media (max-width: 768px) {
+	.gk-map__marker-emoji { width: 42px; height: 42px; font-size: 1.5em; border-width: 2px; }
+	.gk-map__marker-label { font-size: 0.72em; padding: 1px 6px; }
+	.gk-map__marker-tip { font-size: 0.65em; }
+	.gk-map__marker--opt .gk-map__marker-emoji { width: 36px; height: 36px; font-size: 1.2em; }
 }
 
 /* 记忆碎片闪回（任务完成后弹窗） */
