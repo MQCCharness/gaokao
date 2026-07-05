@@ -40,3 +40,6 @@ _old_stella/
 _source_*.png
 _buddy_raw.png
 _extract.mjs
+
+# NoranekoGames 立绘包下载/解压/截图（分支1素材工作目录）
+_dl_lulu/
