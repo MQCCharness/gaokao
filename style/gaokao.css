@@ -1198,3 +1198,61 @@ text-box.gk-voice-playing::after,
 	border-color: rgba(255, 255, 255, 0.35);
 	transform: translateY(-1px);
 }
+
+/* NPC 互动对象选择弹层（gk-npcpicker） */
+.gk-npcpicker {
+	position: fixed; inset: 0; z-index: 10000;
+	background: rgba(15, 17, 33, 0.93); backdrop-filter: blur(8px);
+	display: flex; align-items: center; justify-content: center; padding: 20px;
+	animation: gk-fade-in 0.2s ease;
+}
+.gk-npcpicker__box {
+	max-width: 600px; width: 100%; padding: 24px;
+	background: linear-gradient(135deg, rgba(30, 32, 50, 0.95), rgba(50, 50, 80, 0.92));
+	border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.gk-npcpicker__title { font-size: 1.2em; color: #fbbf24; margin: 0 0 8px; text-align: center; }
+.gk-npcpicker__subtitle { font-size: 0.8em; color: #9ab; text-align: center; margin-bottom: 16px; line-height: 1.5; }
+.gk-npcpicker__grid {
+	display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 12px; margin-bottom: 16px;
+}
+.gk-npcpicker__card {
+	position: relative; padding: 16px 12px; text-align: center;
+	background: rgba(255, 255, 255, 0.06); border: 2px solid rgba(255, 255, 255, 0.12);
+	border-radius: 12px; cursor: pointer; transition: all 0.18s;
+}
+.gk-npcpicker__card:hover {
+	background: rgba(255, 255, 255, 0.12); border-color: rgba(124, 92, 255, 0.6);
+	transform: translateY(-2px);
+}
+.gk-npcpicker__card--done {
+	background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.3); opacity: 0.75;
+}
+.gk-npcpicker__icon { font-size: 2em; margin-bottom: 6px; }
+.gk-npcpicker__label { font-size: 0.9em; color: #e2e8f0; font-weight: 600; }
+.gk-npcpicker__badge {
+	font-size: 0.68em; margin-top: 4px; color: #94a3b8;
+}
+.gk-npcpicker__badge--go { color: #7c5cff; }
+.gk-npcpicker__footer { text-align: center; }
+.gk-npcpicker__leave {
+	padding: 10px 24px; font-size: 0.9em; cursor: pointer;
+	background: rgba(255, 255, 255, 0.08); color: #9ab;
+	border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 10px;
+	transition: all 0.15s;
+}
+.gk-npcpicker__leave:hover { background: rgba(255, 255, 255, 0.15); color: #e2e8f0; }
+
+/* 抖动动画（已互动的卡片被点击时） */
+@keyframes gk-shake {
+	0%, 100% { transform: translateX(0); }
+	20% { transform: translateX(-8px); }
+	40% { transform: translateX(8px); }
+	60% { transform: translateX(-6px); }
+	80% { transform: translateX(6px); }
+}
+@keyframes gk-fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
