@@ -836,6 +836,125 @@ loading-screen [data-content="message"],
 .gk-shard__close:hover { background: rgba(127,90,240,0.6); }
 
 /* ==========================================================================
+   10B. 结局照片蒙太奇（Photo Montage）—— 桌面上一张张浮现旧照片
+   ========================================================================== */
+.gk-montage {
+	position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+	z-index: 9999;
+	display: flex; align-items: center; justify-content: center;
+	transition: opacity 0.6s ease;
+	background: #000;
+}
+.gk-montage__bg {
+	position: absolute; inset: 0;
+	background:
+		radial-gradient(ellipse at center, rgba(60,40,20,0.4) 0%, rgba(0,0,0,0.95) 70%),
+		repeating-linear-gradient(90deg, rgba(80,55,30,0.15) 0px, rgba(80,55,30,0.15) 2px, transparent 2px, transparent 80px),
+		linear-gradient(180deg, #2a1810 0%, #1a0e08 100%);
+	background-size: cover, 80px 80px, cover;
+}
+.gk-montage--bitter .gk-montage__bg {
+	background:
+		radial-gradient(ellipse at center, rgba(40,30,30,0.5) 0%, rgba(0,0,0,0.98) 70%),
+		linear-gradient(180deg, #1a0a0a 0%, #050000 100%);
+}
+.gk-montage--normal .gk-montage__bg {
+	filter: saturate(0.7) brightness(0.85);
+}
+.gk-montage__inner {
+	position: relative; z-index: 2;
+	width: 90%; max-width: 1100px;
+	display: flex; flex-direction: column; align-items: center;
+	gap: 18px;
+	color: #f0e8d8;
+}
+.gk-montage__hint {
+	font-size: 1em; color: #c8b890;
+	letter-spacing: 3px; opacity: 0.7;
+	font-style: italic;
+	margin-bottom: 8px;
+}
+/* 桌面：照片散落区 */
+.gk-montage__desk {
+	position: relative;
+	width: 100%; height: 380px;
+	display: flex; align-items: center; justify-content: center;
+	perspective: 1200px;
+}
+.gk-montage__photo {
+	position: absolute;
+	width: 220px;
+	opacity: 0;
+	transform-origin: center center;
+	transition: opacity 1.2s ease-out, transform 1.2s cubic-bezier(.2,.7,.3,1.2);
+	filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+	cursor: default;
+}
+.gk-montage__photo img {
+	width: 100%; height: auto; display: block;
+	border: 6px solid #f8f4ec;
+	border-bottom-width: 32px;
+	box-shadow: inset 0 0 30px rgba(120,80,40,0.15);
+}
+.gk-montage__photo--show {
+	opacity: 1;
+}
+/* 已浮现的照片，鼠标 hover 时轻微抬起 */
+.gk-montage__photo--show:hover {
+	z-index: 10;
+	filter: drop-shadow(0 12px 24px rgba(255,220,150,0.4)) brightness(1.08);
+	transition: filter 0.3s ease;
+}
+/* 旁白文字 */
+.gk-montage__caption {
+	min-height: 32px;
+	font-size: 1.15em; color: #f8e8c8;
+	font-style: italic;
+	letter-spacing: 1px;
+	text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+	transition: opacity 0.25s ease;
+}
+.gk-montage__cap-text::before { content: '「'; opacity: 0.5; }
+.gk-montage__cap-text::after  { content: '」'; opacity: 0.5; }
+/* 最终句 */
+.gk-montage__final {
+	margin-top: 12px;
+	font-size: 1.25em; font-weight: bold;
+	color: #ffd98a;
+	text-shadow: 0 0 20px rgba(255,200,100,0.5), 0 2px 8px rgba(0,0,0,0.8);
+	letter-spacing: 2px;
+	opacity: 0;
+	transition: opacity 1.5s ease;
+}
+.gk-montage__final--show { opacity: 1; }
+.gk-montage--bitter .gk-montage__final { color: #c8a0a0; text-shadow: 0 0 12px rgba(200,80,80,0.4); }
+/* 推进按钮 */
+.gk-montage__next {
+	margin-top: 16px;
+	padding: 12px 32px;
+	background: rgba(255,220,150,0.15);
+	border: 1px solid rgba(255,220,150,0.5);
+	color: #ffe8b8;
+	border-radius: 24px;
+	font-size: 1em;
+	cursor: pointer;
+	letter-spacing: 2px;
+	transition: all 0.25s ease;
+	backdrop-filter: blur(8px);
+}
+.gk-montage__next:hover {
+	background: rgba(255,220,150,0.3);
+	border-color: rgba(255,220,150,0.8);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(255,200,100,0.3);
+}
+@media (max-width: 768px) {
+	.gk-montage__photo { width: 160px; }
+	.gk-montage__desk { height: 280px; }
+	.gk-montage__caption { font-size: 1em; }
+}
+
+/* ==========================================================================
    11. 状态面板（关系值 + 属性）& 存档提醒
    ========================================================================== */
 .gk-map__status {

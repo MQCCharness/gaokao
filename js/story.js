@@ -461,6 +461,10 @@ monogatari.script({
 		'system 是一封录取通知书——来自这张志愿表上的第一志愿。',
 		'senior 温 看吧？只要你愿意认真对待自己，命运是可以被改写的。',
 		'system 那个雨夜的自己，终于笑了。',
+		'system ……你忽然想起，这一路上那些人。家人、伙伴、师长、同学。',
+		'system 那些画面，像桌上的旧照片，一张张浮现。',
+		function () { GK.showPhotoMontage('good'); },
+		'system （照片一张张铺在桌上，台灯的暖光把它们映得发亮）',
 		{ Choice: { Dialog: 'system 【挚友结局】全剧终', 'End': { Text: '🌙 谢谢这段旅程', Do: 'end' }, 'Replay': { Text: '🔄 重新开始', Do: 'jump ReplayGame' } } }
 	],
 	'NormalEndingTruth': [
@@ -470,6 +474,9 @@ monogatari.script({
 		'system 你在一家还过得去的公司，做着还算对口的工作。不算耀眼，但也没走偏。',
 		'system 偶尔深夜，你会想起那个雨夜——想起本来可以再认真一点。',
 		'system 但你也知道，比起五年前那张盲目的赌注，至少这次是你自己选的。',
+		'system ……翻开抽屉，那些旧照片还在。',
+		function () { GK.showPhotoMontage('normal'); },
+		'system （照片一张张铺在桌上，有的边角已经泛黄）',
 		{ Choice: { Dialog: 'system 【普通结局】全剧终', 'End': { Text: '🌙 继续走吧', Do: 'end' }, 'Replay': { Text: '🔄 重新开始', Do: 'jump ReplayGame' } } }
 	],
 	'BitterEndingTruth': [
@@ -479,6 +486,9 @@ monogatari.script({
 		'system 同一间灰暗的房间。同一张皱巴巴的毕业证。',
 		'system 你看着手机里那条「志愿提交成功」，分不清这是穿越前，还是穿越后。',
 		'system ……也许，命运不是穿越一次就能改写的。它要的，是你真心。',
+		'system 抽屉最深处，压着一沓从未翻开过的旧照片。',
+		function () { GK.showPhotoMontage('bitter'); },
+		'system （照片上的笑脸，刺眼得让你想合上抽屉）',
 		'system （提示：认真解谜、深入思考、善待每个角色，可解锁更好的结局）',
 		{ Choice: { Dialog: 'system 【苦涩结局】全剧终', 'End': { Text: '🌙 结束', Do: 'end' }, 'Replay': { Text: '🔄 这次认真一点，重来', Do: 'jump ReplayGame' } } }
 	],

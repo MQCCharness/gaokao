@@ -47,3 +47,6 @@ _prologue_gen/
 # 立绘包下载/解压/AI生图工作目录（分支工作区，不入库）
 _dl_lulu/
 _ai_gen/
+
+# 结局蒙太奇工作目录
+_montage_gen/
