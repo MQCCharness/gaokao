@@ -32,7 +32,8 @@ monogatari.script({
 	// 主题：先以【五年后】的视角经历生活困境（让玩家共情），再穿越回高考志愿填报那夜
 	// 幕1 雨夜加班 → 幕2 地铁孤独 → 幕3 合租房爆发 → 幕4 闪电穿越 → 幕5 醒来失忆
 	'AmnesiaIntro': [
-		// ─── 幕 1：雨夜·加班（未来困境 1）───
+		// ⚠ jump 目标首句不能是 'show scene'（引擎会卡 step 0），用函数开头
+		function () { GK.clearCharacters(); },
 		'show scene scene-rain-office with fadeIn',
 		'play music bgm-score',  // 忧郁钢琴，借查分 BGM
 		'system 雨声。很重的雨声。',
@@ -236,6 +237,8 @@ monogatari.script({
 	// 设计：mimo-v2.5，5 章节奏（1→2→3→1→0 visions 的递进-收束）
 	// 法律：8 位化名+Wikimedia CC 照片+台词改写，剧情内含免责声明
 	'VisionsIntro': [
+		// ⚠ jump 目标首句不能是 'show scene'（引擎卡 step 0）
+		function () { GK.clearCharacters(); },
 		'show scene scene-bedroom with fadeIn',
 		'play music bgm-score',  // 忧郁底
 		'me ……终于填完了人生理想那一栏。',
@@ -245,21 +248,35 @@ monogatari.script({
 		'jump VisionsCh1',
 	],
 	'VisionsCh1': [
-		function () { GK.showVisions(1); },
+		// ⚠ showVisions 弹出 overlay 会拦截点击，关闭后用 monogatari.run('jump') 推进
+		// 不能在 overlay 显示期间让引擎继续推进对白（玩家看不到对话被卡死）
+		function () {
+			GK.showVisions(1, () => { try { monogatari.run('jump VisionsCh1After'); } catch (e) {} });
+		},
+	],
+	'VisionsCh1After': [
 		'me ……算力是新石油。',
 		'me 我盯着那个穿黑皮衣的男人，他说这话时眼神像在看一个油田。我心里某个角落"咯噔"一下——我填的那个专业，跟"算力"沾边吗？',
 		'me 还没想完，手机又震了。一条，两条，五条。',
 		'jump VisionsCh2',
 	],
 	'VisionsCh2': [
-		function () { GK.showVisions(2); },
+		function () {
+			GK.showVisions(2, () => { try { monogatari.run('jump VisionsCh2After'); } catch (e) {} });
+		},
+	],
+	'VisionsCh2After': [
 		'me 四年。AI 接管脑力活。AGI 的门槛。',
 		'me 这俩人的话像两块石头，砸进我原本平静的心里。我大一还没开学，他们就说四年后的世界我不认识了？',
 		'me 我下意识往下滑。屏幕开始失控——',
 		'jump VisionsCh3',
 	],
 	'VisionsCh3': [
-		function () { GK.showVisions(3); },
+		function () {
+			GK.showVisions(3, () => { try { monogatari.run('jump VisionsCh3After'); } catch (e) {} });
+		},
+	],
+	'VisionsCh3After': [
 		'me 空间智能。ALL IN。AI 淘汰不用 AI 的人。',
 		'me 三张脸叠在一起，像是要把我的脑子撕成三瓣。一个让我搞视觉，一个让我赌上一切，一个让我必须学 AI。',
 		'me 我的手开始发抖。我想到爸妈给我打电话时小心翼翼的声音——他们说"你自己定"。',
@@ -267,7 +284,11 @@ monogatari.script({
 		'jump VisionsCh4',
 	],
 	'VisionsCh4': [
-		function () { GK.showVisions(4); },
+		function () {
+			GK.showVisions(4, () => { try { monogatari.run('jump VisionsCh4After'); } catch (e) {} });
+		},
+	],
+	'VisionsCh4After': [
 		'me 彪悍的人生不需要解释。稳稳地平庸。',
 		'me 那个长鬓角的男人笑着说。我忽然觉得更迷茫了——他想让我折腾，可我连方向都看不清，怎么折腾？',
 		'me 手机屏幕已经模糊成一片光晕。我把手机"啪"地扣在桌上。',

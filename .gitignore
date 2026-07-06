@@ -59,3 +59,9 @@ _map_gen/
 
 # MBTI素材生成工作目录
 _mbti_gen/
+
+_debug_*.mjs
+_debug_*.png
+_debug_*.log
+_probe_*.mjs
+_test_*.mjs
