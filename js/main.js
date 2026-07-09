@@ -243,8 +243,15 @@ $_ready(() => {
 			_wheelLock = true;
 			setTimeout(() => { _wheelLock = false; }, 250); // 防抖
 			if (e.deltaY < 0) {
-				// 滚轮上 = 回滚（点击引擎 quick-menu 的后退按钮）
-				try { document.querySelector('quick-menu [data-action="back"]')?.click(); } catch (err) {}
+				// 滚轮上 = 回滚（Monogatari v2 无内置回退，提示用户用对话日志）
+				try {
+					const btn = document.querySelector('quick-menu [data-action="back"]');
+					if (btn) { btn.click(); }
+					else {
+						// v2 引擎无 back，打开对话日志作为替代
+						monogatari.run('open dialog-log');
+					}
+				} catch (err) {}
 				e.preventDefault();
 			} else if (e.deltaY > 0) {
 				// 滚轮下 = 前进（推进对话）
@@ -259,8 +266,12 @@ $_ready(() => {
 			const tb = document.querySelector('text-box');
 			if (!tb) return;
 			if (e.code === 'ArrowLeft' && !e.ctrlKey) {
-				// ← = 回滚（点击引擎 quick-menu 的后退按钮）
-				try { document.querySelector('quick-menu [data-action="back"]')?.click(); } catch (err) {}
+				// ← = 回滚（v2 无内置回退，打开对话日志替代）
+				try {
+					const btn = document.querySelector('quick-menu [data-action="back"]');
+					if (btn) { btn.click(); }
+					else { monogatari.run('open dialog-log'); }
+				} catch (err) {}
 				e.preventDefault();
 			} else if (e.code === 'Space' && !e.ctrlKey) {
 				const hasChoice = (() => { const cc = document.querySelector('choice-container'); return cc && !cc.hasAttribute('data-hidden') && cc.querySelectorAll('button').length > 0; })();

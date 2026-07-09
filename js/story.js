@@ -700,9 +700,11 @@ monogatari.script({
 	// 互动后回到走廊选择（可继续和其他同学聊，或离开）
 	'NpcCorridorAfter': [
 		function () {
-			try { monogatari.run('hide character classmate_lin with fadeOut'); } catch (e) {}
-			try { monogatari.run('hide character classmate_xyu with fadeOut'); } catch (e) {}
-			try { monogatari.run('hide character classmate_dazhi with fadeOut'); } catch (e) {}
+			['classmate_lin', 'classmate_xyu', 'classmate_dazhi'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
 			const g = GK.get();
 			const talked = g._talked || {};
 			const all = ['classmate_lin', 'classmate_xyu', 'classmate_dazhi'];
@@ -720,9 +722,14 @@ monogatari.script({
 		}}
 	],
 	'NpcCorridorLeave': [
-		'hide character classmate_lin with fadeOut',
-		'hide character classmate_xyu with fadeOut',
-		'hide character classmate_dazhi with fadeOut',
+		function () {
+			// 只 hide 当前 DOM 里存在的角色（避免 hide 未显示角色报错中断流程）
+			['classmate_lin', 'classmate_xyu', 'classmate_dazhi'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
+		},
 		'jump CampusMap',
 	],
 
@@ -1101,9 +1108,11 @@ monogatari.script({
 	'HomeAfter': [
 		function () {
 			// 首句函数：计算剩余家人 + markCleared（避免 hide character 首句报错卡住）
-			try { monogatari.run('hide character fam_mom with fadeOut'); } catch (e) {}
-			try { monogatari.run('hide character fam_dad with fadeOut'); } catch (e) {}
-			try { monogatari.run('hide character fam_aunt with fadeOut'); } catch (e) {}
+			['fam_mom', 'fam_dad', 'fam_aunt'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
 			const g = GK.get();
 			const talked = g._talked || {};
 			const all = ['fam_mom', 'fam_dad', 'fam_aunt'];
@@ -1121,9 +1130,13 @@ monogatari.script({
 		}}
 	],
 	'HomeLeave': [
-		'hide character fam_mom with fadeOut',
-		'hide character fam_dad with fadeOut',
-		'hide character fam_aunt with fadeOut',
+		function () {
+			['fam_mom', 'fam_dad', 'fam_aunt'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
+		},
 		'jump CampusMap',
 	],
 
@@ -1344,8 +1357,11 @@ monogatari.script({
 		'OfficeWangBad':  [ function () { GK.showNpcInteract('tch_wang', 'bad'); } ],
 	'OfficeAfter': [
 		function () {
-			try { monogatari.run('hide character tch_lee with fadeOut'); } catch (e) {}
-			try { monogatari.run('hide character tch_wang with fadeOut'); } catch (e) {}
+			['tch_lee', 'tch_wang'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
 			const g = GK.get();
 			const talked = g._talked || {};
 			const remaining = ['tch_lee', 'tch_wang'].filter(k => !talked[k]);
@@ -1362,8 +1378,13 @@ monogatari.script({
 		}}
 	],
 	'OfficeLeave': [
-		'hide character tch_lee with fadeOut',
-		'hide character tch_wang with fadeOut',
+		function () {
+			['tch_lee', 'tch_wang'].forEach(c => {
+				if (document.querySelector('character-sprite[data-character="' + c + '"]')) {
+					try { monogatari.run('hide character ' + c + ' with fadeOut'); } catch (e) {}
+				}
+			});
+		},
 		'jump CampusMap',
 	],
 });
