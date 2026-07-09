@@ -71,3 +71,7 @@ _voice_gen/
 _serve.log
 _tunnel.log
 cloudflared.exe
+
+# 加载器生成工作目录
+_loader_gen/
+lib/preload-inline.txt
