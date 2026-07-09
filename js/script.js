@@ -323,22 +323,36 @@ function buildMbtiResultDialog () {
 	const g = GK.get();
 	const info = GK.mbtiInfo(g.mbtiType) || { type: g.mbtiType, cn: '探索者', nick: '', tagline: '', strengths: [], careers: [], color: '#5B7FB8', emoji: '🔮' };
 	// 优先用 16personalities 真实形象（花瓣画板下载），失败回退到简笔 SVG
-	// 真图可能是 png/jpg/svg，用 onerror 链式回退
-	const realImgs = ['png', 'jpg', 'svg'].map(ext =>
-		`assets/images/mbti_real/${g.mbtiType}.${ext}`
-	);
-	const fallbackSvg = `assets/images/mbti/${g.mbtiType}.svg`;
-	const onerrorChain = `this.onerror=null;` +
-		realImgs.slice(1).map(p => `if(this.src!=='${p}'){this.src='${p}';}`).join('') +
-		`if(this.src!=='${fallbackSvg}'){this.src='${fallbackSvg}';}`;
+	// 用 data-fallback 属性 + 全局函数处理回退（避免 onerror 内联 JS 破坏引擎字符串解析）
+	const type = g.mbtiType;
 	return `system <div class="gk-mbti" style="--mc:${info.color}">
-		<div class="gk-mbti__avatar gk-mbti__avatar--real"><img src="${realImgs[0]}" alt="${g.mbtiType}" onerror="${onerrorChain}"></div>
-		<div class="gk-mbti__type">${g.mbtiType}</div>
+		<div class="gk-mbti__avatar gk-mbti__avatar--real"><img data-mbti="${type}" alt="${type}"></div>
+		<div class="gk-mbti__type">${type}</div>
 		<div class="gk-mbti__cn">${info.cn} ${info.emoji || ''}</div>
 		<div class="gk-mbti__nick">「${info.nick}」</div>
 		<div class="gk-mbti__tag">${info.tagline}</div>
 		<div class="gk-mbti__row"><b>天赋：</b>${(info.strengths || []).join(' · ')}</div>
 		<div class="gk-mbti__row"><b>可能的方向：</b>${(info.careers || []).slice(0, 4).join(' · ')}</div></div>`;
+}
+
+// MBTI 真图加载（DOM ready 后给所有 [data-mbti] img 设 src + 链式回退）
+function setupMbtiImages () {
+	document.querySelectorAll('img[data-mbti]').forEach(img => {
+		const type = img.getAttribute('data-mbti');
+		const candidates = [
+			`assets/images/mbti_real/${type}.png`,
+			`assets/images/mbti_real/${type}.jpg`,
+			`assets/images/mbti_real/${type}.svg`,
+			`assets/images/mbti/${type}.svg`,
+		];
+		let idx = 0;
+		img.onerror = () => {
+			idx++;
+			if (idx < candidates.length) img.src = candidates[idx];
+			else img.onerror = null;
+		};
+		img.src = candidates[0];
+	});
 }
 MBTI_QUESTIONS.forEach((q, i) => {
 	const nextLabel = (i + 1 >= MBTI_QUESTIONS.length) ? 'MbtiResult' : 'MbtiQuiz';
@@ -385,10 +399,8 @@ monogatari.script (Object.assign({
 			}},
 			'show character senior happy with fadeIn',
 			function () { GK.voice('senior/greet'); },
-			function () { GK.voice('senior/senior_warning_385'); },
 			'senior 你好呀，{{player.name}}。我是「温」，你的志愿陪伴学姐。接下来这段路，我陪你一起走。',
 			'show character senior normal',
-			function () { GK.voice('senior/senior_warning_387'); },
 			'senior 查分、识己、选向、落笔 —— 别紧张，无论考了多少分，你都值得被温柔对待。',
 			'jump Enroll'
 		],
@@ -618,7 +630,8 @@ monogatari.script (Object.assign({
 			// ★ 把人格卡 HTML 写入 mbtiResultChoice.Dialog（避免被 Choice 覆盖）
 			mbtiResultChoice.Choice.Dialog = buildMbtiResultDialog();
 		},
-		mbtiResultChoice
+		mbtiResultChoice,
+		function () { setupMbtiImages(); },  // 渲染后给 [data-mbti] img 设 src + 回退
 	],
 
 	// ══════ Vision + Interest ══════
