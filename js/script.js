@@ -200,6 +200,7 @@ const groupPick = GK.picker({
 
 // —— 人生理想 picker ——
 const visionPick = GK.picker({
+	function () { GK.voice('guide/guide_help_203'); },
 	dialog: 'guide 选择你的【人生理想】（决定专业推荐方向）：',
 	items: VISION_ITEMS,
 	onPick: (v) => { GK.setVision(v); },
@@ -209,6 +210,7 @@ const visionPick = GK.picker({
 
 // —— 兴趣 picker（多选，每点一个 toggle 后回自身；完成键单独）——
 const interestPick = GK.picker({
+	function () { GK.voice('buddy/buddy_help_212'); },
 	dialog: 'buddy 选几个你最来劲的【兴趣标签】（可多选，选完点最下方确认）：',
 	items: INTEREST_ITEMS,
 	onPick: (id) => { GK.toggleInterest(id); },
@@ -284,6 +286,7 @@ const CHAT_TOPICS = [
 	{ k:'感谢',     t:'谢谢你陪我' },
 ];
 const chatPick = GK.picker({
+	function () { GK.voice('senior/senior_help_287'); },
 	dialog: 'senior 想聊点什么？',
 	items: CHAT_TOPICS.map(o => ({ label: '💬 ' + o.k, value: o.t })),
 	onPick: (t) => { const r = GK.agentRespond(t); GK.set({ _chatReply: r.text }); },
@@ -382,8 +385,10 @@ monogatari.script (Object.assign({
 			}},
 			'show character senior happy with fadeIn',
 			function () { GK.voice('senior/greet'); },
+			function () { GK.voice('senior/senior_warning_385'); },
 			'senior 你好呀，{{player.name}}。我是「温」，你的志愿陪伴学姐。接下来这段路，我陪你一起走。',
 			'show character senior normal',
+			function () { GK.voice('senior/senior_warning_387'); },
 			'senior 查分、识己、选向、落笔 —— 别紧张，无论考了多少分，你都值得被温柔对待。',
 			'jump Enroll'
 		],
@@ -413,8 +418,10 @@ monogatari.script (Object.assign({
 		'show notification EnrollOk',
 		'play sound select',
 		function () { GK.voice('system/mentor_intro'); },
+		function () { GK.voice('senior/senior_mentorsummon_416'); },
 		'senior {{player.name}}，在踏上战场前，先召唤一位「导师」为你加持吧。',
 		'show character senior normal',
+		function () { GK.voice('senior/senior_mentorsummon_418'); },
 		'senior 他们是各有所长的战略家 —— 抽到谁，将影响你整张志愿表的走向。',
 		{ Choice: {
 			Dialog: 'senior 召唤池中有 6 位导师（SSR/SR/R）。准备好了吗？',
@@ -481,8 +488,10 @@ monogatari.script (Object.assign({
 		'show character rival angry with fadeIn',
 		'system 第二关 · 查分 BOSS 战',
 		function () { GK.voice('rival/score_intro'); },
+		function () { GK.voice('rival/rival_scoreboss_484'); },
 		'rival 听好了，{{player.name}}。分数不是终点，但它是你必须面对的第一只 BOSS。',
 		'show character rival normal',
+		function () { GK.voice('rival/rival_scoreboss_486'); },
 		'rival 你的导师「{{gk.mentorName}}」已就位。现在 —— 看分数，还是不看？',
 		{ Choice: {
 			Dialog: 'rival 怎么选？',
@@ -502,12 +511,19 @@ monogatari.script (Object.assign({
 		'play sound whoosh',
 		function () { GK.clearCharacters(); },
 		'show character senior sad with fadeIn',
+		function () { GK.voice('senior/senior_scoreauto_505'); },
 		'senior 好，把屏幕放下，深呼吸三次……',
+		function () { GK.voice('senior/senior_scoreauto_506'); },
 		'senior 我现在帮你打开系统，你不用看，我盯着。',
+		function () { GK.voice('senior/senior_scoreauto_507'); },
 		'senior 连接中……正在和各省考试院同步……',
+		function () { GK.voice('senior/senior_scoreauto_508'); },
 		'senior 身份核验通过，找到了你的成绩。',
+		function () { GK.voice('senior/senior_scoreauto_509'); },
 		'senior 别紧张，无论多少分，你都值得被温柔对待。',
+		function () { GK.voice('senior/senior_scoreauto_510'); },
 		'senior 正在解密分数……3……2……1……',
+		function () { GK.voice('senior/senior_scoreauto_511'); },
 		'senior 好了。我帮你看了。来，一起面对它。',
 		'jump ScoreReveal'
 	],
@@ -553,9 +569,11 @@ monogatari.script (Object.assign({
 		function () { GK.clearCharacters(); },
 		'show character guide normal with fadeIn',
 		'system 第三关 · 认识你自己',
+		function () { GK.voice('guide/guide_mbtiintro_556'); },
 		'guide 人格测试是一面镜子 —— 它不定义你，但能帮你看见自己擅长什么、在意什么。',
 		function () { GK.voice('guide/mbti_intro'); },
 		'show character guide happy',
+		function () { GK.voice('guide/guide_mbtiintro_559'); },
 		'guide 我会用 28 道小题带你完成，约 3 分钟。凭直觉作答即可。',
 		'show character guide normal',
 		{ Choice: {
@@ -609,12 +627,16 @@ monogatari.script (Object.assign({
 		'play music bgm-vision',
 		function () { GK.clearCharacters(); },
 		'show character senior normal with fadeIn',
+		function () { GK.voice('senior/senior_visionintro_612'); },
 		'senior 想成为什么样的人，比考多少分更重要。这是你志愿表的灵魂。',
 		function () { GK.voice('senior/vision_intro'); },
 		'show character senior happy',
+		function () { GK.voice('senior/senior_visionintro_615'); },
 		'senior 我这里有 12 种「人生理想」画像，每一个都指向不同的专业方向。',
+		function () { GK.voice('senior/senior_visionintro_616'); },
 		'senior 别急着选"听起来厉害"的。闭上眼想想——十年后的你，在做什么？那个画面里，你是什么样的人？',
 		'show character senior normal',
+		function () { GK.voice('senior/senior_visionintro_618'); },
 		'senior 那个画面，就是你真正该选的理想。来吧，选一个让你心跳加速的。',
 		'jump VisionPick'
 	],
@@ -637,6 +659,7 @@ monogatari.script (Object.assign({
 	'WishRevealPre': [
 		'show scene scene-wish with fadeIn',
 			'play music bgm-wish',
+		function () { GK.voice('senior/senior_wishrevealpre_640'); },
 		function () { GK.buildWishlist(); return 'senior 命运的齿轮转动完毕……你的志愿表即将揭晓。'; },
 		_wishPreChoice
 	],
@@ -668,6 +691,7 @@ monogatari.script (Object.assign({
 		'show scene scene-chat with fadeIn',
 			'play music bgm-chat',
 		'show character senior happy with fadeIn',
+		function () { GK.voice('senior/senior_chat_671'); },
 		'senior 在这里你可以随时和我聊聊 —— 紧张、迷茫、想填志愿、聊聊未来，我都在。',
 		'jump ChatMenu'
 	],
@@ -692,8 +716,10 @@ monogatari.script (Object.assign({
 		'show character senior happy with fadeIn',
 		'play sound levelup',
 		'senior {{player.name}}，无论这手牌怎么打，请记得 ——',
+		function () { GK.voice('senior/senior_goodending_695'); },
 		'senior 你的人生，是你自己的功劳。我只是递了把伞。',
 		'show character senior happy',
+		function () { GK.voice('senior/senior_goodending_697'); },
 		'senior 祝前程似锦，未来可期。🌙',
 		{ Choice: {
 			Dialog: 'senior 想再走一遍这段旅程吗？',

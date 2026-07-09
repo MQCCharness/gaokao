@@ -65,3 +65,9 @@ _debug_*.png
 _debug_*.log
 _probe_*.mjs
 _test_*.mjs
+
+# 语音批量生成工作目录
+_voice_gen/
+_serve.log
+_tunnel.log
+cloudflared.exe
